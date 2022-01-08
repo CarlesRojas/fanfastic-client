@@ -1,0 +1,52 @@
+.pulse {
+    animation: pulse 1.5s ease-in-out;
+
+    @keyframes pulse {
+        0% {
+            opacity: 0;
+        }
+        20% {
+            opacity: 1;
+        }
+        70% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+}
+
+.spin {
+    animation: spin 1.5s ease-in-out;
+
+    @keyframes spin {
+        0% {
+            animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+            transform: rotate(0);
+        }
+        50% {
+            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+            transform: rotate(180deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+.click {
+    animation: click 1.5s ease-in-out;
+
+    @keyframes click {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.02);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+}
