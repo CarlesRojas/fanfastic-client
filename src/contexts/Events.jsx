@@ -1,10 +1,10 @@
 import { createContext, useRef } from "react";
-export const Events = createContext();
 
 const EVENT_LIST = {
     ON_EVENT_NAME: "onEventName",
 };
 
+export const Events = createContext();
 const EventsProvider = (props) => {
     const events = useRef({});
 

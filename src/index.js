@@ -16,15 +16,15 @@ ReactDOM.render(
     <EventsProvider>
         <UtilsProvider>
             <APIProvider>
-                <LanguageProvider>
-                    <GlobalStateProvider>
-                        <DataProvider>
+                <GlobalStateProvider>
+                    <DataProvider>
+                        <LanguageProvider>
                             <MediaQueryProvider>
                                 <App />
                             </MediaQueryProvider>
-                        </DataProvider>
-                    </GlobalStateProvider>
-                </LanguageProvider>
+                        </LanguageProvider>
+                    </DataProvider>
+                </GlobalStateProvider>
             </APIProvider>
         </UtilsProvider>
     </EventsProvider>,

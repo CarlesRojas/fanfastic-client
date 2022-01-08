@@ -1,10 +1,10 @@
 import { createContext, useRef } from "react";
-export const GlobalState = createContext();
 
 const STATE = {
     stateName: "stateName",
 };
 
+export const GlobalState = createContext();
 const GlobalStateProvider = (props) => {
     const state = useRef({});
 

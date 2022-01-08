@@ -1,7 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import { Utils } from "./Utils";
-
-export const Language = createContext();
+import { Data } from "./Data";
 
 const LANGUAGES = {
     SPANISH: "Español",
@@ -33,14 +32,16 @@ const CATALAN = {
     // APP
 };
 
+export const Language = createContext();
 const LanguageProvider = (props) => {
     const { getCookie, setCookie } = useContext(Utils);
+    const { APP_NAME } = useContext(Data);
 
     // #################################################
     //   LANGUAGE
     // #################################################
 
-    const cookieLanguage = getCookie("fanfastic_lang");
+    const cookieLanguage = getCookie(`${APP_NAME}_lang`);
     const [text, set] = useState(
         cookieLanguage === SPANISH.code ? SPANISH : cookieLanguage === CATALAN.code ? CATALAN : ENGLISH
     );
@@ -48,13 +49,13 @@ const LanguageProvider = (props) => {
     const setLanguage = (lang) => {
         if (lang === SPANISH.key) {
             set(SPANISH);
-            setCookie("fanfastic_lang", SPANISH.code, 365 * 100);
+            setCookie(`${APP_NAME}_lang`, SPANISH.code, 365 * 100);
         } else if (lang === ENGLISH.key) {
             set(ENGLISH);
-            setCookie("fanfastic_lang", ENGLISH.code, 365 * 100);
+            setCookie(`${APP_NAME}_lang`, ENGLISH.code, 365 * 100);
         } else if (lang === CATALAN.key) {
             set(CATALAN);
-            setCookie("fanfastic_lang", CATALAN.code, 365 * 100);
+            setCookie(`${APP_NAME}_lang`, CATALAN.code, 365 * 100);
         }
     };
 
