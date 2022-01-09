@@ -15,17 +15,17 @@ import MediaQueryProvider from "./contexts/MediaQuery";
 ReactDOM.render(
     <EventsProvider>
         <UtilsProvider>
-            <APIProvider>
-                <GlobalStateProvider>
-                    <DataProvider>
+            <GlobalStateProvider>
+                <DataProvider>
+                    <APIProvider>
                         <LanguageProvider>
                             <MediaQueryProvider>
                                 <App />
                             </MediaQueryProvider>
                         </LanguageProvider>
-                    </DataProvider>
-                </GlobalStateProvider>
-            </APIProvider>
+                    </APIProvider>
+                </DataProvider>
+            </GlobalStateProvider>
         </UtilsProvider>
     </EventsProvider>,
     document.getElementById("root")

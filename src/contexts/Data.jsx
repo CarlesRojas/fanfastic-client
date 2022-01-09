@@ -9,8 +9,8 @@ const DataProvider = (props) => {
     // #################################################
 
     const token = useRef(null);
-    const username = useRef(null);
-    const userID = useRef(null);
+    const user = useRef(null);
+    const historic = useRef({});
 
     return (
         <Data.Provider
@@ -19,8 +19,8 @@ const DataProvider = (props) => {
 
                 // USER INFO
                 token,
-                username,
-                userID,
+                user,
+                historic,
             }}
         >
             {props.children}

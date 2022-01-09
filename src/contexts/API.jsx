@@ -5,19 +5,22 @@ import { Utils } from "./Utils";
 import { Data } from "./Data";
 
 const API_VERSION = "api_v1";
-const API_URL = "https://fanfastic.herokuapp.com/"; // "http://localhost:3100/"
+const API_URL = "http://localhost:3100/"; //"https://fanfastic.herokuapp.com/"
 
 export const API = createContext();
 const APIProvider = (props) => {
     const { setCookie, getCookie, clearCookies } = useContext(Utils);
-    const { APP_NAME, token, username, userID } = useContext(Data);
+    const { APP_NAME, token, user, historic } = useContext(Data);
 
     // #################################################
     //   AUTH API
     // #################################################
 
     const register = async (username, email, password) => {
-        const postData = { username, email, password };
+        const now = new Date();
+        const timezoneOffsetInMs = -now.getTimezoneOffset() * 60 * 1000;
+
+        const postData = { username, email, password, timezoneOffsetInMs };
 
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/register`, {
@@ -33,7 +36,7 @@ const APIProvider = (props) => {
             const response = await rawResponse.json();
             return response;
         } catch (error) {
-            return { error: `Sign up error: ${error}` };
+            return { error: `Register error: ${error}` };
         }
     };
 
@@ -56,15 +59,11 @@ const APIProvider = (props) => {
             // Return with error if it is the case
             if ("error" in response) return response;
 
-            // Save the new data
+            // Save token
             if ("token" in response) token.current = response.token;
-            if ("username" in response) username.current = response.username;
-            if ("id" in response) userID.current = response.id;
 
             // Set token cookie
             setCookie(`${APP_NAME}_token`, response.token, 365 * 100);
-            setCookie(`${APP_NAME}_name`, response.username, 365 * 100);
-            setCookie(`${APP_NAME}_id`, response.id, 365 * 100);
 
             return response;
         } catch (error) {
@@ -72,29 +71,53 @@ const APIProvider = (props) => {
         }
     };
 
+    const getUserInfo = async () => {
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/getUserInfo`, {
+                method: "get",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+            });
+
+            const response = await rawResponse.json();
+
+            // Return with error if it is the case
+            if ("error" in response) return response;
+
+            // Save user info
+            user.current = response;
+
+            return response;
+        } catch (error) {
+            return { error: `Get user info error: ${error}` };
+        }
+    };
+
     const logout = () => {
         token.current = null;
-        username.current = null;
-        userID.current = null;
+        user.current = null;
 
         clearCookies();
     };
 
-    const isLoggedIn = () => {
+    const tryToLogInWithToken = async () => {
         const tokenInCookie = getCookie(`${APP_NAME}_token`);
-        const nameInCookie = getCookie(`${APP_NAME}_name`);
-        const idInCookie = getCookie(`${APP_NAME}_id`);
 
-        // If they exist, save in data and return true
-        if (tokenInCookie && nameInCookie && idInCookie) {
+        // If token in cookie
+        if (tokenInCookie) {
             token.current = tokenInCookie;
-            username.current = nameInCookie;
-            userID.current = idInCookie;
 
             // Renew expiration
             setCookie(`${APP_NAME}_token`, tokenInCookie, 365 * 100);
-            setCookie(`${APP_NAME}_name`, nameInCookie, 365 * 100);
-            setCookie(`${APP_NAME}_id`, idInCookie, 365 * 100);
+
+            const result = await getUserInfo();
+            if ("error" in result) {
+                logout();
+                return false;
+            }
 
             return true;
         }
@@ -117,6 +140,12 @@ const APIProvider = (props) => {
             });
 
             const response = await rawResponse.json();
+
+            if ("error" in response) return response;
+
+            // Update local user data
+            if (user.current && "email" in user.current) user.current.email = newEmail;
+
             return response;
         } catch (error) {
             return { error: `Change email error: ${error}` };
@@ -140,11 +169,10 @@ const APIProvider = (props) => {
 
             const response = await rawResponse.json();
 
-            // Save in the cookies and Data
-            if ("success" in response) {
-                username.current = newUsername;
-                setCookie(`${APP_NAME}_name`, newUsername, 365);
-            }
+            if ("error" in response) return response;
+
+            // Update local user data
+            if (user.current && "username" in user.current) user.current.username = newUsername;
 
             return response;
         } catch (error) {
@@ -201,18 +229,191 @@ const APIProvider = (props) => {
         }
     };
 
+    // #################################################
+    //   FASTING API
+    // #################################################
+
+    const setFastDesiredStartTime = async (fastDesiredStartTimeInMinutes) => {
+        const postData = { fastDesiredStartTimeInMinutes };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/setFastDesiredStartTime`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Set fast desired start time error: ${error}` };
+        }
+    };
+
+    const setFastObjective = async (fastObjectiveInMinutes) => {
+        const postData = { fastObjectiveInMinutes };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/setFastObjective`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Set fast objective error: ${error}` };
+        }
+    };
+
+    const startFasting = async () => {
+        const date = new Date();
+        const timezoneOffsetInMs = -date.getTimezoneOffset() * 60 * 1000;
+
+        const postData = { date, timezoneOffsetInMs };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/startFasting`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Start Fasting error: ${error}` };
+        }
+    };
+
+    const stopFasting = async () => {
+        const date = new Date();
+        const timezoneOffsetInMs = -date.getTimezoneOffset() * 60 * 1000;
+
+        const postData = { date, timezoneOffsetInMs };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/stopFasting`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Stop Fasting error: ${error}` };
+        }
+    };
+
+    const useWeeklyPass = async () => {
+        const date = new Date();
+        const timezoneOffsetInMs = -date.getTimezoneOffset() * 60 * 1000;
+
+        const postData = { date, timezoneOffsetInMs };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/useWeeklyPass`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Use weekly pass error: ${error}` };
+        }
+    };
+
+    const getMonthFastEntries = async () => {
+        const date = new Date();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        const postData = { month, year };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/getMonthFastEntries`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            if ("error" in response) return response;
+
+            if ("historic" in response) {
+                // Update local data
+                if (!(year in historic.current)) historic.current[year] = {};
+                historic.current[year][month] = response;
+                return true;
+            }
+
+            return false;
+        } catch (error) {
+            return { error: `Get month fast entries error: ${error}` };
+        }
+    };
+
     return (
         <API.Provider
             value={{
                 // AUTH API
                 register,
                 login,
+                getUserInfo,
                 logout,
-                isLoggedIn,
+                tryToLogInWithToken,
                 changeEmail,
                 changeUsername,
                 changePassword,
                 deleteAccount,
+
+                // FASTING API
+                setFastDesiredStartTime,
+                setFastObjective,
+                startFasting,
+                stopFasting,
+                useWeeklyPass,
+                getMonthFastEntries,
             }}
         >
             {props.children}
