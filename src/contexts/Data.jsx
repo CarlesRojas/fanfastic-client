@@ -10,7 +10,8 @@ const DataProvider = (props) => {
 
     const token = useRef(null);
     const user = useRef(null);
-    const historic = useRef({});
+    const fastHistoric = useRef({});
+    const weightHistoric = useRef({});
 
     return (
         <Data.Provider
@@ -20,7 +21,8 @@ const DataProvider = (props) => {
                 // USER INFO
                 token,
                 user,
-                historic,
+                fastHistoric,
+                weightHistoric,
             }}
         >
             {props.children}

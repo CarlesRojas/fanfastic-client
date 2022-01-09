@@ -10,7 +10,7 @@ const API_URL = "http://localhost:3100/"; //"https://fanfastic.herokuapp.com/"
 export const API = createContext();
 const APIProvider = (props) => {
     const { setCookie, getCookie, clearCookies } = useContext(Utils);
-    const { APP_NAME, token, user, historic } = useContext(Data);
+    const { APP_NAME, token, user, fastHistoric, weightHistoric } = useContext(Data);
 
     // #################################################
     //   AUTH API
@@ -34,6 +34,11 @@ const APIProvider = (props) => {
             });
 
             const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
+
             return response;
         } catch (error) {
             return { error: `Register error: ${error}` };
@@ -60,10 +65,10 @@ const APIProvider = (props) => {
             if ("error" in response) return response;
 
             // Save token
-            if ("token" in response) token.current = response.token;
-
-            // Set token cookie
-            setCookie(`${APP_NAME}_token`, response.token, 365 * 100);
+            if ("token" in response) {
+                token.current = response.token;
+                setCookie(`${APP_NAME}_token`, response.token, 365 * 100);
+            }
 
             return response;
         } catch (error) {
@@ -84,10 +89,8 @@ const APIProvider = (props) => {
 
             const response = await rawResponse.json();
 
-            // Return with error if it is the case
+            // Save new user
             if ("error" in response) return response;
-
-            // Save user info
             user.current = response;
 
             return response;
@@ -141,10 +144,9 @@ const APIProvider = (props) => {
 
             const response = await rawResponse.json();
 
+            // Save new user
             if ("error" in response) return response;
-
-            // Update local user data
-            if (user.current && "email" in user.current) user.current.email = newEmail;
+            user.current = response;
 
             return response;
         } catch (error) {
@@ -169,10 +171,9 @@ const APIProvider = (props) => {
 
             const response = await rawResponse.json();
 
+            // Save new user
             if ("error" in response) return response;
-
-            // Update local user data
-            if (user.current && "username" in user.current) user.current.username = newUsername;
+            user.current = response;
 
             return response;
         } catch (error) {
@@ -196,6 +197,10 @@ const APIProvider = (props) => {
             });
 
             const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
 
             return response;
         } catch (error) {
@@ -237,7 +242,7 @@ const APIProvider = (props) => {
         const postData = { fastDesiredStartTimeInMinutes };
 
         try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/setFastDesiredStartTime`, {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/fast/setFastDesiredStartTime`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -249,6 +254,10 @@ const APIProvider = (props) => {
             });
 
             const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
 
             return response;
         } catch (error) {
@@ -260,7 +269,7 @@ const APIProvider = (props) => {
         const postData = { fastObjectiveInMinutes };
 
         try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/setFastObjective`, {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/fast/setFastObjective`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -272,6 +281,10 @@ const APIProvider = (props) => {
             });
 
             const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
 
             return response;
         } catch (error) {
@@ -286,7 +299,7 @@ const APIProvider = (props) => {
         const postData = { date, timezoneOffsetInMs };
 
         try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/startFasting`, {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/fast/startFasting`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -298,6 +311,10 @@ const APIProvider = (props) => {
             });
 
             const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
 
             return response;
         } catch (error) {
@@ -312,7 +329,7 @@ const APIProvider = (props) => {
         const postData = { date, timezoneOffsetInMs };
 
         try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/stopFasting`, {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/fast/stopFasting`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -324,6 +341,10 @@ const APIProvider = (props) => {
             });
 
             const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
 
             return response;
         } catch (error) {
@@ -338,7 +359,7 @@ const APIProvider = (props) => {
         const postData = { date, timezoneOffsetInMs };
 
         try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/useWeeklyPass`, {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/fast/useWeeklyPass`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -350,6 +371,10 @@ const APIProvider = (props) => {
             });
 
             const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
 
             return response;
         } catch (error) {
@@ -365,7 +390,7 @@ const APIProvider = (props) => {
         const postData = { month, year };
 
         try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/getMonthFastEntries`, {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/fast/getMonthFastEntries`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -380,16 +405,132 @@ const APIProvider = (props) => {
 
             if ("error" in response) return response;
 
-            if ("historic" in response) {
+            if ("fastHistoric" in response) {
                 // Update local data
-                if (!(year in historic.current)) historic.current[year] = {};
-                historic.current[year][month] = response;
+                if (!(year in fastHistoric.current)) fastHistoric.current[year] = {};
+                fastHistoric.current[year][month] = response.fastHistoric;
                 return true;
             }
 
             return false;
         } catch (error) {
             return { error: `Get month fast entries error: ${error}` };
+        }
+    };
+
+    // #################################################
+    //   HEALTH API
+    // #################################################
+
+    const setHeight = async (heightInCm) => {
+        const postData = { heightInCm };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/health/setHeight`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
+
+            return response;
+        } catch (error) {
+            return { error: `Set fast objective error: ${error}` };
+        }
+    };
+
+    const setWeight = async (weightInKg) => {
+        const date = new Date();
+        const timezoneOffsetInMs = -date.getTimezoneOffset() * 60 * 1000;
+
+        const postData = { weightInKg, date, timezoneOffsetInMs };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/health/setWeight`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
+
+            return response;
+        } catch (error) {
+            return { error: `Set fast objective error: ${error}` };
+        }
+    };
+
+    const setWeightObjective = async (weightObjectiveInKg) => {
+        const postData = { weightObjectiveInKg };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/health/setWeightObjective`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            // Save new user
+            if ("error" in response) return response;
+            user.current = response;
+
+            return response;
+        } catch (error) {
+            return { error: `Set fast objective error: ${error}` };
+        }
+    };
+
+    const getWeightHistoric = async () => {
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/health/getWeightHistoric`, {
+                method: "get",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+            });
+
+            const response = await rawResponse.json();
+
+            // Return with error if it is the case
+            if ("error" in response) return response;
+
+            // Update local data
+            if ("weightHistoric" in response) {
+                weightHistoric.current = response.weightHistoric;
+                return true;
+            }
+
+            return response;
+        } catch (error) {
+            return { error: `Get user info error: ${error}` };
         }
     };
 
@@ -414,6 +555,12 @@ const APIProvider = (props) => {
                 stopFasting,
                 useWeeklyPass,
                 getMonthFastEntries,
+
+                // HEALTH API
+                setHeight,
+                setWeight,
+                setWeightObjective,
+                getWeightHistoric,
             }}
         >
             {props.children}
