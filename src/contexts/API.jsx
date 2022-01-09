@@ -6,10 +6,11 @@ import { Data } from "./Data";
 
 const API_VERSION = "api_v1";
 const API_URL = "http://localhost:3100/"; //"https://fanfastic.herokuapp.com/"
+const PUBLIC_VAPID_KEY = "BODB_tctXz2EZwqHdAJF879SvVP8aiOOljr5ECGebzv9NOJXhBh_8dR5xzZ3f6sIiTsk18IZdVWRvOSVmvD38nc";
 
 export const API = createContext();
 const APIProvider = (props) => {
-    const { setCookie, getCookie, clearCookies } = useContext(Utils);
+    const { setCookie, getCookie, clearCookies, urlBase64ToUint8Array } = useContext(Utils);
     const { APP_NAME, token, user, fastHistoric, weightHistoric } = useContext(Data);
 
     // #################################################
@@ -534,6 +535,41 @@ const APIProvider = (props) => {
         }
     };
 
+    // #################################################
+    //   PUSH API
+    // #################################################
+
+    const subscribeToPuhsNotifications = async () => {
+        if (!("serviceWorker" in navigator)) return;
+
+        const registration = await navigator.serviceWorker.ready;
+
+        // Subscribe to push notifications
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY),
+        });
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/push/subscribe`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(subscription),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Set fast objective error: ${error}` };
+        }
+    };
+
     return (
         <API.Provider
             value={{
@@ -561,6 +597,9 @@ const APIProvider = (props) => {
                 setWeight,
                 setWeightObjective,
                 getWeightHistoric,
+
+                // PUSH API
+                subscribeToPuhsNotifications,
             }}
         >
             {props.children}

@@ -33,22 +33,6 @@
             "purpose": "any maskable"
         }
     ],
-    "screenshots": [
-        {
-            "src": ".webp",
-            "sizes": "720x1280",
-            "type": "image/webp",
-            "platform": "narrow",
-            "label": ""
-        },
-        {
-            "src": ".webp",
-            "sizes": "1280x720",
-            "type": "image/webp",
-            "platform": "wide",
-            "label": ""
-        }
-    ],
     "orientation": "any",
     "start_url": ".",
     "display": "fullscreen",
