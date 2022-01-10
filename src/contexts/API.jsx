@@ -5,7 +5,7 @@ import { Utils } from "./Utils";
 import { Data } from "./Data";
 
 const API_VERSION = "api_v1";
-const API_URL = "http://localhost:3100/"; //"https://fanfastic.herokuapp.com/"
+const API_URL = "https://fanfastic.herokuapp.com/"; // "http://localhost:3100/";
 const PUBLIC_VAPID_KEY = "BODB_tctXz2EZwqHdAJF879SvVP8aiOOljr5ECGebzv9NOJXhBh_8dR5xzZ3f6sIiTsk18IZdVWRvOSVmvD38nc";
 
 export const API = createContext();

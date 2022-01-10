@@ -1,30 +1,141 @@
+/* eslint-disable no-restricted-globals */
+
 console.log("Service worker loaded");
 
-// eslint-disable-next-line
-self.addEventListener("push", (event) => {
-    // eslint-disable-next-line
-    if (!(self.Notification && self.Notification.permission === "granted")) {
-        return;
+// #################################################
+//   OFFLINE FALLBACK
+// #################################################
+
+const CACHE_NAME = "offline";
+const OFFLINE_URL = "offline.html";
+
+self.addEventListener("install", (event) => {
+    event.waitUntil(
+        (async () => {
+            const cache = await caches.open(CACHE_NAME);
+            await cache.add(new Request(OFFLINE_URL, { cache: "reload" }));
+        })()
+    );
+    self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+    event.waitUntil(
+        (async () => {
+            if ("navigationPreload" in self.registration) {
+                await self.registration.navigationPreload.enable();
+            }
+        })()
+    );
+
+    self.clients.claim();
+});
+
+self.addEventListener("fetch", (event) => {
+    if (event.request.mode === "navigate") {
+        event.respondWith(
+            (async () => {
+                try {
+                    // First, try to use the navigation preload response if it's supported.
+                    const preloadResponse = await event.preloadResponse;
+                    if (preloadResponse) return preloadResponse;
+
+                    // Always try the network first.
+                    const networkResponse = await fetch(event.request);
+                    return networkResponse;
+                } catch (error) {
+                    const cache = await caches.open(CACHE_NAME);
+                    const cachedResponse = await cache.match(OFFLINE_URL);
+                    return cachedResponse;
+                }
+            })()
+        );
     }
-    const data = event.data.json();
+});
 
-    if (data.id === "stopFasting") {
-        var title = "Time to stop fasting!";
-        var body = "Congrats on reaching your fasting goal.";
-        var icon = "/logo512.png";
-    } else if (data.id === "startFasting") {
-        title = "Time to start fasting!";
-        body = "Go for it!";
-        icon = "/logo512.png";
-    }
+// #################################################
+//   PUSH NOTIFICATIONS
+// #################################################
 
-    // title: "Time to stop fasting!",
-    // body: "This is the text of the notification.",
-    // icon: "http://image.ibb.co/frYOFd/tmlogo.png",
+self.addEventListener("push", function (event) {
+    event.waitUntil(
+        self.registration.pushManager.getSubscription().then(function () {
+            return fetch("url").then(function () {
+                if (!(self.Notification && self.Notification.permission === "granted")) return;
 
-    // eslint-disable-next-line
-    self.registration.showNotification(title, {
-        body: body,
-        icon: icon,
+                const data = event.data.json();
+
+                var title = "Check your progress!";
+                var body = "Check the app to see how you are doing.";
+                var tag = "error";
+                var icon = "/logo512.png";
+
+                //   STOP FASTING
+                // #################################################
+                if (data.id === "stopFasting") {
+                    title = "Time to stop fasting!";
+                    body = "Congrats on reaching your fasting goal.";
+                    tag = "stopFasting";
+                    icon = "/logo512.png";
+                }
+
+                //   START FASTING
+                // #################################################
+                else if (data.id === "startFasting") {
+                    title = "Time to start fasting!";
+                    body = "It will last for 16h";
+                    tag = "startFasting";
+                    icon = "/logo512.png";
+                }
+
+                //   WEIGHT REMINDER
+                // #################################################
+                else if (data.id === "weightReminder") {
+                    title = "Weight check!";
+                    body = "Input your weight in the app.";
+                    tag = "weightReminder";
+                    icon = "/logo512.png";
+                }
+
+                return self.registration.showNotification(title, {
+                    body,
+                    icon,
+                    tag,
+                    badge: "/logo512.png", // need logo with 96x96 pixels
+                    renotify: true,
+                    vibrate: [300, 100, 400],
+                });
+            });
+        })
+    );
+});
+
+// #################################################
+//   OPEN APP ON CLICK
+// #################################################
+
+const urlToOpen = new URL("https://fanfastic.netlify.app/").href;
+self.addEventListener("notificationclick", (event) => {
+    const promiseChain = self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((windowClients) => {
+        let matchingClient = null;
+
+        for (let i = 0; i < windowClients.length; i++) {
+            const windowClient = windowClients[i];
+            if (windowClient.url === urlToOpen) {
+                matchingClient = windowClient;
+                break;
+            }
+        }
+
+        if (matchingClient) {
+            return matchingClient.focus();
+        } else {
+            return self.clients.openWindow(urlToOpen).then((client) => {
+                return client.focus();
+            });
+        }
     });
+
+    event.notification.close();
+    event.waitUntil(promiseChain);
 });

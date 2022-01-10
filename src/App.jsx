@@ -16,9 +16,11 @@ export default function App() {
         <div className="App">
             <div
                 className="subscribe"
-                style={{ width: "400px", height: "100px", background: "violet" }}
+                style={{ width: "400px", height: "100px", background: "green" }}
                 onClick={handleSubscribe}
-            ></div>
+            >
+                Subscribe
+            </div>
         </div>
     );
 }
