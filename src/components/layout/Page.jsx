@@ -5,7 +5,7 @@ import React from "react";
 export default function Page({ children, visible }) {
     const backgroundTransition = useTransition(visible, {
         from: { opacity: "0" },
-        enter: { opacity: "1", delay: 300 },
+        enter: { opacity: "1", delay: 400 },
         leave: { opacity: "0" },
         reverse: visible,
     });

@@ -77,6 +77,73 @@ const APIProvider = (props) => {
         }
     };
 
+    const testToken = async (token) => {
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/testToken`, {
+                method: "get",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token,
+                },
+            });
+
+            const response = await rawResponse.json();
+
+            // Return with error if it is the case
+            if ("error" in response) return response;
+
+            return response;
+        } catch (error) {
+            return { error: `Test token error: ${error}` };
+        }
+    };
+
+    const isEmailValid = async (email) => {
+        const postData = { email };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/isEmailValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid email error: ${error}` };
+        }
+    };
+
+    const isUsernameValid = async (username) => {
+        const postData = { username };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/isUsernameValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid username error: ${error}` };
+        }
+    };
+
     const getUserInfo = async () => {
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/getUserInfo`, {
@@ -85,6 +152,7 @@ const APIProvider = (props) => {
                     Accept: "application/json, text/plain, */*",
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
+                    token: token.current,
                 },
             });
 
@@ -98,6 +166,25 @@ const APIProvider = (props) => {
         } catch (error) {
             return { error: `Get user info error: ${error}` };
         }
+    };
+
+    const isLoggedIn = async () => {
+        const tokenInCookie = getCookie(`${APP_NAME}_token`);
+        console.log(tokenInCookie);
+
+        if (!tokenInCookie) return false;
+
+        const response = await testToken(tokenInCookie);
+        if ("error" in response) return false;
+
+        // Set token
+        token.current = tokenInCookie;
+        setCookie(`${APP_NAME}_token`, tokenInCookie, 365 * 100);
+
+        // Save user info
+        await getUserInfo();
+
+        return true;
     };
 
     const logout = () => {
@@ -515,6 +602,7 @@ const APIProvider = (props) => {
                     Accept: "application/json, text/plain, */*",
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
+                    token: token.current,
                 },
             });
 
@@ -576,6 +664,9 @@ const APIProvider = (props) => {
                 // AUTH API
                 register,
                 login,
+                isEmailValid,
+                isUsernameValid,
+                isLoggedIn,
                 getUserInfo,
                 logout,
                 tryToLogInWithToken,
