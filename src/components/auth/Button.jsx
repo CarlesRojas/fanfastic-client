@@ -1,10 +1,10 @@
 import cn from "classnames";
 
-export default function Button({ data, handleAction, last }) {
+export default function Button({ data, nextCard, last }) {
     const { content } = data;
 
     return (
-        <div className={cn("Button", { last })} onClick={handleAction}>
+        <div className={cn("Button", { last })} onClick={nextCard}>
             {content}
         </div>
     );

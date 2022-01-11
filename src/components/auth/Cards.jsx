@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef, Fragment } from "react";
+import { useState, useEffect, Fragment, useContext } from "react";
 import { useSprings, animated } from "react-spring";
 import cn from "classnames";
 import Button from "./Button";
 import Input from "./Input";
+import { Events } from "../../contexts/Events";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import useThrottle from "../../hooks/useThrottle";
 
@@ -13,7 +14,9 @@ const style = (i, currentIndex) => ({
     boxShadow: i < currentIndex ? "0 10px 20px rgba(0, 0, 0, 0)" : "0 10px 20px rgba(0, 0, 0, 0.15)",
 });
 
-export default function Cards({ cards, nextStage, prevStage, stages, stageId }) {
+export default function Cards({ cards, stageId }) {
+    const { emit } = useContext(Events);
+
     // #################################################
     //   STATE
     // #################################################
@@ -22,7 +25,6 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
     const [error, setError] = useState(false);
     const [springs, api] = useSprings(cards.length, (i) => ({ ...style(i, currentCard) }));
     const [animating, trigger] = useCssOneTimeAnimation(500);
-    const stageData = useRef({});
 
     useEffect(() => {
         api.start((i) => ({ ...style(i, currentCard) }));
@@ -37,46 +39,18 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
     //   HANDLERS
     // #################################################
 
-    const handleAction = useThrottle((clickAction, data) => {
+    const nextCard = useThrottle((action, data) => {
         setError(false);
 
-        // console.log("");
-        // console.log(clickAction);
-        // console.log(data);
-
-        // Go to create account
-        if (clickAction === "createAccount") nextStage(stages.indexOf("welcome"), stages.indexOf("register"));
-        // Go to login
-        else if (clickAction === "login") nextStage(stages.indexOf("welcome"), stages.indexOf("login"));
-        // Save login email and go to next card
-        else if (clickAction === "loginEnterEmail") stageData.current[clickAction] = data;
-        // Save login password and go to next stage
-        else if (clickAction === "loginEnterPassword") {
-            stageData.current[clickAction] = data;
-
-            // ROJAS VALIDATE LOGIN
-            nextStage(stages.indexOf("login"), stages.indexOf("loginSuccess"));
-        }
-
-        // Save registration email or username and go to next card
-        else if (clickAction === "registerEnterEmail" || clickAction === "registerEnterUsername")
-            stageData.current[clickAction] = data;
-        // Save registration password and go to next stage
-        else if (clickAction === "registerEnterPassword") {
-            stageData.current[clickAction] = data;
-            nextStage(stages.indexOf("register"), stages.indexOf("fast"));
-        }
-
         if (currentCard < cards.length - 1) setCurrentCard((prev) => prev + 1);
+        else emit("onNextStage", { stageId, action, data });
     }, 500);
 
-    const handleBack = useThrottle(() => {
+    const prevCard = useThrottle(() => {
         setError(false);
 
         if (currentCard > 0) setCurrentCard((prev) => prev - 1);
-        else if (stageId === "register") prevStage(stages.indexOf("register"), stages.indexOf("welcome"));
-        else if (stageId === "login") prevStage(stages.indexOf("login"), stages.indexOf("welcome"));
-        else if (stageId === "health") prevStage(stages.indexOf("health"), stages.indexOf("fast"));
+        else emit("onPrevStage", { stageId });
     }, 500);
 
     // #################################################
@@ -87,14 +61,11 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
 
     return (
         <div className={cn("Cards", { shake: animating })}>
-            {stageId !== "welcome" &&
-                stageId !== "loginSuccess" &&
-                stageId !== "registerSuccess" &&
-                !(stageId === "fast" && currentCard === 0) && (
-                    <div className="backButton" onClick={handleBack}>
-                        Back
-                    </div>
-                )}
+            {stageId !== "welcome" && stageId !== "loginSuccess" && stageId !== "registerSuccess" && (
+                <div className="backButton" onClick={prevCard}>
+                    Back
+                </div>
+            )}
 
             <div className="header">
                 <h1>{title}</h1>
@@ -107,10 +78,7 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
             {springs.map((styles, cardI) => (
                 <animated.div
                     className={"interactions"}
-                    style={{
-                        ...styles,
-                        pointerEvents: cardI === currentCard ? "inherit" : "none",
-                    }}
+                    style={{ ...styles, pointerEvents: cardI === currentCard ? "inherit" : "none" }}
                     key={cardI}
                 >
                     {interactibles.map((interactible, i) => {
@@ -122,7 +90,7 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
                                     {i !== 0 && <div className="separation"></div>}
                                     <Button
                                         data={interactible}
-                                        handleAction={(data) => handleAction(action, data)}
+                                        nextCard={(data) => nextCard(action, data)}
                                         last={i === interactibles.length - 1}
                                     />
                                 </Fragment>
@@ -132,12 +100,12 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
                                 <Fragment key={i}>
                                     {i !== 0 && <div className="separation"></div>}
                                     <Input
-                                        current={cardI === currentCard}
                                         data={interactible}
-                                        handleAction={(data) => handleAction(action, data)}
+                                        nextCard={(data) => nextCard(action, data)}
+                                        current={cardI === currentCard}
                                         handleError={handleError}
-                                        last={i === interactibles.length - 1}
                                         lastCard={cardI === cards.length - 1}
+                                        lastInteractible={i === interactibles.length - 1}
                                     />
                                 </Fragment>
                             );

@@ -11,7 +11,7 @@ import PasswordIcon from "../../resources/icons/password.svg";
 import UpIcon from "../../resources/icons/up.svg";
 import RightIcon from "../../resources/icons/right.svg";
 
-export default function Input({ data, handleAction, last, lastCard, handleError, current }) {
+export default function Input({ data, nextCard, handleError, lastInteractible, lastCard, current }) {
     const { isEmailValid, isUsernameValid, isPasswordValid } = useContext(API);
 
     const { inputType, action } = data;
@@ -38,7 +38,7 @@ export default function Input({ data, handleAction, last, lastCard, handleError,
         else validationResult = await validate(inputRef.current.value, false);
 
         if ("error" in validationResult) handleError(validationResult.error.replaceAll(`"`, ""));
-        else handleAction(inputRef.current.value);
+        else nextCard(inputRef.current.value);
     }, 500);
 
     const handleKeyDown = (event) => {
@@ -60,7 +60,7 @@ export default function Input({ data, handleAction, last, lastCard, handleError,
     // #################################################
 
     return (
-        <div className={cn("Input", { last })} onKeyDown={handleKeyDown}>
+        <div className={cn("Input", { last: lastInteractible })} onKeyDown={handleKeyDown}>
             <input
                 type={inputType}
                 autoComplete="new-password"
