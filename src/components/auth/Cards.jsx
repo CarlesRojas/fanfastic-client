@@ -4,6 +4,7 @@ import cn from "classnames";
 import Button from "./Button";
 import Input from "./Input";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
+import useThrottle from "../../hooks/useThrottle";
 
 const style = (i, currentIndex) => ({
     y: i < currentIndex ? "0rem" : `${i - currentIndex}rem`,
@@ -36,8 +37,9 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
     //   HANDLERS
     // #################################################
 
-    const handleAction = (clickAction, data) => {
+    const handleAction = useThrottle((clickAction, data) => {
         setError(false);
+        console.log("action");
 
         // console.log("");
         // console.log(clickAction);
@@ -67,16 +69,17 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
         }
 
         if (currentCard < cards.length - 1) setCurrentCard((prev) => prev + 1);
-    };
+    }, 500);
 
-    const handleBack = () => {
+    const handleBack = useThrottle(() => {
         setError(false);
 
         if (currentCard > 0) setCurrentCard((prev) => prev - 1);
         else if (stageId === "register") prevStage(stages.indexOf("register"), stages.indexOf("welcome"));
         else if (stageId === "login") prevStage(stages.indexOf("login"), stages.indexOf("welcome"));
         else if (stageId === "health") prevStage(stages.indexOf("health"), stages.indexOf("fast"));
-    };
+    }, 500);
+
     // #################################################
     //   RENDER
     // #################################################

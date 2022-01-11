@@ -1,6 +1,7 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import cn from "classnames";
 import SVG from "react-inlinesvg";
+import useThrottle from "../../hooks/useThrottle";
 
 import { API } from "../../contexts/API";
 
@@ -26,11 +27,7 @@ export default function Input({ data, handleAction, last, lastCard, handleError,
         setHasContent(inputRef.current.value.length > 0);
     };
 
-    const handleKeyDown = (event) => {
-        if (event.key === "Enter" || event.key === "Tab") handleEnter();
-    };
-
-    const handleEnter = async () => {
+    const handleEnter = useThrottle(async () => {
         var validate = () => ({ success: true });
 
         if (inputType === "email") validate = isEmailValid;
@@ -42,6 +39,10 @@ export default function Input({ data, handleAction, last, lastCard, handleError,
 
         if ("error" in validationResult) handleError(validationResult.error.replaceAll(`"`, ""));
         else handleAction(inputRef.current.value);
+    }, 500);
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter" || event.key === "Tab") handleEnter();
     };
 
     const handleFocus = (event) => {

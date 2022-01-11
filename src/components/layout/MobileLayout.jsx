@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import useGlobalState from "../../hooks/useGlobalState";
+import useThrottle from "../../hooks/useThrottle";
 
 import Page from "./Page";
 import Historic from "../Historic";
@@ -24,6 +25,10 @@ export default function MobileLayout() {
         },
     ]);
 
+    const handleClick = useThrottle(() => {
+        setCurrentPage((prev) => (prev === "auth" ? "home" : "auth"));
+    }, 500);
+
     return (
         <div className="MobileLayout">
             {pages.current.map(({ id, page }) => (
@@ -32,7 +37,7 @@ export default function MobileLayout() {
                 </Page>
             ))}
 
-            <div className="change" onClick={() => setCurrentPage((prev) => (prev === "auth" ? "home" : "auth"))}></div>
+            <div className="change" onClick={handleClick}></div>
         </div>
     );
 }
