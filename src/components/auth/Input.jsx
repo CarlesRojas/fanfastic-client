@@ -41,9 +41,7 @@ export default function Input({ data, handleAction, last, lastCard, handleError,
         else validationResult = await validate(inputRef.current.value, false);
 
         if ("error" in validationResult) handleError(validationResult.error.replaceAll(`"`, ""));
-        else {
-            handleAction(inputRef.current.value);
-        }
+        else handleAction(inputRef.current.value);
     };
 
     const handleFocus = (event) => {
