@@ -1,6 +1,8 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useContext } from "react";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import Cards from "./Cards";
+
+import { Events } from "../../contexts/Events";
 
 const STAGES = ["welcome", "login", "loginSuccess", "register", "fast", "health", "registerSuccess"];
 const CARDS = {
@@ -104,6 +106,8 @@ const CARDS = {
 };
 
 export default function Auth() {
+    const { emit, sub, unsub } = useContext(Events);
+
     // #################################################
     //   STATE
     // #################################################
@@ -123,16 +127,25 @@ export default function Auth() {
     //   NEXT & PREV
     // #################################################
 
+    const currentStage = useRef(0);
     const stageRefs = useRef({});
     const nextAnimation = useRef({ currIndex: -1, newIndex: -1, goingBack: false, animated: true });
 
-    const nextStage = useCallback((currIndex, newIndex) => {
-        // Save the animation we want to make and instantiate the appearing stage (out of sight)
-        nextAnimation.current = { currIndex, newIndex, goingBack: false, animated: false };
-        updateStagesVisible(newIndex, true);
-    }, []);
+    const nextStage = useCallback(
+        (currIndex, newIndex) => {
+            emit("onNewPage", { page: STAGES[newIndex], component: "Auth" });
+            currentStage.current = newIndex;
+
+            // Save the animation we want to make and instantiate the appearing stage (out of sight)
+            nextAnimation.current = { currIndex, newIndex, goingBack: false, animated: false };
+            updateStagesVisible(newIndex, true);
+        },
+        [emit]
+    );
 
     const prevStage = useCallback((currIndex, newIndex) => {
+        currentStage.current = newIndex;
+
         // Save the animation we want to make and instantiate the appearing stage (out of sight)
         nextAnimation.current = { currIndex, newIndex, goingBack: true, animated: false };
         updateStagesVisible(newIndex, true);
@@ -170,6 +183,26 @@ export default function Auth() {
         // The first stage starts in the center
         stageRefs.current[0].classList.add("center");
     }, []);
+
+    // #################################################
+    //   BROWSER BACK BUTTON
+    // #################################################
+
+    useEffect(() => {
+        const handleBack = ({ component, page }) => {
+            if (component === "Auth") {
+                const stage = STAGES[currentStage.current];
+                if (stage === "login" || stage === "register" || stage === "fast")
+                    prevStage(currentStage.current, STAGES.indexOf("welcome"));
+                else if (stage === "health") prevStage(currentStage.current, STAGES.indexOf("fast"));
+            }
+        };
+
+        sub("onBrowserBackClicked", handleBack);
+        return () => {
+            unsub("onBrowserBackClicked", handleBack);
+        };
+    }, [sub, unsub, prevStage]);
 
     // #################################################
     //   RENDER

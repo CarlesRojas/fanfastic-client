@@ -39,7 +39,6 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId }) 
 
     const handleAction = useThrottle((clickAction, data) => {
         setError(false);
-        console.log("action");
 
         // console.log("");
         // console.log(clickAction);

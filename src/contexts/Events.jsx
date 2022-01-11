@@ -1,9 +1,5 @@
 import { createContext, useRef } from "react";
 
-const EVENT_LIST = {
-    ON_EVENT_NAME: "onEventName",
-};
-
 export const Events = createContext();
 const EventsProvider = (props) => {
     const events = useRef({});
@@ -32,7 +28,6 @@ const EventsProvider = (props) => {
     return (
         <Events.Provider
             value={{
-                EVENT_LIST,
                 sub,
                 unsub,
                 emit,
