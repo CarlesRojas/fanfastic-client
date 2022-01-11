@@ -37,23 +37,23 @@ const UtilsProvider = (props) => {
     };
 
     // Get all cookies
-    const getCookies = () => {
+    const getCookies = (APP_NAME) => {
         var pairs = document.cookie.split(";");
         var cookies = {};
         for (var i = 0; i < pairs.length; i++) {
             var pair = pairs[i].split("=");
-            if (pair[0].includes("planPlant")) cookies[(pair[0] + "").trim()] = unescape(pair.slice(1).join("="));
+            if (pair[0].includes(APP_NAME)) cookies[(pair[0] + "").trim()] = pair.slice(1).join("=");
         }
         return cookies;
     };
 
     // Clear all cookies
-    const clearCookies = () => {
+    const clearCookies = (APP_NAME) => {
         var res = document.cookie;
         var multiple = res.split(";");
         for (var i = 0; i < multiple.length; i++) {
             var key = multiple[i].split("=");
-            if (key[0].includes("planPlant"))
+            if (key[0].includes(APP_NAME))
                 document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }
     };
@@ -277,6 +277,7 @@ const UtilsProvider = (props) => {
 
     const urlBase64ToUint8Array = (base64String) => {
         const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+        // eslint-disable-next-line
         const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
 
         const rawData = window.atob(base64);

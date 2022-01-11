@@ -192,8 +192,6 @@ const APIProvider = (props) => {
 
     const isLoggedIn = async () => {
         const tokenInCookie = getCookie(`${APP_NAME}_token`);
-        console.log(tokenInCookie);
-
         if (!tokenInCookie) return false;
 
         const response = await testToken(tokenInCookie);

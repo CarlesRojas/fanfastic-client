@@ -39,9 +39,9 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId, st
     const handleAction = (clickAction, data) => {
         setError(false);
 
-        console.log("");
-        console.log(clickAction);
-        console.log(data);
+        // console.log("");
+        // console.log(clickAction);
+        // console.log(data);
 
         // Go to create account
         if (clickAction === "createAccount") nextStage(stages.indexOf("welcome"), stages.indexOf("register"));
