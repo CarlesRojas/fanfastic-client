@@ -12,7 +12,7 @@ const style = (i, currentIndex) => ({
     boxShadow: i < currentIndex ? "0 10px 20px rgba(0, 0, 0, 0)" : "0 10px 20px rgba(0, 0, 0, 0.15)",
 });
 
-export default function Cards({ cards, nextStage, prevStage, stages, stageId, stageAnimation }) {
+export default function Cards({ cards, nextStage, prevStage, stages, stageId }) {
     // #################################################
     //   STATE
     // #################################################
@@ -107,8 +107,7 @@ export default function Cards({ cards, nextStage, prevStage, stages, stageId, st
                     className={"interactions"}
                     style={{
                         ...styles,
-                        pointerEvents:
-                            cardI === currentCard ? stageAnimation.to((v) => (v === "0vw" ? "all" : "none")) : "none",
+                        pointerEvents: cardI === currentCard ? "inherit" : "none",
                     }}
                     key={cardI}
                 >

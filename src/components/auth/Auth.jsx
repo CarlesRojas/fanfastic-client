@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { useSprings, animated } from "react-spring";
+import { useState, useCallback, useRef, useEffect } from "react";
+import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import Cards from "./Cards";
 
 const STAGES = ["welcome", "login", "loginSuccess", "register", "fast", "health", "registerSuccess"];
@@ -108,7 +108,7 @@ export default function Auth() {
     //   STATE
     // #################################################
 
-    const [springs, api] = useSprings(STAGES.length, (i) => ({ x: i === 0 ? "0vw" : "100vw" }));
+    const [animating, trigger] = useCssOneTimeAnimation(400);
     const [stagesVisible, setStagesVisible] = useState(STAGES.map((_, i) => i === 0));
 
     const updateStagesVisible = (index, newValue) => {
@@ -123,74 +123,72 @@ export default function Auth() {
     //   NEXT & PREV
     // #################################################
 
-    const nextStage = useCallback(
-        (currIndex, newIndex) => {
-            // Place the entering stage on its starting position
-            api.start((index) => {
-                if (index !== newIndex) return;
-                return { x: "100vw", immediate: true };
-            });
+    const stageRefs = useRef({});
+    const nextAnimation = useRef({ currIndex: -1, newIndex: -1, goingBack: false, animated: true });
 
-            // Show the entering stage
-            updateStagesVisible(newIndex, true);
+    const nextStage = useCallback((currIndex, newIndex) => {
+        // Save the animation we want to make and instantiate the appearing stage (out of sight)
+        nextAnimation.current = { currIndex, newIndex, goingBack: false, animated: false };
+        updateStagesVisible(newIndex, true);
+    }, []);
 
-            // Animate both entering and exiting springs
-            api.start((index) => {
-                if (index === currIndex) return { x: "-100px", onRest: () => updateStagesVisible(currIndex, false) };
-                else if (index === newIndex) return { x: "0vw" };
-                return;
-            });
-        },
-        [api]
-    );
+    const prevStage = useCallback((currIndex, newIndex) => {
+        // Save the animation we want to make and instantiate the appearing stage (out of sight)
+        nextAnimation.current = { currIndex, newIndex, goingBack: true, animated: false };
+        updateStagesVisible(newIndex, true);
+    }, []);
 
-    const prevStage = useCallback(
-        (currIndex, newIndex) => {
-            // Place the entering stage on its starting position
-            api.start((index) => {
-                if (index !== newIndex) return;
-                return { x: "-100vw", immediate: true };
-            });
+    useEffect(() => {
+        const { currIndex, newIndex, goingBack, animated } = nextAnimation.current;
+        if (animated || newIndex < 0) return;
+        nextAnimation.current = { ...nextAnimation.current, animated: true };
 
-            // Show the entering stage
-            updateStagesVisible(newIndex, true);
+        // Add classes to animate towards the right (Go back)
+        if (goingBack) {
+            if (currIndex >= 0) stageRefs.current[currIndex].classList.add("exitToRight");
+            if (newIndex >= 0) stageRefs.current[newIndex].classList.add("enterFromLeft");
+        }
+        // Add classes to animate towards the left (Go next)
+        else {
+            if (currIndex >= 0) stageRefs.current[currIndex].classList.add("exitToLeft");
+            if (newIndex >= 0) stageRefs.current[newIndex].classList.add("enterFromRight");
+        }
 
-            // Animate both entering and exiting springs
-            api.start((index) => {
-                if (index === currIndex) return { x: "100px", onRest: () => updateStagesVisible(currIndex, false) };
-                else if (index === newIndex) return { x: "0vw" };
-                return;
-            });
-        },
-        [api]
-    );
+        trigger();
+    }, [stagesVisible, trigger]);
+
+    useEffect(() => {
+        if (!animating) {
+            // When animation ends -> Deinstantiate the stage that left
+            const currIndex = nextAnimation.current.currIndex;
+            nextAnimation.current = { currIndex: -1, newIndex: -1, goingBack: false, animated: true };
+            updateStagesVisible(currIndex, false);
+        }
+    }, [animating]);
+
+    useEffect(() => {
+        // The first stage starts in the center
+        stageRefs.current[0].classList.add("center");
+    }, []);
 
     // #################################################
     //   RENDER
     // #################################################
 
     return (
-        <div className={"Auth"}>
-            {springs.map(
-                ({ x }, i) =>
+        <div className={"Auth"} style={{ pointerEvents: animating ? "none" : "all" }}>
+            {STAGES.map(
+                (id, i) =>
                     stagesVisible[i] && (
-                        <animated.div
-                            key={i}
-                            className={"stageContainer"}
-                            style={{
-                                x,
-                                pointerEvents: x.to((v) => (v === "0vw" ? "all" : "none")),
-                            }}
-                        >
+                        <div key={i} className={"stageContainer"} ref={(elem) => (stageRefs.current[i] = elem)}>
                             <Cards
-                                cards={CARDS[STAGES[i]]}
+                                cards={CARDS[id]}
                                 nextStage={nextStage}
                                 prevStage={prevStage}
                                 stages={STAGES}
-                                stageId={STAGES[i]}
-                                stageAnimation={x}
+                                stageId={id}
                             />
-                        </animated.div>
+                        </div>
                     )
             )}
         </div>
