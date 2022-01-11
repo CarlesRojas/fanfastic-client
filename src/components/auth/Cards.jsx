@@ -14,7 +14,7 @@ const style = (i, currentIndex) => ({
     boxShadow: i < currentIndex ? "0 10px 20px rgba(0, 0, 0, 0)" : "0 10px 20px rgba(0, 0, 0, 0.15)",
 });
 
-export default function Cards({ cards, stageId }) {
+export default function Cards({ cards, stageId, canGoBack }) {
     const { emit } = useContext(Events);
 
     // #################################################
@@ -36,21 +36,23 @@ export default function Cards({ cards, stageId }) {
     };
 
     // #################################################
-    //   HANDLERS
+    //   NEXT & PREV
     // #################################################
 
     const nextCard = useThrottle((action, data) => {
         setError(false);
+        emit("onActionDone", { stageId, action, data });
 
-        if (currentCard < cards.length - 1) setCurrentCard((prev) => prev + 1);
-        else emit("onNextStage", { stageId, action, data });
+        if (currentCard < cards.length - 1) {
+            setCurrentCard((prev) => prev + 1);
+        } else emit("onNextStage");
     }, 500);
 
     const prevCard = useThrottle(() => {
         setError(false);
 
         if (currentCard > 0) setCurrentCard((prev) => prev - 1);
-        else emit("onPrevStage", { stageId });
+        else emit("onPrevStage");
     }, 500);
 
     // #################################################
@@ -59,9 +61,19 @@ export default function Cards({ cards, stageId }) {
 
     const { title, subtitle, interactibles } = cards[currentCard];
 
+    useEffect(() => {
+        if (!("auto" in cards[currentCard])) return;
+
+        const timeout = setTimeout(() => nextCard("success", ""), 2000);
+
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, [cards, currentCard, nextCard]);
+
     return (
         <div className={cn("Cards", { shake: animating })}>
-            {stageId !== "welcome" && stageId !== "loginSuccess" && stageId !== "registerSuccess" && (
+            {canGoBack && (
                 <div className="backButton" onClick={prevCard}>
                     Back
                 </div>

@@ -7,7 +7,6 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
     // #################################################
 
     const [pagesVisible, setPagesVisible] = useState(pagesIds.map((_, i) => i === 0));
-    const numPages = useRef(pagesIds.length);
     const pagesRef = useRef({});
 
     const updatePagesVisible = (index, newValue) => {
@@ -26,14 +25,14 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
     const animationState = useRef({ shouldStartAnimation: false, goingBack: false, animationStarted: false });
 
     const nextPage = useCallback(() => {
-        if (page.current >= numPages.current.length) return false;
+        if (page.current >= pagesIds.length - 1) return false;
 
         // Save the animation we want to make and instantiate the appearing stage (out of sight)
         animationState.current = { shouldStartAnimation: true, goingBack: false, animationStarted: false };
 
         updatePagesVisible(page.current + 1, true);
         return true;
-    }, []);
+    }, [pagesIds]);
 
     const prevPage = useCallback(() => {
         if (page.current <= 0) return false;

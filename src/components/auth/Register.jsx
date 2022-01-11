@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useContext } from "react";
+import { useCallback, useEffect, useContext, useRef } from "react";
 import usePageAnimation from "../../hooks/usePageAnimation";
 import { Events } from "../../contexts/Events";
 import Cards from "./Cards";
@@ -10,17 +10,17 @@ const CARDS = {
         {
             title: "Create an account",
             subtitle: "Enter your email:",
-            interactibles: [{ type: "input", inputType: "email", action: "registerEnterEmail" }],
+            interactibles: [{ type: "input", inputType: "email", action: "email" }],
         },
         {
             title: "Create an account",
             subtitle: "Enter your new username:",
-            interactibles: [{ type: "input", inputType: "text", action: "registerEnterUsername" }],
+            interactibles: [{ type: "input", inputType: "text", action: "username" }],
         },
         {
             title: "Create an account",
             subtitle: "Enter your new password:",
-            interactibles: [{ type: "input", inputType: "password", action: "registerEnterPassword" }],
+            interactibles: [{ type: "input", inputType: "password", action: "password" }],
         },
     ],
     fast: [
@@ -28,16 +28,16 @@ const CARDS = {
             title: "Setup you fasting schedule",
             subtitle: "For how long do you want to fast?",
             interactibles: [
-                { type: "picker", action: "fastDuration" },
-                { type: "button", content: "Select", action: "selectFastDuration" },
+                { type: "picker", pickerType: "fastDuration" },
+                { type: "button", action: "fastDuration", content: "Select" },
             ],
         },
         {
             title: "Setup you fasting schedule",
             subtitle: "And at what time would you like to start?",
             interactibles: [
-                { type: "picker", action: "fastStartTime" },
-                { type: "button", content: "Select", action: "selectFastStartTime" },
+                { type: "picker", pickerType: "fastStartTime" },
+                { type: "button", action: "fastStartTime", content: "Select" },
             ],
         },
     ],
@@ -46,24 +46,24 @@ const CARDS = {
             title: "Tell us about you",
             subtitle: "What is you height?",
             interactibles: [
-                { type: "picker", action: "height" },
-                { type: "button", content: "Select", action: "selectHeight" },
+                { type: "picker", pickerType: "height" },
+                { type: "button", action: "height", content: "Select" },
             ],
         },
         {
             title: "Tell us about you",
             subtitle: "What is you weight?",
             interactibles: [
-                { type: "picker", action: "weight" },
-                { type: "button", content: "Select", action: "selectWeight" },
+                { type: "picker", pickerType: "weight" },
+                { type: "button", action: "weight", content: "Select" },
             ],
         },
         {
             title: "Tell us about you",
             subtitle: "And, what is you weight?",
             interactibles: [
-                { type: "picker", action: "objectiveWeight" },
-                { type: "button", content: "Select", action: "selectObjectiveWeight" },
+                { type: "picker", pickerType: "objectiveWeight" },
+                { type: "button", action: "objectiveWeight", content: "Select" },
             ],
         },
     ],
@@ -71,7 +71,8 @@ const CARDS = {
         {
             title: "All done!",
             subtitle: "Welcome to Fanfastic!",
-            interactibles: [{ type: "auto", action: "registerSuccess" }],
+            interactibles: [],
+            auto: true,
         },
     ],
 };
@@ -79,39 +80,66 @@ const CARDS = {
 export default function Register() {
     const { sub, unsub } = useContext(Events);
 
-    const content = STAGES.map((id, i) => <Cards cards={CARDS[id]} stageId={id} />);
+    // #################################################
+    //   DATA
+    // #################################################
 
+    const registrationData = useRef({
+        email: "",
+        username: "",
+        password: "",
+        fastDuration: "",
+        fastStartTime: "",
+        heigth: "",
+        weight: "",
+        objectiveWeight: "",
+    });
+
+    const handleActionDone = ({ stageId, action, data }) => {
+        if (stageId === "register" && action !== "success") registrationData.current[action] = data;
+    };
+
+    // #################################################
+    //   PAGE ANIMATION
+    // #################################################
+
+    const content = STAGES.map((id) => <Cards cards={CARDS[id]} stageId={id} canGoBack={id !== "registerSuccess"} />);
     const [renderedPages, nextPage, prevPage] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
         containerClass: "verticalPages",
     });
 
-    const handleNextStage = useCallback(
-        (data) => {
-            console.log(data);
-            if (!nextPage()) console.log("End Register");
-        },
-        [nextPage]
-    );
+    // #################################################
+    //   NEXT & PREV
+    // #################################################
 
-    const handlePrevStage = useCallback(
-        (data) => {
-            console.log(data);
-            if (!prevPage()) console.log("back to welcome");
-        },
-        [prevPage]
-    );
+    const handleNextStage = useCallback(() => {
+        if (!nextPage()) {
+            console.log("CALL ALL THE REGISTER APIS");
+            console.log(registrationData.current);
+        }
+    }, [nextPage]);
+
+    const handlePrevStage = useCallback(() => {
+        if (!prevPage()) console.log("back to welcome");
+    }, [prevPage]);
 
     useEffect(() => {
         sub("onNextStage", handleNextStage);
+        sub("onActionDone", handleActionDone);
         sub("onPrevStage", handlePrevStage);
 
         return () => {
             unsub("onNextStage", handleNextStage);
+            unsub("onActionDone", handleActionDone);
             unsub("onPrevStage", handlePrevStage);
         };
     }, [handleNextStage, handlePrevStage, sub, unsub]);
+
+    // #################################################
+    //   RENDER
+    // #################################################
 
     return renderedPages;
 }
