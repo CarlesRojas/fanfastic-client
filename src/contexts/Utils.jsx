@@ -234,6 +234,7 @@ const UtilsProvider = (props) => {
     //      THROTTLE & DEBOUNCE
     // ###################################################
 
+    // Execute every x time
     const throttle = (func, limit, immediate) => {
         var timeout;
         let inThrottle;
@@ -252,6 +253,7 @@ const UtilsProvider = (props) => {
         };
     };
 
+    // Wait for the function to stop being called to execute
     const debounce = (func, wait, immediate) => {
         var timeout;
 

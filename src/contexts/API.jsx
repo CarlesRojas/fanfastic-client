@@ -100,8 +100,8 @@ const APIProvider = (props) => {
         }
     };
 
-    const isEmailValid = async (email) => {
-        const postData = { email };
+    const isEmailValid = async (email, checkIfExists) => {
+        const postData = { email, checkIfExists };
 
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/isEmailValid`, {
@@ -141,6 +141,28 @@ const APIProvider = (props) => {
             return response;
         } catch (error) {
             return { error: `Is valid username error: ${error}` };
+        }
+    };
+
+    const isPasswordValid = async (password) => {
+        const postData = { password };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/isPasswordValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid password error: ${error}` };
         }
     };
 
@@ -666,6 +688,7 @@ const APIProvider = (props) => {
                 login,
                 isEmailValid,
                 isUsernameValid,
+                isPasswordValid,
                 isLoggedIn,
                 getUserInfo,
                 logout,

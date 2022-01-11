@@ -18,12 +18,12 @@ const CARDS = {
         {
             title: "Log in",
             subtitle: "Enter your email:",
-            interactibles: [{ type: "input", action: "loginEnterEmail" }],
+            interactibles: [{ type: "input", inputType: "email", action: "loginEnterEmail" }],
         },
         {
             title: "Log in",
             subtitle: "Enter your password:",
-            interactibles: [{ type: "input", action: "loginEnterPassword" }],
+            interactibles: [{ type: "input", inputType: "password", action: "loginEnterPassword" }],
         },
     ],
     loginSuccess: [
@@ -37,22 +37,17 @@ const CARDS = {
         {
             title: "Create an account",
             subtitle: "Enter your email:",
-            interactibles: [{ type: "input", action: "registerEnterEmail" }],
+            interactibles: [{ type: "input", inputType: "email", action: "registerEnterEmail" }],
         },
         {
             title: "Create an account",
             subtitle: "Enter your new username:",
-            interactibles: [{ type: "input", action: "registerEnterUsername" }],
+            interactibles: [{ type: "input", inputType: "text", action: "registerEnterUsername" }],
         },
         {
             title: "Create an account",
             subtitle: "Enter your new password:",
-            interactibles: [{ type: "input", action: "registerEnterPassword" }],
-        },
-        {
-            title: "Create an account",
-            subtitle: "Confirm the password:",
-            interactibles: [{ type: "input", action: "registerConfirmPassword" }],
+            interactibles: [{ type: "input", inputType: "password", action: "registerEnterPassword" }],
         },
     ],
     fast: [
@@ -109,6 +104,10 @@ const CARDS = {
 };
 
 export default function Auth() {
+    // #################################################
+    //   STATE
+    // #################################################
+
     const [springs, api] = useSprings(STAGES.length, (i) => ({ x: i === 0 ? "0vw" : "100vw" }));
     const [stagesVisible, setStagesVisible] = useState(STAGES.map((_, i) => i === 0));
 
@@ -119,6 +118,10 @@ export default function Auth() {
             return newArray;
         });
     };
+
+    // #################################################
+    //   NEXT & PREV
+    // #################################################
 
     const nextStage = useCallback(
         (currIndex, newIndex) => {
@@ -162,6 +165,10 @@ export default function Auth() {
         [api]
     );
 
+    // #################################################
+    //   RENDER
+    // #################################################
+
     return (
         <div className={"Auth"}>
             {springs.map(
@@ -173,7 +180,6 @@ export default function Auth() {
                             style={{
                                 x,
                                 pointerEvents: x.to((v) => (v === "0vw" ? "all" : "none")),
-                                backgroundColor: `rgb(${i * 40}, ${i * 40}, ${i * 40})`,
                             }}
                         >
                             <Cards
@@ -181,18 +187,9 @@ export default function Auth() {
                                 nextStage={nextStage}
                                 prevStage={prevStage}
                                 stages={STAGES}
+                                stageId={STAGES[i]}
+                                stageAnimation={x}
                             />
-                            {/* {STAGES[i]}
-                            {i + 1 < STAGES.length && (
-                                <div className="button" onClick={() => nextStage(i, i + 1)}>
-                                    Next
-                                </div>
-                            )}
-                            {i > 0 && (
-                                <div className="button" onClick={() => prevStage(i, i - 1)}>
-                                    Prev
-                                </div>
-                            )} */}
                         </animated.div>
                     )
             )}

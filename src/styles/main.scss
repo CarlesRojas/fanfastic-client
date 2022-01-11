@@ -36,7 +36,7 @@
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: rgb(255, 0, 0);
+    background: $background;
 
     .stageContainer {
         position: absolute;
@@ -48,16 +48,6 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
-
-        .button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 4rem;
-            width: 100vw;
-            background-color: darkblue;
-            margin: 1rem 0;
-        }
     }
 }
 
@@ -69,15 +59,28 @@
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: rgb(255, 183, 116);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
+    .backButton {
+        position: absolute;
+        top: calc(20% - #{$authButtonHeight});
+        height: 4rem;
+        padding: 0 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.5);
+    }
+
     .header {
+        position: absolute;
+        top: 20%;
         width: 90%;
-        height: 10rem;
+        height: $authHeaderHeight;
         background-color: white;
         padding: 1rem;
         display: flex;
@@ -85,7 +88,7 @@
         justify-content: space-between;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
-        z-index: 2;
+        z-index: 100;
 
         h1 {
             font-size: 1.8rem;
@@ -93,21 +96,39 @@
             margin-bottom: 0.5rem;
         }
 
-        p {
+        .subtitle {
             font-weight: 400;
+
+            p {
+                margin-top: 0.3rem;
+                font-size: 0.8rem;
+                font-weight: 500;
+                color: rgb(233, 50, 50);
+
+                &:first-letter {
+                    text-transform: capitalize;
+                }
+            }
         }
     }
 
     .interactions {
-        position: relative;
+        position: absolute;
+        top: 20%;
+        padding-top: $authHeaderHeight;
         width: 90%;
-        background-color: white;
         display: flex;
         flex-direction: column;
-        border-bottom-left-radius: 1rem;
-        border-bottom-right-radius: 1rem;
-        box-shadow: 0 0 100px rgba(0, 0, 0, 0.2);
-        z-index: 1;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        border-bottom-left-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+        background-color: rgb(230, 230, 230);
+
+        .separation {
+            background-color: white;
+            height: 1rem;
+        }
     }
 }
 
@@ -117,18 +138,96 @@
 
 .Button {
     width: 100%;
-    background-color: rgb(228, 228, 228);
-    height: 4rem;
-    margin-bottom: 1rem;
+    background-color: $backgrounOrange;
+    height: $authButtonHeight;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.5);
+
+    &.last {
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    //     &:hover {
+    //         background-color: rgb(225, 225, 225);
+    //     }
+}
+
+// #######################################
+//      INPUT
+// #######################################
+
+.Input {
+    position: relative;
+    width: 100%;
+    background-color: rgb(230, 230, 230);
+    height: $authButtonHeight;
     display: flex;
     justify-content: center;
     align-items: center;
 
     &.last {
-        margin-bottom: 0;
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 1rem;
+
+        input {
+            border-bottom-left-radius: 1rem;
+        }
     }
+
+    input {
+        background-color: rgb(235, 235, 235);
+        width: calc(100% - $authButtonHeight);
+        height: $authButtonHeight;
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 1rem;
+        user-select: all;
+    }
+
+    .enter {
+        position: relative;
+        height: $authButtonHeight;
+        min-height: $authButtonHeight;
+        max-height: $authButtonHeight;
+        width: $authButtonHeight;
+        min-width: $authButtonHeight;
+        max-width: $authButtonHeight;
+        background-color: $backgrounOrange;
+        border-bottom-right-radius: 1rem;
+        overflow: hidden;
+
+        .icon {
+            transition: top 0.2s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: rgba(0, 0, 0, 0.5);
+            height: 100%;
+            min-height: 100%;
+            max-height: 100%;
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+            padding: 1.1rem;
+            pointer-events: none;
+
+            &.up {
+                top: -$authButtonHeight;
+            }
+
+            &.down {
+                top: $authButtonHeight;
+            }
+        }
+    }
+
+    //     &:hover {
+    //         background-color: rgb(225, 225, 225);
+    //     }
 }
 
 // #######################################
