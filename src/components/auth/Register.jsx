@@ -103,11 +103,13 @@ export default function Register() {
     //   PAGE ANIMATION
     // #################################################
 
+    const animationSpeed = 400;
     const content = STAGES.map((id) => <Cards cards={CARDS[id]} stageId={id} canGoBack={id !== "registerSuccess"} />);
     const [renderedPages, nextPage, prevPage] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
         containerClass: "verticalPages",
+        animationSpeed,
     });
 
     // #################################################
@@ -115,14 +117,32 @@ export default function Register() {
     // #################################################
 
     const handleNextStage = useCallback(() => {
+        let timeout = null;
+
         if (!nextPage()) {
-            console.log("CALL ALL THE REGISTER APIS");
-            console.log(registrationData.current);
+            timeout = setTimeout(() => {
+                console.log("CALL ALL THE REGISTER APIS");
+                console.log(registrationData.current);
+            }, animationSpeed);
         }
+
+        return () => {
+            clearTimeout(timeout);
+        };
     }, [nextPage]);
 
     const handlePrevStage = useCallback(() => {
-        if (!prevPage()) console.log("back to welcome");
+        let timeout = null;
+
+        if (!prevPage()) {
+            timeout = setTimeout(() => {
+                console.log("back to welcome");
+            }, animationSpeed);
+        }
+
+        return () => {
+            clearTimeout(timeout);
+        };
     }, [prevPage]);
 
     useEffect(() => {

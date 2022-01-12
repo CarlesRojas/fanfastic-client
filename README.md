@@ -21,6 +21,7 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 
 ## TO DO:
 
--   [ ] When calling nextPage on the last page in usePageAnimation, animate it.
+-   [x] When calling nextPage on the last page in usePageAnimation, animate it.
+-   [ ] Add initial data to cards so when going back they mantaign the data
 -   [ ] Auth should be a usePageAnimation with only one stage, deepending on the data, we call one of the other two (We will need a way to also animate the first card in a stage, for all except the welcome)
 -   [ ] Integrate page history

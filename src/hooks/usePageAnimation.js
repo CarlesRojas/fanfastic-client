@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import useCssOneTimeAnimation from "./useCssOneTimeAnimation";
 
-export default function usePageAnimation({ pagesIds, pagesContents, containerClass }) {
+export default function usePageAnimation({ pagesIds, pagesContents, containerClass, animationSpeed }) {
     // #################################################
     //   STATE
     // #################################################
@@ -24,31 +24,45 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
     const page = useRef(0);
     const animationState = useRef({ shouldStartAnimation: false, goingBack: false, animationStarted: false });
 
-    const nextPage = useCallback(() => {
-        if (page.current >= pagesIds.length - 1) return false;
+    const isFirstPage = useCallback(() => {
+        return page.current === 0;
+    }, []);
 
+    const isLastPage = useCallback(() => {
+        return page.current === pagesIds.length - 1;
+    }, [pagesIds]);
+
+    const nextPage = useCallback(() => {
         // Save the animation we want to make and instantiate the appearing stage (out of sight)
         animationState.current = { shouldStartAnimation: true, goingBack: false, animationStarted: false };
 
+        if (isLastPage()) {
+            updatePagesVisible(page.current, true);
+            return false;
+        }
+
         updatePagesVisible(page.current + 1, true);
         return true;
-    }, [pagesIds]);
+    }, [isLastPage]);
 
     const prevPage = useCallback(() => {
-        if (page.current <= 0) return false;
-
         // Save the animation we want to make and instantiate the appearing stage (out of sight)
         animationState.current = { shouldStartAnimation: true, goingBack: true, animationStarted: false };
 
+        if (isFirstPage()) {
+            updatePagesVisible(page.current, true);
+            return false;
+        }
+
         updatePagesVisible(page.current - 1, true);
         return true;
-    }, []);
+    }, [isFirstPage]);
 
     // #################################################
     //   ANIMATION
     // #################################################
 
-    const [animating, trigger] = useCssOneTimeAnimation(400);
+    const [animating, trigger] = useCssOneTimeAnimation(animationSpeed);
 
     useEffect(() => {
         const { shouldStartAnimation, goingBack, animationStarted } = animationState.current;
@@ -59,16 +73,16 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
         // Add classes to animate towards the right (Go back)
         if (goingBack) {
             pagesRef.current[page.current].classList.add("exitGoingBack");
-            pagesRef.current[page.current - 1].classList.add("enterGoingBack");
+            if (!isFirstPage()) pagesRef.current[page.current - 1].classList.add("enterGoingBack");
         }
         // Add classes to animate towards the left (Go next)
         else {
             pagesRef.current[page.current].classList.add("exitGoingFordward");
-            pagesRef.current[page.current + 1].classList.add("enterGoingFordward");
+            if (!isLastPage()) pagesRef.current[page.current + 1].classList.add("enterGoingFordward");
         }
 
         trigger();
-    }, [pagesVisible, trigger]);
+    }, [pagesVisible, trigger, isFirstPage, isLastPage]);
 
     useEffect(() => {
         const { shouldStartAnimation, goingBack } = animationState.current;
