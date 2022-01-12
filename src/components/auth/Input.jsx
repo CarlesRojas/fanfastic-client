@@ -27,7 +27,12 @@ export default function Input({ data, nextCard, handleError, lastInteractible, l
         setHasContent(inputRef.current.value.length > 0);
     };
 
+    const validating = useRef(false);
+
     const handleEnter = useThrottle(async () => {
+        if (validating.current) return;
+        validating.current = true;
+
         var validate = () => ({ success: true });
 
         if (inputType === "email") validate = isEmailValid;
@@ -39,7 +44,8 @@ export default function Input({ data, nextCard, handleError, lastInteractible, l
 
         if ("error" in validationResult) handleError(validationResult.error.replaceAll(`"`, ""));
         else nextCard(inputRef.current.value);
-    }, 500);
+        validating.current = false;
+    }, 1500);
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter" || event.key === "Tab") handleEnter();

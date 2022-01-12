@@ -248,6 +248,14 @@ const UtilsProvider = (props) => {
         return outputArray;
     };
 
+    // ###################################################
+    //      SLEEP
+    // ###################################################
+
+    const sleep = (ms) => {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    };
+
     return (
         <Utils.Provider
             value={{
@@ -282,6 +290,9 @@ const UtilsProvider = (props) => {
 
                 // BASE64
                 urlBase64ToUint8Array,
+
+                // SLEEP
+                sleep,
             }}
         >
             {props.children}
