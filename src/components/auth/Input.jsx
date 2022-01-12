@@ -11,7 +11,15 @@ import PasswordIcon from "../../resources/icons/password.svg";
 import UpIcon from "../../resources/icons/up.svg";
 import RightIcon from "../../resources/icons/right.svg";
 
-export default function Input({ data, nextCard, handleError, lastInteractible, lastCard, current }) {
+export default function Input({
+    data,
+    nextPhase,
+    handleError,
+    isLastInteractible,
+    isLastPhase,
+    isCurrentPhase,
+    registrationData,
+}) {
     const { isEmailValid, isUsernameValid, isPasswordValid } = useContext(API);
 
     const { inputType, action } = data;
@@ -39,11 +47,11 @@ export default function Input({ data, nextCard, handleError, lastInteractible, l
         else if (inputType === "text") validate = isUsernameValid;
         else if (inputType === "password") validate = isPasswordValid;
 
-        if (action === "registerEnterEmail") var validationResult = await validate(inputRef.current.value, true);
+        if (action === "email") var validationResult = await validate(inputRef.current.value, true);
         else validationResult = await validate(inputRef.current.value, false);
 
         if ("error" in validationResult) handleError(validationResult.error.replaceAll(`"`, ""));
-        else nextCard(inputRef.current.value);
+        else nextPhase(inputRef.current.value);
         validating.current = false;
     }, 1500);
 
@@ -58,15 +66,19 @@ export default function Input({ data, nextCard, handleError, lastInteractible, l
     };
 
     useEffect(() => {
-        if (current) inputRef.current.focus();
-    }, [current, inputType]);
+        if (isCurrentPhase) inputRef.current.focus();
+    }, [isCurrentPhase]);
+
+    useEffect(() => {
+        inputRef.current.value = registrationData.current[action];
+    }, [registrationData, action]);
 
     // #################################################
     //   RENDER
     // #################################################
 
     return (
-        <div className={cn("Input", { last: lastInteractible })} onKeyDown={handleKeyDown}>
+        <div className={cn("Input", { last: isLastInteractible })} onKeyDown={handleKeyDown}>
             <input
                 type={inputType}
                 autoComplete="new-password"
@@ -80,7 +92,7 @@ export default function Input({ data, nextCard, handleError, lastInteractible, l
                     className={cn("icon", { up: hasContent })}
                     src={inputType === "email" ? EmailIcon : inputType === "text" ? UsernameIcon : PasswordIcon}
                 />
-                <SVG className={cn("icon", { down: !hasContent })} src={lastCard ? RightIcon : UpIcon} />
+                <SVG className={cn("icon", { down: !hasContent })} src={isLastPhase ? RightIcon : UpIcon} />
             </div>
         </div>
     );

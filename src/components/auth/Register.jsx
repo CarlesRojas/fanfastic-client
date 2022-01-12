@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useContext, useRef } from "react";
 import usePageAnimation from "../../hooks/usePageAnimation";
 import { Events } from "../../contexts/Events";
-import Cards from "./Cards";
+import Card from "./Card";
 
 const STAGES = ["register", "fast", "health", "registerSuccess"];
 
@@ -28,7 +28,7 @@ const CARDS = {
             title: "Setup you fasting schedule",
             subtitle: "For how long do you want to fast?",
             interactibles: [
-                { type: "picker", pickerType: "fastDuration" },
+                { type: "picker", action: "pickfastDuration", pickerType: "fastDuration" },
                 { type: "button", action: "fastDuration", content: "Select" },
             ],
         },
@@ -36,7 +36,7 @@ const CARDS = {
             title: "Setup you fasting schedule",
             subtitle: "And at what time would you like to start?",
             interactibles: [
-                { type: "picker", pickerType: "fastStartTime" },
+                { type: "picker", action: "pickfastStartTime", pickerType: "fastStartTime" },
                 { type: "button", action: "fastStartTime", content: "Select" },
             ],
         },
@@ -46,7 +46,7 @@ const CARDS = {
             title: "Tell us about you",
             subtitle: "What is you height?",
             interactibles: [
-                { type: "picker", pickerType: "height" },
+                { type: "picker", action: "pickHeight", pickerType: "height" },
                 { type: "button", action: "height", content: "Select" },
             ],
         },
@@ -54,7 +54,7 @@ const CARDS = {
             title: "Tell us about you",
             subtitle: "What is you weight?",
             interactibles: [
-                { type: "picker", pickerType: "weight" },
+                { type: "picker", action: "pickWeight", pickerType: "weight" },
                 { type: "button", action: "weight", content: "Select" },
             ],
         },
@@ -62,7 +62,7 @@ const CARDS = {
             title: "Tell us about you",
             subtitle: "And, what is you weight?",
             interactibles: [
-                { type: "picker", pickerType: "objectiveWeight" },
+                { type: "picker", action: "pickObjectiveWeight", pickerType: "objectiveWeight" },
                 { type: "button", action: "objectiveWeight", content: "Select" },
             ],
         },
@@ -96,7 +96,8 @@ export default function Register() {
     });
 
     const handleActionDone = ({ stageId, action, data }) => {
-        if (stageId === "register" && action !== "success") registrationData.current[action] = data;
+        console.log(stageId, action, data);
+        if (stageId === "register" && action in registrationData.current) registrationData.current[action] = data;
     };
 
     // #################################################
@@ -104,7 +105,14 @@ export default function Register() {
     // #################################################
 
     const animationSpeed = 400;
-    const content = STAGES.map((id) => <Cards cards={CARDS[id]} stageId={id} canGoBack={id !== "registerSuccess"} />);
+    const content = STAGES.map((id) => (
+        <Card
+            cardPhases={CARDS[id]}
+            stageId={id}
+            canGoBack={id !== "registerSuccess"}
+            registrationData={registrationData}
+        />
+    ));
     const [renderedPages, nextPage, prevPage] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
