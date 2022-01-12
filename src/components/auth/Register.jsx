@@ -69,7 +69,7 @@ const CARDS = {
     ],
     registerSuccess: [
         {
-            title: "All done!",
+            title: "All done",
             subtitle: "Welcome to Fanfastic!",
             interactibles: [],
             auto: true,
@@ -111,7 +111,7 @@ export default function Register({ parentId }) {
             cardPhases={CARDS[id]}
             stageId={id}
             canGoBack={id !== "registerSuccess"}
-            registrationData={registrationData}
+            parentData={registrationData}
             parentId={PARENT_ID}
         />
     ));
@@ -148,7 +148,6 @@ export default function Register({ parentId }) {
 
     const handlePrevStage = useCallback(
         (stageId) => {
-            console.log(stageId);
             if (stageId !== PARENT_ID) return;
             if (!prevPage()) emit("onPrevStage", parentId);
         },

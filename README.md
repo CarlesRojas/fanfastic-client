@@ -25,4 +25,5 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Add initial data to cards so when going back they mantaign the data
 -   [x] Auth should be a usePageAnimation with only one stage, deepending on the data, we call one of the other two
 -   [x] We will need a way to also animate the first card in a stage, for all except the welcome
+-   [ ] Call the apis. (The current console logs are runing to late)(On error, go back to the first stage and show the error).
 -   [ ] Integrate page history

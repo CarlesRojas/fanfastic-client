@@ -18,7 +18,7 @@ export default function Input({
     isLastInteractible,
     isLastPhase,
     isCurrentPhase,
-    registrationData,
+    parentData,
 }) {
     const { isEmailValid, isUsernameValid, isPasswordValid } = useContext(API);
 
@@ -70,8 +70,8 @@ export default function Input({
     }, [isCurrentPhase]);
 
     useEffect(() => {
-        inputRef.current.value = registrationData.current[action];
-    }, [registrationData, action]);
+        inputRef.current.value = parentData.current[action];
+    }, [parentData, action]);
 
     // #################################################
     //   RENDER

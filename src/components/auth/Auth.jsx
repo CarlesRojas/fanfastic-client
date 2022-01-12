@@ -23,7 +23,7 @@ const CARDS = {
 export default function Auth() {
     const { sub, unsub } = useContext(Events);
 
-    const [showNextPages, setShowNextPages] = useState({ register: false, login: true });
+    const [showNextPages, setShowNextPages] = useState({ register: false, login: false });
 
     const handleActionDone = ({ stageId, action, data }) => {
         if (stageId !== PARENT_ID) return;

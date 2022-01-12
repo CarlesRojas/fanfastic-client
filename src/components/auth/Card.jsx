@@ -15,7 +15,7 @@ const style = (i, currentIndex) => ({
     filter: i > currentIndex ? "brightness(90%)" : "brightness(100%)",
 });
 
-export default function Card({ cardPhases, stageId, canGoBack, registrationData, parentId }) {
+export default function Card({ cardPhases, stageId, canGoBack, parentData, parentId }) {
     const { emit } = useContext(Events);
 
     // #################################################
@@ -119,7 +119,7 @@ export default function Card({ cardPhases, stageId, canGoBack, registrationData,
                                         handleError={handleError}
                                         isLastPhase={phase === cardPhases.length - 1}
                                         isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
-                                        registrationData={registrationData}
+                                        parentData={parentData}
                                     />
                                 </Fragment>
                             );
