@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import useCssOneTimeAnimation from "./useCssOneTimeAnimation";
 
-export default function usePageAnimation({ pagesIds, pagesContents, containerClass, animationSpeed }) {
+export default function usePageAnimation({ pagesIds, pagesContents, containerClass, animationSpeed, animateFirst }) {
     // #################################################
     //   STATE
     // #################################################
@@ -96,10 +96,14 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
         updatePagesVisible(gonePage, false);
     }, [animating]);
 
+    const firstRun = useRef(true);
     useEffect(() => {
-        // The first page starts in the center
-        pagesRef.current[0].classList.add("center");
-    }, []);
+        if (!firstRun.current) return;
+        firstRun.current = false;
+
+        if (animateFirst) pagesRef.current[0].classList.add("enterGoingFordward");
+        else pagesRef.current[0].classList.add("center");
+    }, [animateFirst]);
 
     // #################################################
     //   RENDER

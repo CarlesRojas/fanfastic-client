@@ -110,6 +110,7 @@ export default function Register() {
         pagesContents: content,
         containerClass: "verticalPages",
         animationSpeed,
+        animateFirst: true,
     });
 
     // #################################################
