@@ -12,7 +12,7 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
     const updatePagesVisible = (index, newValue) => {
         setPagesVisible((prev) => {
             const newArray = [...prev];
-            newArray[index] = newValue;
+            if (index >= 0 && index < newArray.length) newArray[index] = newValue;
             return newArray;
         });
     };
@@ -31,6 +31,13 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
     const isLastPage = useCallback(() => {
         return page.current === pagesIds.length - 1;
     }, [pagesIds]);
+
+    const isInBounds = useCallback(
+        (index) => {
+            return index >= 0 && index < pagesIds.length;
+        },
+        [pagesIds]
+    );
 
     const nextPage = useCallback(() => {
         // Save the animation we want to make and instantiate the appearing stage (out of sight)
@@ -72,17 +79,19 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
 
         // Add classes to animate towards the right (Go back)
         if (goingBack) {
-            pagesRef.current[page.current].classList.add("exitGoingBack");
-            if (!isFirstPage()) pagesRef.current[page.current - 1].classList.add("enterGoingBack");
+            if (isInBounds(page.current)) pagesRef.current[page.current].classList.add("exitGoingBack");
+            if (isInBounds(page.current - 1) && !isFirstPage())
+                pagesRef.current[page.current - 1].classList.add("enterGoingBack");
         }
         // Add classes to animate towards the left (Go next)
         else {
-            pagesRef.current[page.current].classList.add("exitGoingFordward");
-            if (!isLastPage()) pagesRef.current[page.current + 1].classList.add("enterGoingFordward");
+            if (isInBounds(page.current)) pagesRef.current[page.current].classList.add("exitGoingFordward");
+            if (isInBounds(page.current + 1) && !isLastPage())
+                pagesRef.current[page.current + 1].classList.add("enterGoingFordward");
         }
 
         trigger();
-    }, [pagesVisible, trigger, isFirstPage, isLastPage]);
+    }, [pagesVisible, trigger, isFirstPage, isLastPage, isInBounds]);
 
     useEffect(() => {
         const { shouldStartAnimation, goingBack } = animationState.current;

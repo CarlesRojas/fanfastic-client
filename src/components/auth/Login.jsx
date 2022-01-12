@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useContext } from "react";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
-import Cards from "./Cards";
 
 const STAGES = ["login", "loginSuccess"];
 
@@ -27,20 +26,5 @@ const CARDS = {
 };
 
 export default function Login() {
-    // #################################################
-    //   STATE
-    // #################################################
-
-    const [animating, trigger] = useCssOneTimeAnimation(400);
-    const [stagesVisible, setStagesVisible] = useState(STAGES.map((_, i) => i === 0));
-
-    const updateStagesVisible = (index, newValue) => {
-        setStagesVisible((prev) => {
-            const newArray = [...prev];
-            newArray[index] = newValue;
-            return newArray;
-        });
-    };
-
     return <div></div>;
 }

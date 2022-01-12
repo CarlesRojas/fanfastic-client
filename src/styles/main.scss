@@ -29,17 +29,6 @@
 }
 
 // #######################################
-//      AUTH
-// #######################################
-
-.Auth {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    background: $background;
-}
-
-// #######################################
 //      CARDS
 // #######################################
 
@@ -359,83 +348,6 @@
 
             100% {
                 transform: translateX(-100vw);
-            }
-        }
-    }
-}
-
-.verticalPages {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    transform: translateY(100vh);
-
-    &.center {
-        transform: translateY(0vh);
-    }
-
-    &.enterGoingFordward {
-        animation: enterGoingFordward 0.4s ease-in-out;
-        animation-fill-mode: forwards;
-
-        @keyframes enterGoingFordward {
-            0% {
-                transform: translateY(100vh);
-            }
-
-            100% {
-                transform: translateY(0vh);
-            }
-        }
-    }
-
-    &.enterGoingBack {
-        animation: enterGoingBack 0.4s ease-in-out;
-        animation-fill-mode: forwards;
-
-        @keyframes enterGoingBack {
-            0% {
-                transform: translateY(-100vh);
-            }
-
-            100% {
-                transform: translateY(0vh);
-            }
-        }
-    }
-
-    &.exitGoingBack {
-        animation: exitGoingBack 0.4s ease-in-out;
-        animation-fill-mode: forwards;
-
-        @keyframes exitGoingBack {
-            0% {
-                transform: translateY(0vh);
-            }
-
-            100% {
-                transform: translateY(100vh);
-            }
-        }
-    }
-
-    &.exitGoingFordward {
-        animation: exitGoingFordward 0.4s ease-in-out;
-        animation-fill-mode: forwards;
-
-        @keyframes exitGoingFordward {
-            0% {
-                transform: translateY(0vh);
-            }
-
-            100% {
-                transform: translateY(-100vh);
             }
         }
     }

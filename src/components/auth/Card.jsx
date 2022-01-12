@@ -15,7 +15,7 @@ const style = (i, currentIndex) => ({
     filter: i > currentIndex ? "brightness(90%)" : "brightness(100%)",
 });
 
-export default function Card({ cardPhases, stageId, canGoBack, registrationData }) {
+export default function Card({ cardPhases, stageId, canGoBack, registrationData, parentId }) {
     const { emit } = useContext(Events);
 
     // #################################################
@@ -46,14 +46,14 @@ export default function Card({ cardPhases, stageId, canGoBack, registrationData 
 
         if (currentPhase < cardPhases.length - 1) {
             setCurrentPhase((prev) => prev + 1);
-        } else emit("onNextStage");
+        } else emit("onNextStage", parentId);
     }, 500);
 
     const prevPhase = useThrottle(() => {
         setError(false);
 
         if (currentPhase > 0) setCurrentPhase((prev) => prev - 1);
-        else emit("onPrevStage");
+        else emit("onPrevStage", parentId);
     }, 500);
 
     // #################################################

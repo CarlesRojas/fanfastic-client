@@ -3,8 +3,8 @@ import usePageAnimation from "../../hooks/usePageAnimation";
 import { Events } from "../../contexts/Events";
 import Card from "./Card";
 
+const PARENT_ID = "register";
 const STAGES = ["register", "fast", "health", "registerSuccess"];
-
 const CARDS = {
     register: [
         {
@@ -77,8 +77,8 @@ const CARDS = {
     ],
 };
 
-export default function Register() {
-    const { sub, unsub } = useContext(Events);
+export default function Register({ parentId }) {
+    const { sub, unsub, emit } = useContext(Events);
 
     // #################################################
     //   DATA
@@ -96,8 +96,9 @@ export default function Register() {
     });
 
     const handleActionDone = ({ stageId, action, data }) => {
-        console.log(stageId, action, data);
-        if (stageId === "register" && action in registrationData.current) registrationData.current[action] = data;
+        if (stageId !== PARENT_ID) return;
+
+        if (action in registrationData.current) registrationData.current[action] = data;
     };
 
     // #################################################
@@ -111,12 +112,13 @@ export default function Register() {
             stageId={id}
             canGoBack={id !== "registerSuccess"}
             registrationData={registrationData}
+            parentId={PARENT_ID}
         />
     ));
     const [renderedPages, nextPage, prevPage] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
-        containerClass: "verticalPages",
+        containerClass: "lateralPages",
         animationSpeed,
         animateFirst: true,
     });
@@ -125,44 +127,43 @@ export default function Register() {
     //   NEXT & PREV
     // #################################################
 
-    const handleNextStage = useCallback(() => {
-        let timeout = null;
+    const handleNextStage = useCallback(
+        (stageId) => {
+            if (stageId !== PARENT_ID) return;
+            let timeout = null;
 
-        if (!nextPage()) {
-            timeout = setTimeout(() => {
-                console.log("CALL ALL THE REGISTER APIS");
-                console.log(registrationData.current);
-            }, animationSpeed);
-        }
+            if (!nextPage()) {
+                timeout = setTimeout(() => {
+                    console.log("CALL ALL THE REGISTER APIS");
+                    console.log(registrationData.current);
+                }, animationSpeed);
+            }
 
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, [nextPage]);
+            return () => {
+                clearTimeout(timeout);
+            };
+        },
+        [nextPage]
+    );
 
-    const handlePrevStage = useCallback(() => {
-        let timeout = null;
-
-        if (!prevPage()) {
-            timeout = setTimeout(() => {
-                console.log("back to welcome");
-            }, animationSpeed);
-        }
-
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, [prevPage]);
+    const handlePrevStage = useCallback(
+        (stageId) => {
+            console.log(stageId);
+            if (stageId !== PARENT_ID) return;
+            if (!prevPage()) emit("onPrevStage", parentId);
+        },
+        [prevPage, emit, parentId]
+    );
 
     useEffect(() => {
         sub("onNextStage", handleNextStage);
-        sub("onActionDone", handleActionDone);
         sub("onPrevStage", handlePrevStage);
+        sub("onActionDone", handleActionDone);
 
         return () => {
             unsub("onNextStage", handleNextStage);
-            unsub("onActionDone", handleActionDone);
             unsub("onPrevStage", handlePrevStage);
+            unsub("onActionDone", handleActionDone);
         };
     }, [handleNextStage, handlePrevStage, sub, unsub]);
 
