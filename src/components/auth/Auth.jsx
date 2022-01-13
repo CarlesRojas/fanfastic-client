@@ -25,20 +25,13 @@ export default function Auth() {
 
     const [showNextPages, setShowNextPages] = useState({ register: false, login: false });
 
-    const handleActionDone = ({ stageId, action, data }) => {
-        if (stageId !== PARENT_ID) return;
-
-        if (action === "register") setShowNextPages({ register: true, login: false });
-        else if (action === "login") setShowNextPages({ register: false, login: true });
-    };
-
     // #################################################
     //   PAGE ANIMATION
     // #################################################
 
     const animationSpeed = 400;
     const content = STAGES.map((id) => (
-        <Card cardPhases={CARDS[id]} stageId={id} canGoBack={false} registrationData={{}} parentId={PARENT_ID} />
+        <Card cardPhases={CARDS[id]} canGoBack={false} registrationData={{}} parentId={PARENT_ID} />
     ));
     const [renderedPages, nextPage, prevPage] = usePageAnimation({
         pagesIds: STAGES,
@@ -49,20 +42,27 @@ export default function Auth() {
     });
 
     // #################################################
-    //   NEXT & PREV
+    //   HANDLERS
     // #################################################
 
+    const handleActionDone = useCallback(({ callerParentId, action }) => {
+        if (callerParentId !== PARENT_ID) return;
+
+        if (action === "register") setShowNextPages({ register: true, login: false });
+        else if (action === "login") setShowNextPages({ register: false, login: true });
+    }, []);
+
     const handleNextStage = useCallback(
-        (stageId) => {
-            if (stageId !== PARENT_ID) return;
+        (callerParentId) => {
+            if (callerParentId !== PARENT_ID) return;
             nextPage();
         },
         [nextPage]
     );
 
     const handlePrevStage = useCallback(
-        (stageId) => {
-            if (stageId !== PARENT_ID) return;
+        (callerParentId) => {
+            if (callerParentId !== PARENT_ID) return;
             let timeout = null;
 
             prevPage();
@@ -77,6 +77,10 @@ export default function Auth() {
         [prevPage]
     );
 
+    // #################################################
+    //   EVENTS
+    // #################################################
+
     useEffect(() => {
         sub("onNextStage", handleNextStage);
         sub("onPrevStage", handlePrevStage);
@@ -87,7 +91,7 @@ export default function Auth() {
             unsub("onPrevStage", handlePrevStage);
             unsub("onActionDone", handleActionDone);
         };
-    }, [handleNextStage, handlePrevStage, sub, unsub]);
+    }, [handleNextStage, handlePrevStage, handleActionDone, sub, unsub]);
 
     // #################################################
     //   RENDER

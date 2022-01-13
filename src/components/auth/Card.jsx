@@ -15,7 +15,7 @@ const style = (i, currentIndex) => ({
     filter: i > currentIndex ? "brightness(90%)" : "brightness(100%)",
 });
 
-export default function Card({ cardPhases, stageId, canGoBack, parentData, parentId }) {
+export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     const { emit } = useContext(Events);
 
     // #################################################
@@ -42,7 +42,7 @@ export default function Card({ cardPhases, stageId, canGoBack, parentData, paren
 
     const nextPhase = useThrottle((action, data) => {
         setError(false);
-        emit("onActionDone", { stageId, action, data });
+        emit("onActionDone", { callerParentId: parentId, action, data });
 
         if (currentPhase < cardPhases.length - 1) {
             setCurrentPhase((prev) => prev + 1);
@@ -57,20 +57,24 @@ export default function Card({ cardPhases, stageId, canGoBack, parentData, paren
     }, 500);
 
     // #################################################
+    //   AUTOMATIC DISMISS
+    // #################################################
+
+    // useEffect(() => {
+    //     if (!("auto" in cardPhases[currentPhase])) return;
+
+    //     const timeout = setTimeout(() => nextPhase("success", ""), 2000);
+
+    //     return () => {
+    //         clearTimeout(timeout);
+    //     };
+    // }, [cardPhases, currentPhase, nextPhase]);
+
+    // #################################################
     //   RENDER
     // #################################################
 
     const { title, subtitle } = cardPhases[currentPhase];
-
-    useEffect(() => {
-        if (!("auto" in cardPhases[currentPhase])) return;
-
-        const timeout = setTimeout(() => nextPhase("success", ""), 2000);
-
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, [cardPhases, currentPhase, nextPhase]);
 
     return (
         <div className={cn("Card", { shake: animating })}>
@@ -80,7 +84,7 @@ export default function Card({ cardPhases, stageId, canGoBack, parentData, paren
                 </div>
             )}
 
-            <div className="header">
+            <div className={cn("header", { noInteractibles: cardPhases[currentPhase].interactibles.length <= 0 })}>
                 <h1>{title}</h1>
                 <div className={"subtitle"}>
                     {subtitle}

@@ -41,25 +41,13 @@ export default function Login({ parentId }) {
         password: "",
     });
 
-    const handleActionDone = ({ stageId, action, data }) => {
-        if (stageId !== PARENT_ID) return;
-
-        if (action in loginData.current) loginData.current[action] = data;
-    };
-
     // #################################################
     //   PAGE ANIMATION
     // #################################################
 
     const animationSpeed = 400;
     const content = STAGES.map((id) => (
-        <Card
-            cardPhases={CARDS[id]}
-            stageId={id}
-            canGoBack={id !== "loginSuccess"}
-            parentData={loginData}
-            parentId={PARENT_ID}
-        />
+        <Card cardPhases={CARDS[id]} canGoBack={id !== "loginSuccess"} parentData={loginData} parentId={PARENT_ID} />
     ));
     const [renderedPages, nextPage, prevPage] = usePageAnimation({
         pagesIds: STAGES,
@@ -70,35 +58,47 @@ export default function Login({ parentId }) {
     });
 
     // #################################################
-    //   NEXT & PREV
+    //   HANDLERS
     // #################################################
 
-    const handleNextStage = useCallback(
-        (stageId) => {
-            if (stageId !== PARENT_ID) return;
-            let timeout = null;
+    const handleActionDone = useCallback(
+        ({ callerParentId, action, data }) => {
+            if (callerParentId !== PARENT_ID) return;
 
-            if (!nextPage()) {
-                timeout = setTimeout(() => {
-                    console.log("CALL ALL THE LOGIN APIS");
-                    console.log(loginData.current);
-                }, animationSpeed);
+            if (action in loginData.current) loginData.current[action] = data;
+
+            if (action === "password") {
+                console.log("CALL ALL THE LOGIN APIS");
+                console.log(loginData.current);
+
+                // ROJAS REMOVE TIMEOUT and just wait for the api to response to decide to go to next or to show error
+                setTimeout(() => {
+                    nextPage();
+                }, 2000);
             }
+        },
+        [nextPage]
+    );
 
-            return () => {
-                clearTimeout(timeout);
-            };
+    const handleNextStage = useCallback(
+        (callerParentId) => {
+            if (callerParentId !== PARENT_ID) return;
+            nextPage();
         },
         [nextPage]
     );
 
     const handlePrevStage = useCallback(
-        (stageId) => {
-            if (stageId !== PARENT_ID) return;
+        (callerParentId) => {
+            if (callerParentId !== PARENT_ID) return;
             if (!prevPage()) emit("onPrevStage", parentId);
         },
         [prevPage, emit, parentId]
     );
+
+    // #################################################
+    //   EVENTS
+    // #################################################
 
     useEffect(() => {
         sub("onNextStage", handleNextStage);
@@ -110,7 +110,7 @@ export default function Login({ parentId }) {
             unsub("onPrevStage", handlePrevStage);
             unsub("onActionDone", handleActionDone);
         };
-    }, [handleNextStage, handlePrevStage, sub, unsub]);
+    }, [handleNextStage, handlePrevStage, handleActionDone, sub, unsub]);
 
     // #################################################
     //   RENDER

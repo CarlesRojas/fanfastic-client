@@ -95,12 +95,6 @@ export default function Register({ parentId }) {
         objectiveWeight: "",
     });
 
-    const handleActionDone = ({ stageId, action, data }) => {
-        if (stageId !== PARENT_ID) return;
-
-        if (action in registrationData.current) registrationData.current[action] = data;
-    };
-
     // #################################################
     //   PAGE ANIMATION
     // #################################################
@@ -109,7 +103,6 @@ export default function Register({ parentId }) {
     const content = STAGES.map((id) => (
         <Card
             cardPhases={CARDS[id]}
-            stageId={id}
             canGoBack={id !== "registerSuccess"}
             parentData={registrationData}
             parentId={PARENT_ID}
@@ -124,35 +117,48 @@ export default function Register({ parentId }) {
     });
 
     // #################################################
-    //   NEXT & PREV
+    //   HANDLERS
     // #################################################
 
-    const handleNextStage = useCallback(
-        (stageId) => {
-            if (stageId !== PARENT_ID) return;
-            let timeout = null;
+    const handleActionDone = useCallback(
+        ({ callerParentId, action, data }) => {
+            console.log(callerParentId, action, data);
+            if (callerParentId !== PARENT_ID) return;
 
-            if (!nextPage()) {
-                timeout = setTimeout(() => {
-                    console.log("CALL ALL THE REGISTER APIS");
-                    console.log(registrationData.current);
-                }, animationSpeed);
+            if (action in registrationData.current) registrationData.current[action] = data;
+
+            if (action === "objectiveWeight") {
+                console.log("CALL ALL THE LOGIN APIS");
+                console.log(registrationData.current);
+
+                // ROJAS REMOVE TIMEOUT and just wait for the api to response to decide to go to next or to show error
+                setTimeout(() => {
+                    nextPage();
+                }, 2000);
             }
+        },
+        [nextPage]
+    );
 
-            return () => {
-                clearTimeout(timeout);
-            };
+    const handleNextStage = useCallback(
+        (callerParentId) => {
+            if (callerParentId !== PARENT_ID) return;
+            nextPage();
         },
         [nextPage]
     );
 
     const handlePrevStage = useCallback(
-        (stageId) => {
-            if (stageId !== PARENT_ID) return;
+        (callerParentId) => {
+            if (callerParentId !== PARENT_ID) return;
             if (!prevPage()) emit("onPrevStage", parentId);
         },
         [prevPage, emit, parentId]
     );
+
+    // #################################################
+    //   EVENTS
+    // #################################################
 
     useEffect(() => {
         sub("onNextStage", handleNextStage);
@@ -164,7 +170,7 @@ export default function Register({ parentId }) {
             unsub("onPrevStage", handlePrevStage);
             unsub("onActionDone", handleActionDone);
         };
-    }, [handleNextStage, handlePrevStage, sub, unsub]);
+    }, [handleNextStage, handlePrevStage, handleActionDone, sub, unsub]);
 
     // #################################################
     //   RENDER
