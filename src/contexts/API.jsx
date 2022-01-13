@@ -100,72 +100,6 @@ const APIProvider = (props) => {
         }
     };
 
-    const isEmailValid = async (email, checkIfExists) => {
-        const postData = { email, checkIfExists };
-
-        try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/isEmailValid`, {
-                method: "post",
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify(postData),
-            });
-
-            const response = await rawResponse.json();
-
-            return response;
-        } catch (error) {
-            return { error: `Is valid email error: ${error}` };
-        }
-    };
-
-    const isUsernameValid = async (username) => {
-        const postData = { username };
-
-        try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/isUsernameValid`, {
-                method: "post",
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify(postData),
-            });
-
-            const response = await rawResponse.json();
-
-            return response;
-        } catch (error) {
-            return { error: `Is valid username error: ${error}` };
-        }
-    };
-
-    const isPasswordValid = async (password) => {
-        const postData = { password };
-
-        try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/isPasswordValid`, {
-                method: "post",
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify(postData),
-            });
-
-            const response = await rawResponse.json();
-
-            return response;
-        } catch (error) {
-            return { error: `Is valid password error: ${error}` };
-        }
-    };
-
     const getUserInfo = async () => {
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/getUserInfo`, {
@@ -678,15 +612,192 @@ const APIProvider = (props) => {
         }
     };
 
+    // #################################################
+    //   VALIDATE API
+    // #################################################
+
+    const isEmailValid = async (email, checkIfExists) => {
+        const postData = { email, checkIfExists };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isEmailValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid email error: ${error}` };
+        }
+    };
+
+    const isUsernameValid = async (username) => {
+        const postData = { username };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isUsernameValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid username error: ${error}` };
+        }
+    };
+
+    const isPasswordValid = async (password) => {
+        const postData = { password };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isPasswordValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid password error: ${error}` };
+        }
+    };
+
+    const isFastDesiredStartTimeValid = async (fastDesiredStartTimeInMinutes) => {
+        const postData = { fastDesiredStartTimeInMinutes };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isFastDesiredStartTimeValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid fast desired start time error: ${error}` };
+        }
+    };
+
+    const isFastObjectiveValid = async (fastObjectiveInMinutes) => {
+        const postData = { fastObjectiveInMinutes };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isFastObjectiveValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid fast objective error: ${error}` };
+        }
+    };
+
+    const isHeightValid = async (heightInCm) => {
+        const postData = { heightInCm };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isHeightValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid height error: ${error}` };
+        }
+    };
+
+    const isWeightValid = async (weightInKg) => {
+        const postData = { weightInKg };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isWeightValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid weight error: ${error}` };
+        }
+    };
+
+    const isWeightObjectiveValid = async (weightInKg, weightObjectiveInKg) => {
+        const postData = { weightInKg, weightObjectiveInKg };
+
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isWeightObjectiveValid`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Is valid weight objective error: ${error}` };
+        }
+    };
+
     return (
         <API.Provider
             value={{
                 // AUTH API
                 register,
                 login,
-                isEmailValid,
-                isUsernameValid,
-                isPasswordValid,
                 isLoggedIn,
                 getUserInfo,
                 logout,
@@ -712,6 +823,16 @@ const APIProvider = (props) => {
 
                 // PUSH API
                 subscribeToPuhsNotifications,
+
+                // VALIDATE API
+                isEmailValid,
+                isUsernameValid,
+                isPasswordValid,
+                isFastDesiredStartTimeValid,
+                isFastObjectiveValid,
+                isHeightValid,
+                isWeightValid,
+                isWeightObjectiveValid,
             }}
         >
             {props.children}
