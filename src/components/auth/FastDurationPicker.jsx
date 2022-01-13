@@ -212,11 +212,11 @@ export default function FastDurationPicker({ data, isLastInteractible, parentDat
     // #################################################
 
     return (
-        <div className={cn("FastDurationPicker", { last: isLastInteractible })} {...gestureBind()}>
+        <div className={cn("FastPicker", { last: isLastInteractible })} {...gestureBind()}>
             <div className="pickerContainer">
                 {springs.map(
                     (styles, i) =>
-                        Math.abs(i - currentElem) < 5 && (
+                        Math.abs(i - currentElem) < 10 && (
                             <animated.div className={"element"} key={i} style={styles}>
                                 {getPickerValue(i)}
                             </animated.div>

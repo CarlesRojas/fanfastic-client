@@ -215,10 +215,10 @@
 }
 
 // #######################################
-//      FAST DURATION PICKER
+//      FAST PICKER
 // #######################################
 
-.FastDurationPicker {
+.FastPicker {
     position: relative;
     width: 100%;
     height: $authButtonHeight * 2;
@@ -255,6 +255,12 @@
             align-items: center;
             font-size: 1.1rem;
             pointer-events: none;
+
+            .minutes {
+                margin-left: 0.1rem;
+                font-size: 0.6rem;
+                opacity: 0.5;
+            }
         }
     }
 

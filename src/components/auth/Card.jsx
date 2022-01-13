@@ -4,6 +4,7 @@ import cn from "classnames";
 import Button from "./Button";
 import Input from "./Input";
 import FastDurationPicker from "./FastDurationPicker";
+import FastStartTimePicker from "./FastStartTimePicker";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import useThrottle from "../../hooks/useThrottle";
 
@@ -128,6 +129,17 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                 <Fragment key={i}>
                                     {i !== 0 && <div className="separation"></div>}
                                     <FastDurationPicker
+                                        data={interactible}
+                                        isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
+                                        parentData={parentData}
+                                    />
+                                </Fragment>
+                            );
+                        else if (type === "fastStartTimePicker")
+                            return (
+                                <Fragment key={i}>
+                                    {i !== 0 && <div className="separation"></div>}
+                                    <FastStartTimePicker
                                         data={interactible}
                                         isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
                                         parentData={parentData}
