@@ -62,7 +62,7 @@ export default function FastStartTimePicker({ data, isLastInteractible, parentDa
         (i, currentIndex) => ({
             x: i === currentIndex ? "0rem" : ` ${(i - currentIndex) * 3 + 0.5 * (i - currentIndex < 0 ? -1 : 1)}rem`,
             scale: i === currentIndex ? 1.4 : 1,
-            opacity: i === currentIndex ? 1 : 1 - Math.abs(i - currentIndex) * 0.2,
+            opacity: i === currentIndex ? 1 : 1 - Math.abs(i - currentIndex) * 0.3,
             fontWeight: i === currentIndex ? 600 : 400,
         }),
         []
@@ -86,7 +86,7 @@ export default function FastStartTimePicker({ data, isLastInteractible, parentDa
 
     const initialI = useRef(0);
 
-    // Vertical gesture
+    // Horizontal gesture
     const gestureBind = useDrag(
         ({ event, first, down, movement: [mx] }) => {
             event.stopPropagation();
@@ -112,7 +112,7 @@ export default function FastStartTimePicker({ data, isLastInteractible, parentDa
     //   DATA MANAGEMENT
     // #################################################
 
-    // Save the date when the picker changes
+    // Save the data when the picker changes
     useEffect(() => {
         if (!(pickerType in parentData.current)) return;
         parentData.current[pickerType] = currentElem;
@@ -123,8 +123,8 @@ export default function FastStartTimePicker({ data, isLastInteractible, parentDa
     // #################################################
 
     return (
-        <div className={cn("FastPicker", { last: isLastInteractible })} {...gestureBind()}>
-            <div className="pickerContainer">
+        <div className={cn("FastPicker", { last: isLastInteractible })}>
+            <div className="pickerContainer" {...gestureBind()}>
                 {springs.map(
                     (styles, i) =>
                         Math.abs(i - currentElem) < 10 && (

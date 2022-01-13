@@ -29,6 +29,9 @@
 }
 
 // #######################################
+//      AUTH
+// #######################################
+
 //      CARDS
 // #######################################
 
@@ -121,10 +124,21 @@
             background-color: white;
             height: 1rem;
         }
+
+        .fastPickerReplacement {
+            width: 100%;
+            height: $authButtonHeight * 2;
+            background-color: white;
+        }
+
+        .healthPickerReplacement {
+            width: 100%;
+            height: $authButtonHeight * 2;
+            background-color: rgb(230, 230, 230);
+        }
     }
 }
 
-// #######################################
 //      BUTTON
 // #######################################
 
@@ -144,7 +158,6 @@
     }
 }
 
-// #######################################
 //      INPUT
 // #######################################
 
@@ -214,7 +227,6 @@
     }
 }
 
-// #######################################
 //      FAST PICKER
 // #######################################
 
@@ -257,9 +269,9 @@
             pointer-events: none;
 
             .minutes {
-                margin-left: 0.1rem;
+                margin-left: 0.05rem;
                 font-size: 0.6rem;
-                opacity: 0.5;
+                opacity: 1;
             }
         }
     }
@@ -269,6 +281,7 @@
         position: relative;
         width: 100%;
         height: $authButtonHeight;
+        pointer-events: none;
 
         .highlight {
             font-weight: 700;
@@ -277,6 +290,70 @@
         .warning {
             font-weight: 500;
             color: #ff5e00;
+        }
+    }
+}
+
+//      HEALTH PICKER
+// #######################################
+
+.HealthPicker {
+    position: relative;
+    width: 100%;
+    height: $authButtonHeight * 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(230, 230, 230);
+
+    &.last {
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    .pickerContainer {
+        position: relative;
+        width: $authButtonHeight;
+        height: $authButtonHeight * 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+
+        .element {
+            position: absolute;
+            width: $authButtonHeight;
+            min-width: $authButtonHeight;
+            max-width: $authButtonHeight;
+            height: $authButtonHeight;
+            min-height: $authButtonHeight;
+            max-height: $authButtonHeight;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            pointer-events: none;
+            opacity: 0;
+        }
+    }
+
+    .infoContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.2rem;
+        position: relative;
+        width: fit-content;
+        height: $authButtonHeight * 2;
+        pointer-events: none;
+        font-size: 1.1rem;
+        margin-right: 1rem;
+        margin-top: 0.3rem;
+        font-weight: 600;
+
+        &.point {
+            margin-right: 0;
+            font-weight: 800;
         }
     }
 }

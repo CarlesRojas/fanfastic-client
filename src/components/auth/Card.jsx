@@ -5,6 +5,8 @@ import Button from "./Button";
 import Input from "./Input";
 import FastDurationPicker from "./FastDurationPicker";
 import FastStartTimePicker from "./FastStartTimePicker";
+import HeightPicker from "./HeightPicker";
+import WeightPicker from "./WeightPicker";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import useThrottle from "../../hooks/useThrottle";
 
@@ -125,7 +127,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                 </Fragment>
                             );
                         else if (type === "fastDurationPicker")
-                            return (
+                            return phase === currentPhase ? (
                                 <Fragment key={i}>
                                     {i !== 0 && <div className="separation"></div>}
                                     <FastDurationPicker
@@ -134,9 +136,11 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                         parentData={parentData}
                                     />
                                 </Fragment>
+                            ) : (
+                                <div className="fastPickerReplacement" key={i}></div>
                             );
                         else if (type === "fastStartTimePicker")
-                            return (
+                            return phase === currentPhase ? (
                                 <Fragment key={i}>
                                     {i !== 0 && <div className="separation"></div>}
                                     <FastStartTimePicker
@@ -145,6 +149,34 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                         parentData={parentData}
                                     />
                                 </Fragment>
+                            ) : (
+                                <div className="fastPickerReplacement" key={i}></div>
+                            );
+                        else if (type === "heightPicker")
+                            return phase === currentPhase ? (
+                                <Fragment key={i}>
+                                    {i !== 0 && <div className="separation"></div>}
+                                    <HeightPicker
+                                        data={interactible}
+                                        isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
+                                        parentData={parentData}
+                                    />
+                                </Fragment>
+                            ) : (
+                                <div className="healthPickerReplacement" key={i}></div>
+                            );
+                        else if (type === "weightPicker")
+                            return phase === currentPhase ? (
+                                <Fragment key={i}>
+                                    {i !== 0 && <div className="separation"></div>}
+                                    <WeightPicker
+                                        data={interactible}
+                                        isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
+                                        parentData={parentData}
+                                    />
+                                </Fragment>
+                            ) : (
+                                <div className="healthPickerReplacement" key={i}></div>
                             );
                         else return null;
                     })}

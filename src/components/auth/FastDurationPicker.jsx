@@ -175,7 +175,7 @@ export default function FastDurationPicker({ data, isLastInteractible, parentDat
 
     const initialI = useRef(0);
 
-    // Vertical gesture
+    // Horizontal gesture
     const gestureBind = useDrag(
         ({ event, first, down, movement: [mx] }) => {
             event.stopPropagation();
@@ -201,7 +201,7 @@ export default function FastDurationPicker({ data, isLastInteractible, parentDat
     //   DATA MANAGEMENT
     // #################################################
 
-    // Save the date when the picker changes
+    // Save the data when the picker changes
     useEffect(() => {
         if (!(pickerType in parentData.current)) return;
         parentData.current[pickerType] = currentElem;
@@ -212,8 +212,8 @@ export default function FastDurationPicker({ data, isLastInteractible, parentDat
     // #################################################
 
     return (
-        <div className={cn("FastPicker", { last: isLastInteractible })} {...gestureBind()}>
-            <div className="pickerContainer">
+        <div className={cn("FastPicker", { last: isLastInteractible })}>
+            <div className="pickerContainer" {...gestureBind()}>
                 {springs.map(
                     (styles, i) =>
                         Math.abs(i - currentElem) < 10 && (

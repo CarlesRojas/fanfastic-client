@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import * as serviceWorker from "./serviceWorker";
 import ReactDOM from "react-dom";
 import App from "./App";
@@ -13,21 +14,23 @@ import DataProvider from "./contexts/Data";
 import MediaQueryProvider from "./contexts/MediaQuery";
 
 ReactDOM.render(
-    <EventsProvider>
-        <UtilsProvider>
-            <GlobalStateProvider>
-                <DataProvider>
-                    <APIProvider>
-                        <LanguageProvider>
-                            <MediaQueryProvider>
-                                <App />
-                            </MediaQueryProvider>
-                        </LanguageProvider>
-                    </APIProvider>
-                </DataProvider>
-            </GlobalStateProvider>
-        </UtilsProvider>
-    </EventsProvider>,
+    <StrictMode>
+        <EventsProvider>
+            <UtilsProvider>
+                <GlobalStateProvider>
+                    <DataProvider>
+                        <APIProvider>
+                            <LanguageProvider>
+                                <MediaQueryProvider>
+                                    <App />
+                                </MediaQueryProvider>
+                            </LanguageProvider>
+                        </APIProvider>
+                    </DataProvider>
+                </GlobalStateProvider>
+            </UtilsProvider>
+        </EventsProvider>
+    </StrictMode>,
     document.getElementById("root")
 );
 

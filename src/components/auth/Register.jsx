@@ -4,7 +4,7 @@ import { Events } from "../../contexts/Events";
 import Card from "./Card";
 
 const PARENT_ID = "register";
-const STAGES = ["fast", "register", "health", "registerSuccess"];
+const STAGES = ["register", "fast", "health", "registerSuccess"];
 const CARDS = {
     register: [
         {
@@ -52,7 +52,7 @@ const CARDS = {
             subtitle: "What is you height?",
             interactiblesHeight: 13,
             interactibles: [
-                { type: "picker", pickerType: "height" },
+                { type: "heightPicker", pickerType: "height" },
                 { type: "button", content: "Select" },
             ],
         },
@@ -61,16 +61,16 @@ const CARDS = {
             subtitle: "What is you weight?",
             interactiblesHeight: 13,
             interactibles: [
-                { type: "picker", pickerType: "weight" },
+                { type: "weightPicker", pickerType: "weight" },
                 { type: "button", content: "Select" },
             ],
         },
         {
             title: "Tell us about you",
-            subtitle: "And, what is you weight?",
+            subtitle: "And, what weight would you like to have?",
             interactiblesHeight: 13,
             interactibles: [
-                { type: "picker", pickerType: "objectiveWeight" },
+                { type: "weightPicker", pickerType: "objectiveWeight" },
                 { type: "button", action: "callAPIs", content: "Select" },
             ],
         },
@@ -99,9 +99,9 @@ export default function Register({ parentId }) {
         password: "",
         fastDuration: 2,
         fastStartTime: 18,
-        heigth: 0,
-        weight: 0,
-        objectiveWeight: 0,
+        height: { m: 1, cm: 65 },
+        weight: { kg: 80, dg: 0 },
+        objectiveWeight: { kg: -2, dg: -2 },
     });
 
     // #################################################
@@ -137,7 +137,24 @@ export default function Register({ parentId }) {
 
             if (action === "callAPIs") {
                 console.log("CALL ALL THE LOGIN APIS");
-                console.log(registrationData.current);
+                console.log(`email: ${registrationData.current.email}`);
+                console.log(`username: ${registrationData.current.username}`);
+                console.log(`password: ${registrationData.current.password}`);
+                console.log(`fastDuration: ${(12 + registrationData.current.fastDuration) * 60}`);
+                console.log(
+                    `fastStartTime: ${
+                        registrationData.current.fastStartTime % 2 === 0
+                            ? (12 + registrationData.current.fastStartTime / 2) * 60
+                            : (12 + (registrationData.current.fastStartTime - 1) / 2) * 60 + 30
+                    }`
+                );
+                console.log(`height: ${registrationData.current.height.m * 100 + registrationData.current.height.cm}`);
+                console.log(`weight: ${registrationData.current.weight.kg + registrationData.current.weight.dg / 10}`);
+                console.log(
+                    `objectiveWeight: ${
+                        registrationData.current.objectiveWeight.kg + registrationData.current.objectiveWeight.dg / 10
+                    }`
+                );
 
                 // ROJAS REMOVE TIMEOUT and just wait for the api to response to decide to go to next or to show error
                 setTimeout(() => {

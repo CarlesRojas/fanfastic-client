@@ -72,7 +72,8 @@ export default function Login({ parentId }) {
 
             if (action === "password") {
                 console.log("CALL ALL THE LOGIN APIS");
-                console.log(loginData.current);
+                console.log(`email: ${loginData.current.email}`);
+                console.log(`username: ${loginData.current.username}`);
 
                 // ROJAS REMOVE TIMEOUT and just wait for the api to response to decide to go to next or to show error
                 setTimeout(() => {
