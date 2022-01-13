@@ -3,7 +3,7 @@ import { useSprings, animated } from "react-spring";
 import cn from "classnames";
 import Button from "./Button";
 import Input from "./Input";
-import Picker from "./Picker";
+import FastDurationPicker from "./FastDurationPicker";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import useThrottle from "../../hooks/useThrottle";
 
@@ -137,11 +137,11 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                     />
                                 </Fragment>
                             );
-                        else if (type === "picker")
+                        else if (type === "fastDurationPicker")
                             return (
                                 <Fragment key={i}>
                                     {i !== 0 && <div className="separation"></div>}
-                                    <Picker
+                                    <FastDurationPicker
                                         data={interactible}
                                         nextPhase={(data) => nextPhase(action, data)}
                                         isLastInteractible={i === cardPhases[phase].interactibles.length - 1}

@@ -30,18 +30,20 @@ const CARDS = {
         {
             title: "Setup you fasting schedule",
             subtitle: "For how long do you want to fast?",
-            interactiblesHeight: 13,
+            interactiblesHeight: 14,
             interactibles: [
-                { type: "picker", action: "pickfastDuration", pickerType: "fastDuration" },
+                { type: "fastDurationPicker", action: "pickfastDuration", pickerType: "fastDuration" },
+                { type: "info" },
                 { type: "button", action: "fastDuration", content: "Select" },
             ],
         },
         {
             title: "Setup you fasting schedule",
             subtitle: "And at what time would you like to start?",
-            interactiblesHeight: 13,
+            interactiblesHeight: 14,
             interactibles: [
-                { type: "picker", action: "pickfastStartTime", pickerType: "fastStartTime" },
+                { type: "fastDurationPicker", action: "pickfastStartTime", pickerType: "fastStartTime" },
+                { type: "info" },
                 { type: "button", action: "fastStartTime", content: "Select" },
             ],
         },

@@ -215,37 +215,63 @@
 }
 
 // #######################################
-//      PICKER
+//      FAST DURATION PICKER
 // #######################################
 
-.Picker {
+.FastDurationPicker {
     position: relative;
     width: 100%;
-    background-color: rgb(230, 230, 230);
     height: $authButtonHeight * 2;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    overflow: hidden;
+    background-color: white;
 
     &.last {
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 1rem;
     }
 
-    .element {
-        position: absolute;
-        width: $authButtonHeight;
-        min-width: $authButtonHeight;
-        max-width: $authButtonHeight;
+    .pickerContainer {
+        position: relative;
+        width: 100%;
+        background-color: rgb(230, 230, 230);
         height: $authButtonHeight;
-        min-height: $authButtonHeight;
-        max-height: $authButtonHeight;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 1.1rem;
-        pointer-events: none;
+        overflow: hidden;
+
+        .element {
+            position: absolute;
+            width: $authButtonHeight;
+            min-width: $authButtonHeight;
+            max-width: $authButtonHeight;
+            height: $authButtonHeight;
+            min-height: $authButtonHeight;
+            max-height: $authButtonHeight;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+    }
+
+    .infoContainer {
+        padding: 1rem;
+        position: relative;
+        width: 100%;
+        height: $authButtonHeight;
+
+        .highlight {
+            font-weight: 700;
+        }
+
+        .warning {
+            font-weight: 500;
+            color: #ff5e00;
+        }
     }
 }
 
