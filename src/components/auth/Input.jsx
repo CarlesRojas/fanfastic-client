@@ -38,10 +38,6 @@ export default function Input({
     const validatingRef = useRef(false);
     const [validating, setValidating] = useState(false);
 
-    const sleep = (ms) => {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    };
-
     const handleEnter = useThrottle(async () => {
         if (validatingRef.current) return;
         validatingRef.current = true;
@@ -50,8 +46,6 @@ export default function Input({
         const value = inputRef.current.value;
 
         var validate = () => ({ success: true });
-
-        await sleep(5000);
 
         if (inputType === "email") validate = isEmailValid;
         else if (inputType === "username") validate = isUsernameValid;
@@ -113,7 +107,7 @@ export default function Input({
                 ref={inputRef}
             />
 
-            <div className="enter" onClick={handleEnter}>
+            <div className={cn("enter", { validating })} onClick={handleEnter}>
                 <SVG
                     className={cn("icon", { up: hasContent })}
                     src={inputType === "email" ? EmailIcon : inputType === "username" ? UsernameIcon : PasswordIcon}
