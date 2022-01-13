@@ -11,11 +11,13 @@ const CARDS = {
         {
             title: "Log in",
             subtitle: "Enter your email:",
+            interactiblesHeight: 4,
             interactibles: [{ type: "input", action: "email", inputType: "email" }],
         },
         {
             title: "Log in",
             subtitle: "Enter your password:",
+            interactiblesHeight: 4,
             interactibles: [{ type: "input", action: "password", inputType: "password" }],
         },
     ],
@@ -23,6 +25,7 @@ const CARDS = {
         {
             title: "Welcome back",
             subtitle: "Happy to see you again!",
+            interactiblesHeight: 0,
             interactibles: [],
             auto: true,
         },

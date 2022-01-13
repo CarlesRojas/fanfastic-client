@@ -21,19 +21,18 @@ export default function Input({
     parentData,
 }) {
     const { isEmailValid, isUsernameValid, isPasswordValid } = useContext(API);
-
     const { inputType, action } = data;
 
     // #################################################
-    //   CHECK VALIDITY
+    //   STATE
     // #################################################
 
     const [hasContent, setHasContent] = useState(false);
     const inputRef = useRef();
 
-    const handleChange = () => {
-        setHasContent(inputRef.current.value.length > 0);
-    };
+    // #################################################
+    //   CHECK VALIDITY
+    // #################################################
 
     const validating = useRef(false);
 
@@ -55,6 +54,14 @@ export default function Input({
         validating.current = false;
     }, 1500);
 
+    // #################################################
+    //   HANDLERS
+    // #################################################
+
+    const handleChange = () => {
+        setHasContent(inputRef.current.value.length > 0);
+    };
+
     const handleKeyDown = (event) => {
         if (event.key === "Enter" || event.key === "Tab") handleEnter();
     };
@@ -64,6 +71,10 @@ export default function Input({
         event.target.value = "";
         event.target.value = temp_value;
     };
+
+    // #################################################
+    //   FOCUS & INITIAL DATA
+    // #################################################
 
     useEffect(() => {
         if (isCurrentPhase) inputRef.current.focus();

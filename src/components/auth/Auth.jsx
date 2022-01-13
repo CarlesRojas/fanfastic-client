@@ -12,6 +12,7 @@ const CARDS = {
         {
             title: "Hi, welcome to Fanfastic!",
             subtitle: "What do you want to do?",
+            interactiblesHeight: 9,
             interactibles: [
                 { type: "button", action: "register", content: "Create and account" },
                 { type: "button", action: "login", content: "Log in" },

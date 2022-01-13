@@ -4,22 +4,25 @@ import { Events } from "../../contexts/Events";
 import Card from "./Card";
 
 const PARENT_ID = "register";
-const STAGES = ["register", "fast", "health", "registerSuccess"];
+const STAGES = ["fast", "register", "health", "registerSuccess"];
 const CARDS = {
     register: [
         {
             title: "Create an account",
             subtitle: "Enter your email:",
+            interactiblesHeight: 4,
             interactibles: [{ type: "input", inputType: "email", action: "email" }],
         },
         {
             title: "Create an account",
             subtitle: "Enter your new username:",
+            interactiblesHeight: 4,
             interactibles: [{ type: "input", inputType: "text", action: "username" }],
         },
         {
             title: "Create an account",
             subtitle: "Enter your new password:",
+            interactiblesHeight: 4,
             interactibles: [{ type: "input", inputType: "password", action: "password" }],
         },
     ],
@@ -27,6 +30,7 @@ const CARDS = {
         {
             title: "Setup you fasting schedule",
             subtitle: "For how long do you want to fast?",
+            interactiblesHeight: 13,
             interactibles: [
                 { type: "picker", action: "pickfastDuration", pickerType: "fastDuration" },
                 { type: "button", action: "fastDuration", content: "Select" },
@@ -35,6 +39,7 @@ const CARDS = {
         {
             title: "Setup you fasting schedule",
             subtitle: "And at what time would you like to start?",
+            interactiblesHeight: 13,
             interactibles: [
                 { type: "picker", action: "pickfastStartTime", pickerType: "fastStartTime" },
                 { type: "button", action: "fastStartTime", content: "Select" },
@@ -45,6 +50,7 @@ const CARDS = {
         {
             title: "Tell us about you",
             subtitle: "What is you height?",
+            interactiblesHeight: 13,
             interactibles: [
                 { type: "picker", action: "pickHeight", pickerType: "height" },
                 { type: "button", action: "height", content: "Select" },
@@ -53,6 +59,7 @@ const CARDS = {
         {
             title: "Tell us about you",
             subtitle: "What is you weight?",
+            interactiblesHeight: 13,
             interactibles: [
                 { type: "picker", action: "pickWeight", pickerType: "weight" },
                 { type: "button", action: "weight", content: "Select" },
@@ -61,6 +68,7 @@ const CARDS = {
         {
             title: "Tell us about you",
             subtitle: "And, what is you weight?",
+            interactiblesHeight: 13,
             interactibles: [
                 { type: "picker", action: "pickObjectiveWeight", pickerType: "objectiveWeight" },
                 { type: "button", action: "objectiveWeight", content: "Select" },
@@ -71,6 +79,7 @@ const CARDS = {
         {
             title: "All done",
             subtitle: "Welcome to Fanfastic!",
+            interactiblesHeight: 0,
             interactibles: [],
             auto: true,
         },
@@ -122,7 +131,6 @@ export default function Register({ parentId }) {
 
     const handleActionDone = useCallback(
         ({ callerParentId, action, data }) => {
-            console.log(callerParentId, action, data);
             if (callerParentId !== PARENT_ID) return;
 
             if (action in registrationData.current) registrationData.current[action] = data;

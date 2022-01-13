@@ -52,6 +52,7 @@
         align-items: center;
         font-weight: 700;
         color: rgba(0, 0, 0, 0.5);
+        z-index: 140;
     }
 
     .header {
@@ -66,7 +67,7 @@
         justify-content: space-between;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
-        z-index: 100;
+        z-index: 150;
 
         h1 {
             font-size: 1.8rem;
@@ -94,10 +95,19 @@
         }
     }
 
+    .clip {
+        position: absolute;
+        width: 100%;
+        height: $distanceToTop + $authHeaderHeight / 2;
+        top: 0;
+        left: 0;
+        z-index: 130;
+        background-color: $background;
+    }
+
     .interactions {
         position: absolute;
         top: $distanceToTop;
-        padding-top: $authHeaderHeight;
         width: 90%;
         display: flex;
         flex-direction: column;
@@ -132,10 +142,6 @@
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 1rem;
     }
-
-    //     &:hover {
-    //         background-color: rgb(225, 225, 225);
-    //     }
 }
 
 // #######################################
@@ -206,10 +212,41 @@
             }
         }
     }
+}
 
-    //     &:hover {
-    //         background-color: rgb(225, 225, 225);
-    //     }
+// #######################################
+//      PICKER
+// #######################################
+
+.Picker {
+    position: relative;
+    width: 100%;
+    background-color: rgb(230, 230, 230);
+    height: $authButtonHeight * 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    &.last {
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    .element {
+        position: absolute;
+        width: $authButtonHeight;
+        min-width: $authButtonHeight;
+        max-width: $authButtonHeight;
+        height: $authButtonHeight;
+        min-height: $authButtonHeight;
+        max-height: $authButtonHeight;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.1rem;
+        pointer-events: none;
+    }
 }
 
 // #######################################

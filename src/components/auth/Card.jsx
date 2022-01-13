@@ -1,23 +1,31 @@
-import { useState, useEffect, Fragment, useContext } from "react";
+import { useState, useEffect, Fragment, useContext, useCallback } from "react";
 import { useSprings, animated } from "react-spring";
 import cn from "classnames";
 import Button from "./Button";
 import Input from "./Input";
-import { Events } from "../../contexts/Events";
+import Picker from "./Picker";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import useThrottle from "../../hooks/useThrottle";
 
-const style = (i, currentIndex) => ({
-    y: i < currentIndex ? "0rem" : `${i - currentIndex}rem`,
-    paddingTop: i < currentIndex ? "1rem" : "10rem",
-    zIndex: 10 - (i - currentIndex),
-    boxShadow: i < currentIndex ? "0 10px 20px rgba(0, 0, 0, 0)" : "0 10px 20px rgba(0, 0, 0, 0.15)",
-    filter: i > currentIndex ? "brightness(90%)" : "brightness(100%)",
-});
+import { Events } from "../../contexts/Events";
 
 export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     const { emit } = useContext(Events);
 
+    // #################################################
+    //   SPRING STYLE
+    // #################################################
+
+    const style = useCallback(
+        (i, currentIndex) => ({
+            y: i < currentIndex ? "0rem" : `${i - currentIndex}rem`,
+            marginTop: i < currentIndex ? `${10 - cardPhases[i].interactiblesHeight}rem` : "10rem",
+            zIndex: 10 - (i - currentIndex),
+            boxShadow: i < currentIndex ? "0 10px 20px rgba(0, 0, 0, 0)" : "0 10px 20px rgba(0, 0, 0, 0.15)",
+            filter: i > currentIndex ? `brightness(${100 - (i - currentIndex) * 5}%)` : "brightness(100%)",
+        }),
+        [cardPhases]
+    );
     // #################################################
     //   STATE
     // #################################################
@@ -29,7 +37,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
 
     useEffect(() => {
         api.start((i) => ({ ...style(i, currentPhase) }));
-    }, [api, currentPhase]);
+    }, [api, currentPhase, style]);
 
     const handleError = (error) => {
         setError(error);
@@ -92,6 +100,8 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                 </div>
             </div>
 
+            <div className="clip"></div>
+
             {springs.map((styles, phase) => (
                 <animated.div
                     className={"interactions"}
@@ -122,6 +132,18 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                         isCurrentPhase={phase === currentPhase}
                                         handleError={handleError}
                                         isLastPhase={phase === cardPhases.length - 1}
+                                        isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
+                                        parentData={parentData}
+                                    />
+                                </Fragment>
+                            );
+                        else if (type === "picker")
+                            return (
+                                <Fragment key={i}>
+                                    {i !== 0 && <div className="separation"></div>}
+                                    <Picker
+                                        data={interactible}
+                                        nextPhase={(data) => nextPhase(action, data)}
                                         isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
                                         parentData={parentData}
                                     />
