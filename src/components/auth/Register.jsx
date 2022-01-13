@@ -71,7 +71,7 @@ const CARDS = {
             interactiblesHeight: 13,
             interactibles: [
                 { type: "weightPicker", pickerType: "objectiveWeight" },
-                { type: "button", action: "callAPIs", content: "Select" },
+                { type: "objectiveWeightButton", action: "callAPIs", content: "Select" },
             ],
         },
     ],
@@ -152,7 +152,10 @@ export default function Register({ parentId }) {
                 console.log(`weight: ${registrationData.current.weight.kg + registrationData.current.weight.dg / 10}`);
                 console.log(
                     `objectiveWeight: ${
-                        registrationData.current.objectiveWeight.kg + registrationData.current.objectiveWeight.dg / 10
+                        registrationData.current.objectiveWeight.kg === -1
+                            ? "Skip"
+                            : registrationData.current.objectiveWeight.kg +
+                              registrationData.current.objectiveWeight.dg / 10
                     }`
                 );
 

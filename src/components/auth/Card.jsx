@@ -11,6 +11,7 @@ import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import useThrottle from "../../hooks/useThrottle";
 
 import { Events } from "../../contexts/Events";
+import ObjectiveWeightButton from "./ObjectiveWeightButton";
 
 export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     const { emit } = useContext(Events);
@@ -177,6 +178,17 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                 </Fragment>
                             ) : (
                                 <div className="healthPickerReplacement" key={i}></div>
+                            );
+                        else if (type === "objectiveWeightButton")
+                            return (
+                                <Fragment key={i}>
+                                    {i !== 0 && <div className="separation"></div>}
+                                    <ObjectiveWeightButton
+                                        nextPhase={(data) => nextPhase(action, data)}
+                                        isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
+                                        parentData={parentData}
+                                    />
+                                </Fragment>
                             );
                         else return null;
                     })}

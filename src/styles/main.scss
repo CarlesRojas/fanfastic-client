@@ -158,6 +158,43 @@
     }
 }
 
+//      OBJECTIVE WEIGHT BUTTON
+// #######################################
+
+.ObjectiveWeightButton {
+    position: relative;
+    width: 100%;
+    height: $authButtonHeight;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.last {
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+
+        .skip {
+            border-bottom-left-radius: 1rem;
+        }
+
+        .select {
+            border-bottom-right-radius: 1rem;
+        }
+    }
+
+    .skip,
+    .select {
+        width: 50%;
+        height: $authButtonHeight;
+        background-color: $backgrounOrange;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 //      INPUT
 // #######################################
 
