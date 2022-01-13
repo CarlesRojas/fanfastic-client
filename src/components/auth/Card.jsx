@@ -52,9 +52,9 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     //   NEXT & PREV
     // #################################################
 
-    const nextPhase = useThrottle((action, data) => {
+    const nextPhase = useThrottle((action) => {
         setError(false);
-        emit("onActionDone", { callerParentId: parentId, action, data });
+        emit("onActionDone", { callerParentId: parentId, action });
 
         if (currentPhase < cardPhases.length - 1) {
             setCurrentPhase((prev) => prev + 1);
@@ -107,7 +107,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                     {i !== 0 && <div className="separation"></div>}
                                     <Button
                                         data={interactible}
-                                        nextPhase={(data) => nextPhase(action, data)}
+                                        nextPhase={() => nextPhase(action)}
                                         isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
                                     />
                                 </Fragment>
@@ -118,7 +118,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                     {i !== 0 && <div className="separation"></div>}
                                     <Input
                                         data={interactible}
-                                        nextPhase={(data) => nextPhase(action, data)}
+                                        nextPhase={() => nextPhase(action)}
                                         isCurrentPhase={phase === currentPhase}
                                         handleError={handleError}
                                         isLastPhase={phase === cardPhases.length - 1}
@@ -184,7 +184,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                 <Fragment key={i}>
                                     {i !== 0 && <div className="separation"></div>}
                                     <ObjectiveWeightButton
-                                        nextPhase={(data) => nextPhase(action, data)}
+                                        nextPhase={() => nextPhase(action)}
                                         isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
                                         parentData={parentData}
                                     />

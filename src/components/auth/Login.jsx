@@ -12,13 +12,13 @@ const CARDS = {
             title: "Log in",
             subtitle: "Enter your email:",
             interactiblesHeight: 4,
-            interactibles: [{ type: "input", action: "email", inputType: "email" }],
+            interactibles: [{ type: "input", inputType: "email" }],
         },
         {
             title: "Log in",
             subtitle: "Enter your password:",
             interactiblesHeight: 4,
-            interactibles: [{ type: "input", action: "password", inputType: "password" }],
+            interactibles: [{ type: "input", action: "completeLogin", inputType: "password" }],
         },
     ],
     loginSuccess: [
@@ -65,15 +65,13 @@ export default function Login({ parentId }) {
     // #################################################
 
     const handleActionDone = useCallback(
-        ({ callerParentId, action, data }) => {
+        ({ callerParentId, action }) => {
             if (callerParentId !== PARENT_ID) return;
 
-            if (action in loginData.current) loginData.current[action] = data;
-
-            if (action === "password") {
+            if (action === "completeLogin") {
                 console.log("CALL ALL THE LOGIN APIS");
                 console.log(`email: ${loginData.current.email}`);
-                console.log(`username: ${loginData.current.username}`);
+                console.log(`password: ${loginData.current.password}`);
 
                 // ROJAS REMOVE TIMEOUT and just wait for the api to response to decide to go to next or to show error
                 setTimeout(() => {

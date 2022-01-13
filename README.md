@@ -26,7 +26,7 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Auth should be a usePageAnimation with only one stage, deepending on the data, we call one of the other two
 -   [x] We will need a way to also animate the first card in a stage, for all except the welcome
 -   [x] Different components for the different pickers
--   [ ] Bug with adding characters after validating in an input container
--   [ ] Loading icon on input enter
+-   [x] Bug with adding characters after validating in an input container
+-   [x] Loading icon on input enter
 -   [ ] Call the apis.(On error, go back to the first stage and show the error).
 -   [ ] Integrate page history

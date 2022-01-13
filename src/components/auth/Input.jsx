@@ -10,6 +10,7 @@ import UsernameIcon from "../../resources/icons/username.svg";
 import PasswordIcon from "../../resources/icons/password.svg";
 import UpIcon from "../../resources/icons/up.svg";
 import RightIcon from "../../resources/icons/right.svg";
+import LoadingIcon from "../../resources/icons/loading.svg";
 
 export default function Input({
     data,
@@ -21,7 +22,7 @@ export default function Input({
     parentData,
 }) {
     const { isEmailValid, isUsernameValid, isPasswordValid } = useContext(API);
-    const { inputType, action } = data;
+    const { inputType } = data;
 
     // #################################################
     //   STATE
@@ -34,24 +35,38 @@ export default function Input({
     //   CHECK VALIDITY
     // #################################################
 
-    const validating = useRef(false);
+    const validatingRef = useRef(false);
+    const [validating, setValidating] = useState(false);
+
+    const sleep = (ms) => {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    };
 
     const handleEnter = useThrottle(async () => {
-        if (validating.current) return;
-        validating.current = true;
+        if (validatingRef.current) return;
+        validatingRef.current = true;
+        setValidating(true);
+
+        const value = inputRef.current.value;
 
         var validate = () => ({ success: true });
 
+        await sleep(5000);
+
         if (inputType === "email") validate = isEmailValid;
-        else if (inputType === "text") validate = isUsernameValid;
+        else if (inputType === "username") validate = isUsernameValid;
         else if (inputType === "password") validate = isPasswordValid;
 
-        if (action === "email") var validationResult = await validate(inputRef.current.value, true);
-        else validationResult = await validate(inputRef.current.value, false);
+        if (inputType === "email") var validationResult = await validate(value, true);
+        else validationResult = await validate(value, false);
 
         if ("error" in validationResult) handleError(validationResult.error.replaceAll(`"`, ""));
-        else nextPhase(inputRef.current.value);
-        validating.current = false;
+        else {
+            parentData.current[inputType] = value;
+            nextPhase();
+        }
+        setValidating(false);
+        validatingRef.current = false;
     }, 1500);
 
     // #################################################
@@ -81,8 +96,8 @@ export default function Input({
     }, [isCurrentPhase]);
 
     useEffect(() => {
-        inputRef.current.value = parentData.current[action];
-    }, [parentData, action]);
+        inputRef.current.value = parentData.current[inputType];
+    }, [parentData, inputType]);
 
     // #################################################
     //   RENDER
@@ -91,7 +106,7 @@ export default function Input({
     return (
         <div className={cn("Input", { last: isLastInteractible })} onKeyDown={handleKeyDown}>
             <input
-                type={inputType}
+                type={inputType === "email" ? "email" : inputType === "username" ? "text" : "password"}
                 autoComplete="new-password"
                 onChange={handleChange}
                 onFocus={handleFocus}
@@ -101,9 +116,12 @@ export default function Input({
             <div className="enter" onClick={handleEnter}>
                 <SVG
                     className={cn("icon", { up: hasContent })}
-                    src={inputType === "email" ? EmailIcon : inputType === "text" ? UsernameIcon : PasswordIcon}
+                    src={inputType === "email" ? EmailIcon : inputType === "username" ? UsernameIcon : PasswordIcon}
                 />
-                <SVG className={cn("icon", { down: !hasContent })} src={isLastPhase ? RightIcon : UpIcon} />
+                <SVG
+                    className={cn("icon", { down: !hasContent }, { spin: validating }, { infinite: validating })}
+                    src={validating ? LoadingIcon : isLastPhase ? RightIcon : UpIcon}
+                />
             </div>
         </div>
     );

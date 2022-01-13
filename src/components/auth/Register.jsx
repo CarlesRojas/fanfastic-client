@@ -11,19 +11,19 @@ const CARDS = {
             title: "Create an account",
             subtitle: "Enter your email:",
             interactiblesHeight: 4,
-            interactibles: [{ type: "input", inputType: "email", action: "email" }],
+            interactibles: [{ type: "input", inputType: "email" }],
         },
         {
             title: "Create an account",
             subtitle: "Enter your new username:",
             interactiblesHeight: 4,
-            interactibles: [{ type: "input", inputType: "text", action: "username" }],
+            interactibles: [{ type: "input", inputType: "username" }],
         },
         {
             title: "Create an account",
             subtitle: "Enter your new password:",
             interactiblesHeight: 4,
-            interactibles: [{ type: "input", inputType: "password", action: "password" }],
+            interactibles: [{ type: "input", inputType: "password" }],
         },
     ],
     fast: [
@@ -71,7 +71,7 @@ const CARDS = {
             interactiblesHeight: 13,
             interactibles: [
                 { type: "weightPicker", pickerType: "objectiveWeight" },
-                { type: "objectiveWeightButton", action: "callAPIs", content: "Select" },
+                { type: "objectiveWeightButton", action: "completeRegistration", content: "Select" },
             ],
         },
     ],
@@ -130,13 +130,11 @@ export default function Register({ parentId }) {
     // #################################################
 
     const handleActionDone = useCallback(
-        ({ callerParentId, action, data }) => {
+        ({ callerParentId, action }) => {
             if (callerParentId !== PARENT_ID) return;
 
-            if (action in registrationData.current) registrationData.current[action] = data;
-
-            if (action === "callAPIs") {
-                console.log("CALL ALL THE LOGIN APIS");
+            if (action === "completeRegistration") {
+                console.log("CALL ALL THE REGISTER APIS");
                 console.log(`email: ${registrationData.current.email}`);
                 console.log(`username: ${registrationData.current.username}`);
                 console.log(`password: ${registrationData.current.password}`);
