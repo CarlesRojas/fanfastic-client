@@ -32,9 +32,8 @@ const CARDS = {
             subtitle: "For how long do you want to fast?",
             interactiblesHeight: 14,
             interactibles: [
-                { type: "fastDurationPicker", action: "pickfastDuration", pickerType: "fastDuration" },
-                { type: "info" },
-                { type: "button", action: "fastDuration", content: "Select" },
+                { type: "fastDurationPicker", pickerType: "fastDuration" },
+                { type: "button", content: "Select" },
             ],
         },
         {
@@ -42,9 +41,8 @@ const CARDS = {
             subtitle: "And at what time would you like to start?",
             interactiblesHeight: 14,
             interactibles: [
-                { type: "fastDurationPicker", action: "pickfastStartTime", pickerType: "fastStartTime" },
-                { type: "info" },
-                { type: "button", action: "fastStartTime", content: "Select" },
+                { type: "fastDurationPicker", pickerType: "fastStartTime" },
+                { type: "button", content: "Select" },
             ],
         },
     ],
@@ -54,8 +52,8 @@ const CARDS = {
             subtitle: "What is you height?",
             interactiblesHeight: 13,
             interactibles: [
-                { type: "picker", action: "pickHeight", pickerType: "height" },
-                { type: "button", action: "height", content: "Select" },
+                { type: "picker", pickerType: "height" },
+                { type: "button", content: "Select" },
             ],
         },
         {
@@ -63,8 +61,8 @@ const CARDS = {
             subtitle: "What is you weight?",
             interactiblesHeight: 13,
             interactibles: [
-                { type: "picker", action: "pickWeight", pickerType: "weight" },
-                { type: "button", action: "weight", content: "Select" },
+                { type: "picker", pickerType: "weight" },
+                { type: "button", content: "Select" },
             ],
         },
         {
@@ -72,8 +70,8 @@ const CARDS = {
             subtitle: "And, what is you weight?",
             interactiblesHeight: 13,
             interactibles: [
-                { type: "picker", action: "pickObjectiveWeight", pickerType: "objectiveWeight" },
-                { type: "button", action: "objectiveWeight", content: "Select" },
+                { type: "picker", pickerType: "objectiveWeight" },
+                { type: "button", action: "callAPIs", content: "Select" },
             ],
         },
     ],
@@ -99,11 +97,11 @@ export default function Register({ parentId }) {
         email: "",
         username: "",
         password: "",
-        fastDuration: "",
-        fastStartTime: "",
-        heigth: "",
-        weight: "",
-        objectiveWeight: "",
+        fastDuration: 0,
+        fastStartTime: 0,
+        heigth: 0,
+        weight: 0,
+        objectiveWeight: 0,
     });
 
     // #################################################
@@ -137,7 +135,7 @@ export default function Register({ parentId }) {
 
             if (action in registrationData.current) registrationData.current[action] = data;
 
-            if (action === "objectiveWeight") {
+            if (action === "callAPIs") {
                 console.log("CALL ALL THE LOGIN APIS");
                 console.log(registrationData.current);
 

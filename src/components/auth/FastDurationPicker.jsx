@@ -2,17 +2,14 @@ import { useState, useContext, useCallback, useEffect, useRef } from "react";
 import { useSprings, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import cn from "classnames";
-import SVG from "react-inlinesvg";
 
-import { API } from "../../contexts/API";
 import { Utils } from "../../contexts/Utils";
 
 const ONLY_ON_OCASIONS = 7;
 
-export default function FastDurationPicker({ data, nextPhase, isLastInteractible, parentData }) {
+export default function FastDurationPicker({ data, isLastInteractible, parentData }) {
     const { clamp } = useContext(Utils);
-
-    const { pickerType, action } = data;
+    const { pickerType } = data;
 
     const getPickerLength = () => {
         return 12;
@@ -164,7 +161,7 @@ export default function FastDurationPicker({ data, nextPhase, isLastInteractible
     //   STATE
     // #################################################
 
-    const [currentElem, setCurrentElem] = useState(0);
+    const [currentElem, setCurrentElem] = useState(parentData.current[pickerType]);
 
     const [springs, api] = useSprings(getPickerLength(), (i) => ({ ...style(i, currentElem) }));
 
@@ -201,20 +198,14 @@ export default function FastDurationPicker({ data, nextPhase, isLastInteractible
     );
 
     // #################################################
-    //   CHECK VALIDITY
+    //   DATA MANAGEMENT
     // #################################################
 
-    // #################################################
-    //   HANDLERS
-    // #################################################
-
-    // #################################################
-    //   FOCUS & INITIAL DATA
-    // #################################################
-
-    // useEffect(() => {
-    //     inputRef.current.value = parentData.current[action];
-    // }, [parentData, action]);
+    // Save the date when the picker changes
+    useEffect(() => {
+        if (!(pickerType in parentData.current)) return;
+        parentData.current[pickerType] = currentElem;
+    }, [currentElem, parentData, pickerType]);
 
     // #################################################
     //   RENDER

@@ -65,20 +65,6 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     }, 500);
 
     // #################################################
-    //   AUTOMATIC DISMISS
-    // #################################################
-
-    // useEffect(() => {
-    //     if (!("auto" in cardPhases[currentPhase])) return;
-
-    //     const timeout = setTimeout(() => nextPhase("success", ""), 2000);
-
-    //     return () => {
-    //         clearTimeout(timeout);
-    //     };
-    // }, [cardPhases, currentPhase, nextPhase]);
-
-    // #################################################
     //   RENDER
     // #################################################
 
@@ -143,7 +129,6 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                                     {i !== 0 && <div className="separation"></div>}
                                     <FastDurationPicker
                                         data={interactible}
-                                        nextPhase={(data) => nextPhase(action, data)}
                                         isLastInteractible={i === cardPhases[phase].interactibles.length - 1}
                                         parentData={parentData}
                                     />
