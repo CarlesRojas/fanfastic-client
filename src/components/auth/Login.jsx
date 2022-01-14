@@ -6,7 +6,7 @@ import { Events } from "../../contexts/Events";
 import { API } from "../../contexts/API";
 
 const PARENT_ID = "login";
-const STAGES = ["login"];
+const STAGES = ["login", "loginSuccess"];
 
 const CARDS = {
     login: [
@@ -21,6 +21,16 @@ const CARDS = {
             subtitle: "Enter your password:",
             interactiblesHeight: 4,
             interactibles: [{ type: "input", action: "completeLogin", inputType: "password" }],
+        },
+    ],
+    loginSuccess: [
+        {
+            title: "Welcome back",
+            subtitle: "Happy to see you again!",
+            loadingMessage: "Logging you in...",
+            interactiblesHeight: 0,
+            loadUntilSuccess: true,
+            interactibles: [],
         },
     ],
 };
@@ -44,9 +54,9 @@ export default function Login({ parentId, setLoggedIn }) {
 
     const animationSpeed = 400;
     const content = STAGES.map((id) => (
-        <Card cardPhases={CARDS[id]} canGoBack={true} parentData={loginData} parentId={PARENT_ID} />
+        <Card cardPhases={CARDS[id]} canGoBack={id !== "loginSuccess"} parentData={loginData} parentId={PARENT_ID} />
     ));
-    const [{ renderedPages, nextPage, prevPage }] = usePageAnimation({
+    const [{ renderedPages, nextPage, prevPage, setPage }] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
         containerClass: "lateralPages",
@@ -59,15 +69,38 @@ export default function Login({ parentId, setLoggedIn }) {
     //   HANDLERS
     // #################################################
 
-    const handleLogin = useCallback(async () => {
-        const result = await login(loginData.current.email, loginData.current.password);
+    const checkError = useCallback(
+        (data) => {
+            if ("error" in data) {
+                setPage(0);
+                setTimeout(() => emit("onLoginError", data.error), animationSpeed);
+                return true;
+            }
+            return false;
+        },
+        [setPage, emit]
+    );
 
-        if ("error" in result) emit("onLoginError", result.error);
-        else {
+    const handleLogin = useCallback(async () => {
+        nextPage();
+        const { email, password } = loginData.current;
+
+        const result = await login(email, password);
+        if (checkError(result)) return;
+
+        const sleep = (ms) => {
+            return new Promise((resolve) => setTimeout(resolve, ms));
+        };
+
+        await sleep(3000);
+
+        emit("onLoadSuccess");
+
+        setTimeout(() => {
             nextPage();
             setTimeout(() => setLoggedIn(true), animationSpeed);
-        }
-    }, [login, nextPage, setLoggedIn, emit]);
+        }, 2000);
+    }, [login, nextPage, setLoggedIn, checkError, emit]);
 
     const handleActionDone = useCallback(
         ({ callerParentId, action }) => {

@@ -81,6 +81,7 @@ const CARDS = {
         {
             title: "Account created",
             subtitle: "Welcome to Fanfastic!",
+            loadingMessage: "Creating your account...",
             interactiblesHeight: 0,
             loadUntilSuccess: true,
             interactibles: [],

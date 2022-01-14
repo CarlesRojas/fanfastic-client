@@ -38,7 +38,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     //   STATE
     // #################################################
 
-    const [registerLoadingDone, setRegisterLoadingDone] = useState(false);
+    const [loadingDone, setLoadingDone] = useState(false);
     const [currentPhase, setCurrentPhase] = useState(0);
     const [error, setError] = useState(false);
     const [springs, api] = useSprings(cardPhases.length, (i) => ({ ...style(i, currentPhase) }));
@@ -97,7 +97,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     );
 
     const handleLoadSuccess = useCallback(() => {
-        setRegisterLoadingDone(true);
+        setLoadingDone(true);
     }, []);
 
     // #################################################
@@ -120,7 +120,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     //   RENDER
     // #################################################
 
-    const { title, subtitle, loadUntilSuccess } = cardPhases[currentPhase];
+    const { title, subtitle, loadUntilSuccess, loadingMessage } = cardPhases[currentPhase];
 
     return (
         <div className={cn("Card", { shake: animating })}>
@@ -131,9 +131,9 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
             )}
 
             <div className={cn("header", { noInteractibles: cardPhases[currentPhase].interactibles.length <= 0 })}>
-                {loadUntilSuccess && !registerLoadingDone ? (
+                {loadUntilSuccess && !loadingDone ? (
                     <div className={"loadingContainer"}>
-                        <p className={"loadingText"}>{"Creating your account..."}</p>
+                        <p className={"loadingText"}>{loadingMessage}</p>
                         <SVG className={cn("loadingIcon", "spin", "infinite")} src={LoadingIcon} />
                     </div>
                 ) : (
