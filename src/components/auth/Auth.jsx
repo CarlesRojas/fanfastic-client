@@ -1,13 +1,10 @@
 import { useCallback, useEffect, useContext, useState } from "react";
 import usePageAnimation from "../../hooks/usePageAnimation";
-import SVG from "react-inlinesvg";
 import Card from "./Card";
 import Login from "./Login";
 import Register from "./Register";
 
 import { Events } from "../../contexts/Events";
-
-import Logo from "../../resources/icons/logo.svg";
 
 const PARENT_ID = "welcome";
 const STAGES = ["welcome"];
@@ -107,9 +104,6 @@ export default function Auth() {
             {renderedPages}
             {showNextPages.login && <Login parentId={PARENT_ID} />}
             {showNextPages.register && <Register parentId={PARENT_ID} />}
-            <div className="Auth">
-                <SVG className={"authLogo"} src={Logo} />
-            </div>
         </>
     );
 }
