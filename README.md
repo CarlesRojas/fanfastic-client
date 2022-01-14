@@ -28,5 +28,5 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Different components for the different pickers
 -   [x] Bug with adding characters after validating in an input container
 -   [x] Loading icon on input enter
--   [ ] Call the apis.(On error, go back to the first stage and show the error).
+-   [x] Call the apis.(On error, go back to the first stage and show the error).
 -   [ ] Integrate page history

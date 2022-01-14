@@ -22,7 +22,12 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
     // #################################################
 
     const page = useRef(0);
-    const animationState = useRef({ shouldStartAnimation: false, goingBack: false, animationStarted: false });
+    const animationState = useRef({
+        shouldStartAnimation: false,
+        goingBack: false,
+        animationStarted: false,
+        newIndex: -1,
+    });
 
     const isFirstPage = useCallback(() => {
         return page.current === 0;
@@ -41,7 +46,12 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
 
     const nextPage = useCallback(() => {
         // Save the animation we want to make and instantiate the appearing stage (out of sight)
-        animationState.current = { shouldStartAnimation: true, goingBack: false, animationStarted: false };
+        animationState.current = {
+            shouldStartAnimation: true,
+            goingBack: false,
+            animationStarted: false,
+            newIndex: page.current + 1,
+        };
 
         if (isLastPage()) {
             updatePagesVisible(page.current, true);
@@ -54,7 +64,12 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
 
     const prevPage = useCallback(() => {
         // Save the animation we want to make and instantiate the appearing stage (out of sight)
-        animationState.current = { shouldStartAnimation: true, goingBack: true, animationStarted: false };
+        animationState.current = {
+            shouldStartAnimation: true,
+            goingBack: true,
+            animationStarted: false,
+            newIndex: page.current - 1,
+        };
 
         if (isFirstPage()) {
             updatePagesVisible(page.current, true);
@@ -65,6 +80,25 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
         return true;
     }, [isFirstPage]);
 
+    const setPage = useCallback(
+        (index) => {
+            if (page.current === index || !isInBounds(index)) return false;
+            const goingBack = index < page.current;
+
+            // Save the animation we want to make and instantiate the appearing stage (out of sight)
+            animationState.current = {
+                shouldStartAnimation: true,
+                goingBack,
+                animationStarted: false,
+                newIndex: index,
+            };
+
+            updatePagesVisible(index, true);
+            return true;
+        },
+        [isInBounds]
+    );
+
     // #################################################
     //   ANIMATION
     // #################################################
@@ -72,7 +106,7 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
     const [animating, trigger] = useCssOneTimeAnimation(animationSpeed);
 
     useEffect(() => {
-        const { shouldStartAnimation, goingBack, animationStarted } = animationState.current;
+        const { shouldStartAnimation, goingBack, animationStarted, newIndex } = animationState.current;
         if (animationStarted || !shouldStartAnimation) return;
 
         animationState.current = { ...animationState.current, animationStarted: true };
@@ -80,27 +114,30 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
         // Add classes to animate towards the right (Go back)
         if (goingBack) {
             if (isInBounds(page.current)) pagesRef.current[page.current].classList.add("exitGoingBack");
-            if (isInBounds(page.current - 1) && !isFirstPage())
-                pagesRef.current[page.current - 1].classList.add("enterGoingBack");
+            if (isInBounds(newIndex) && !isFirstPage()) pagesRef.current[newIndex].classList.add("enterGoingBack");
         }
         // Add classes to animate towards the left (Go next)
         else {
             if (isInBounds(page.current)) pagesRef.current[page.current].classList.add("exitGoingFordward");
-            if (isInBounds(page.current + 1) && !isLastPage())
-                pagesRef.current[page.current + 1].classList.add("enterGoingFordward");
+            if (isInBounds(newIndex) && !isLastPage()) pagesRef.current[newIndex].classList.add("enterGoingFordward");
         }
 
         trigger();
     }, [pagesVisible, trigger, isFirstPage, isLastPage, isInBounds]);
 
     useEffect(() => {
-        const { shouldStartAnimation, goingBack } = animationState.current;
+        const { shouldStartAnimation, newIndex } = animationState.current;
         if (animating || !shouldStartAnimation) return;
 
         // When animation ends -> Deinstantiate the page that left
         const gonePage = page.current;
-        page.current = page.current + (goingBack ? -1 : 1);
-        animationState.current = { shouldStartAnimation: false, goingBack: false, animationStarted: false };
+        page.current = newIndex;
+        animationState.current = {
+            shouldStartAnimation: false,
+            goingBack: false,
+            animationStarted: false,
+            newIndex: -1,
+        };
 
         updatePagesVisible(gonePage, false);
     }, [animating]);
@@ -132,5 +169,5 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
             )
     );
 
-    return [renderedPages, nextPage, prevPage];
+    return [renderedPages, nextPage, prevPage, setPage];
 }

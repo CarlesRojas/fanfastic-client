@@ -22,7 +22,7 @@ const CARDS = {
     ],
 };
 
-export default function Auth() {
+export default function Auth({ setLoggedIn }) {
     const { sub, unsub } = useContext(Events);
 
     const [showNextPages, setShowNextPages] = useState({ register: false, login: false });
@@ -102,8 +102,8 @@ export default function Auth() {
     return (
         <>
             {renderedPages}
-            {showNextPages.login && <Login parentId={PARENT_ID} />}
-            {showNextPages.register && <Register parentId={PARENT_ID} />}
+            {showNextPages.login && <Login setLoggedIn={setLoggedIn} parentId={PARENT_ID} />}
+            {showNextPages.register && <Register setLoggedIn={setLoggedIn} parentId={PARENT_ID} />}
         </>
     );
 }

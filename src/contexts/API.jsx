@@ -21,7 +21,7 @@ const APIProvider = (props) => {
         const now = new Date();
         const timezoneOffsetInMs = -now.getTimezoneOffset() * 60 * 1000;
 
-        const postData = { username, email, password, timezoneOffsetInMs };
+        const postData = { username, email: email.toLowerCase(), password, timezoneOffsetInMs };
 
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/register`, {
@@ -42,12 +42,12 @@ const APIProvider = (props) => {
 
             return response;
         } catch (error) {
-            return { error: `Register error: ${error}` };
+            return { error: `Unknown registration error` };
         }
     };
 
     const login = async (email, password) => {
-        const postData = { email, password };
+        const postData = { email: email.toLowerCase(), password };
 
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/login`, {
@@ -73,7 +73,7 @@ const APIProvider = (props) => {
 
             return response;
         } catch (error) {
-            return { error: `Login error: ${error}` };
+            return { error: "Unknown login error" };
         }
     };
 
@@ -115,11 +115,15 @@ const APIProvider = (props) => {
             const response = await rawResponse.json();
 
             // Save new user
-            if ("error" in response) return response;
+            if ("error" in response) {
+                clearCookies(APP_NAME);
+                return response;
+            }
             user.current = response;
 
             return response;
         } catch (error) {
+            clearCookies(APP_NAME);
             return { error: `Get user info error: ${error}` };
         }
     };
@@ -145,7 +149,7 @@ const APIProvider = (props) => {
         token.current = null;
         user.current = null;
 
-        clearCookies();
+        clearCookies(APP_NAME);
     };
 
     const tryToLogInWithToken = async () => {
@@ -170,7 +174,7 @@ const APIProvider = (props) => {
     };
 
     const changeEmail = async (password, newEmail) => {
-        const postData = { password, email: newEmail };
+        const postData = { password, email: newEmail.toLowerCase() };
 
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/changeEmail`, {
@@ -617,7 +621,7 @@ const APIProvider = (props) => {
     // #################################################
 
     const isEmailValid = async (email, checkIfExists) => {
-        const postData = { email, checkIfExists };
+        const postData = { email: email.toLowerCase(), checkIfExists };
 
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isEmailValid`, {

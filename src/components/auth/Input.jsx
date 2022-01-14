@@ -22,7 +22,7 @@ export default function Input({
     parentData,
 }) {
     const { isEmailValid, isUsernameValid, isPasswordValid } = useContext(API);
-    const { inputType } = data;
+    const { inputType, checkExists } = data;
 
     // #################################################
     //   STATE
@@ -51,7 +51,7 @@ export default function Input({
         else if (inputType === "username") validate = isUsernameValid;
         else if (inputType === "password") validate = isPasswordValid;
 
-        if (inputType === "email") var validationResult = await validate(value, true);
+        if (inputType === "email") var validationResult = await validate(value, checkExists);
         else validationResult = await validate(value, false);
 
         if ("error" in validationResult) handleError(validationResult.error.replaceAll(`"`, ""));

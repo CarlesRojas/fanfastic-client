@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useContext, useRef } from "react";
 import usePageAnimation from "../../hooks/usePageAnimation";
-import { Events } from "../../contexts/Events";
 import Card from "./Card";
 
+import { Events } from "../../contexts/Events";
+import { API } from "../../contexts/API";
+
 const PARENT_ID = "login";
-const STAGES = ["login", "loginSuccess"];
+const STAGES = ["login"];
 
 const CARDS = {
     login: [
@@ -12,7 +14,7 @@ const CARDS = {
             title: "Log in",
             subtitle: "Enter your email:",
             interactiblesHeight: 4,
-            interactibles: [{ type: "input", inputType: "email" }],
+            interactibles: [{ type: "input", inputType: "email", checkExists: false }],
         },
         {
             title: "Log in",
@@ -21,22 +23,14 @@ const CARDS = {
             interactibles: [{ type: "input", action: "completeLogin", inputType: "password" }],
         },
     ],
-    loginSuccess: [
-        {
-            title: "Welcome back",
-            subtitle: "Happy to see you again!",
-            interactiblesHeight: 0,
-            interactibles: [],
-            auto: true,
-        },
-    ],
 };
 
-export default function Login({ parentId }) {
+export default function Login({ parentId, setLoggedIn }) {
     const { sub, unsub, emit } = useContext(Events);
+    const { login } = useContext(API);
 
     // #################################################
-    //   DATA
+    //   LOGIN
     // #################################################
 
     const loginData = useRef({
@@ -50,7 +44,7 @@ export default function Login({ parentId }) {
 
     const animationSpeed = 400;
     const content = STAGES.map((id) => (
-        <Card cardPhases={CARDS[id]} canGoBack={id !== "loginSuccess"} parentData={loginData} parentId={PARENT_ID} />
+        <Card cardPhases={CARDS[id]} canGoBack={true} parentData={loginData} parentId={PARENT_ID} />
     ));
     const [renderedPages, nextPage, prevPage] = usePageAnimation({
         pagesIds: STAGES,
@@ -64,22 +58,22 @@ export default function Login({ parentId }) {
     //   HANDLERS
     // #################################################
 
+    const handleLogin = useCallback(async () => {
+        const result = await login(loginData.current.email, loginData.current.password);
+
+        if ("error" in result) emit("onLoginError", result.error);
+        else {
+            nextPage();
+            setTimeout(() => setLoggedIn(true), animationSpeed);
+        }
+    }, [login, nextPage, setLoggedIn, emit]);
+
     const handleActionDone = useCallback(
         ({ callerParentId, action }) => {
             if (callerParentId !== PARENT_ID) return;
-
-            if (action === "completeLogin") {
-                console.log("CALL ALL THE LOGIN APIS");
-                console.log(`email: ${loginData.current.email}`);
-                console.log(`password: ${loginData.current.password}`);
-
-                // ROJAS REMOVE TIMEOUT and just wait for the api to response to decide to go to next or to show error
-                setTimeout(() => {
-                    nextPage();
-                }, 2000);
-            }
+            if (action === "completeLogin") handleLogin();
         },
-        [nextPage]
+        [handleLogin]
     );
 
     const handleNextStage = useCallback(

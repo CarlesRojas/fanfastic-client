@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useContext, useRef } from "react";
 import usePageAnimation from "../../hooks/usePageAnimation";
-import { Events } from "../../contexts/Events";
 import Card from "./Card";
+
+import { Events } from "../../contexts/Events";
+import { API } from "../../contexts/API";
 
 const PARENT_ID = "register";
 const STAGES = ["register", "fast", "health", "registerSuccess"];
@@ -11,7 +13,7 @@ const CARDS = {
             title: "Create an account",
             subtitle: "Enter your email:",
             interactiblesHeight: 4,
-            interactibles: [{ type: "input", inputType: "email" }],
+            interactibles: [{ type: "input", inputType: "email", checkExists: true }],
         },
         {
             title: "Create an account",
@@ -77,17 +79,19 @@ const CARDS = {
     ],
     registerSuccess: [
         {
-            title: "All done",
+            title: "Account created",
             subtitle: "Welcome to Fanfastic!",
             interactiblesHeight: 0,
+            loadUntilSuccess: true,
             interactibles: [],
-            auto: true,
         },
     ],
 };
 
-export default function Register({ parentId }) {
+export default function Register({ parentId, setLoggedIn }) {
     const { sub, unsub, emit } = useContext(Events);
+    const { register, login, setFastDesiredStartTime, setFastObjective, setHeight, setWeight, setWeightObjective } =
+        useContext(API);
 
     // #################################################
     //   DATA
@@ -117,7 +121,7 @@ export default function Register({ parentId }) {
             parentId={PARENT_ID}
         />
     ));
-    const [renderedPages, nextPage, prevPage] = usePageAnimation({
+    const [renderedPages, nextPage, prevPage, setPage] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
         containerClass: "lateralPages",
@@ -129,41 +133,76 @@ export default function Register({ parentId }) {
     //   HANDLERS
     // #################################################
 
+    const checkError = useCallback(
+        (data) => {
+            if ("error" in data) {
+                setPage(0);
+                setTimeout(() => emit("onRegisterError", data.error), animationSpeed);
+                return true;
+            }
+            return false;
+        },
+        [setPage, emit]
+    );
+
+    const handleRegister = useCallback(async () => {
+        const { email, username, password, fastDuration, fastStartTime, height, weight, objectiveWeight } =
+            registrationData.current;
+
+        nextPage();
+
+        const registerResult = await register(username, email, password);
+        if (checkError(registerResult)) return;
+
+        const loginResult = await login(email, password);
+        if (checkError(loginResult)) return;
+
+        const fastObjectiveResult = await setFastObjective((12 + fastDuration) * 60);
+        if (checkError(fastObjectiveResult)) return;
+
+        const fastDesiredStartResult = await setFastDesiredStartTime(
+            fastStartTime % 2 === 0 ? (12 + fastStartTime / 2) * 60 : (12 + (fastStartTime - 1) / 2) * 60 + 30
+        );
+        if (checkError(fastDesiredStartResult)) return;
+
+        const setHeightResult = await setHeight(height.m * 100 + height.cm);
+        if (checkError(setHeightResult)) return;
+
+        const setWeightResult = await setWeight(weight.kg + weight.dg / 10);
+        if (checkError(setWeightResult)) return;
+
+        const setWeightObjectiveResult = await setWeightObjective(
+            objectiveWeight.kg === -1 ? -1 : objectiveWeight.kg + objectiveWeight.dg / 10
+        );
+        if (checkError(setWeightObjectiveResult)) return;
+
+        emit("onLoadSuccess");
+
+        setTimeout(() => {
+            nextPage();
+            setTimeout(() => setLoggedIn(true), animationSpeed);
+        }, 2000);
+    }, [
+        register,
+        login,
+        setFastObjective,
+        setFastDesiredStartTime,
+        setHeight,
+        setWeight,
+        setWeightObjective,
+        checkError,
+        nextPage,
+        setLoggedIn,
+        emit,
+    ]);
+
     const handleActionDone = useCallback(
         ({ callerParentId, action }) => {
             if (callerParentId !== PARENT_ID) return;
 
-            if (action === "completeRegistration") {
-                console.log("CALL ALL THE REGISTER APIS");
-                console.log(`email: ${registrationData.current.email}`);
-                console.log(`username: ${registrationData.current.username}`);
-                console.log(`password: ${registrationData.current.password}`);
-                console.log(`fastDuration: ${(12 + registrationData.current.fastDuration) * 60}`);
-                console.log(
-                    `fastStartTime: ${
-                        registrationData.current.fastStartTime % 2 === 0
-                            ? (12 + registrationData.current.fastStartTime / 2) * 60
-                            : (12 + (registrationData.current.fastStartTime - 1) / 2) * 60 + 30
-                    }`
-                );
-                console.log(`height: ${registrationData.current.height.m * 100 + registrationData.current.height.cm}`);
-                console.log(`weight: ${registrationData.current.weight.kg + registrationData.current.weight.dg / 10}`);
-                console.log(
-                    `objectiveWeight: ${
-                        registrationData.current.objectiveWeight.kg === -1
-                            ? "Skip"
-                            : registrationData.current.objectiveWeight.kg +
-                              registrationData.current.objectiveWeight.dg / 10
-                    }`
-                );
-
-                // ROJAS REMOVE TIMEOUT and just wait for the api to response to decide to go to next or to show error
-                setTimeout(() => {
-                    nextPage();
-                }, 2000);
-            }
+            if (action === "completeRegistration") handleRegister();
         },
-        [nextPage]
+        [handleRegister]
     );
 
     const handleNextStage = useCallback(

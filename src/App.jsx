@@ -23,7 +23,7 @@ export default function App() {
         };
 
         checkLogin();
-    }, [isLoggedIn]);
+    }, [isLoggedIn, loggedIn]);
 
     if (loggedIn === null) return null;
     else if (loggedIn) return isDesktop || (isTablet && isLandscape) ? <DesktopLayout /> : <MobileLayout />;

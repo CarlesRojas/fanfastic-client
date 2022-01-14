@@ -9,12 +9,15 @@ import HeightPicker from "./HeightPicker";
 import WeightPicker from "./WeightPicker";
 import useCssOneTimeAnimation from "../../hooks/useCssOneTimeAnimation";
 import useThrottle from "../../hooks/useThrottle";
+import SVG from "react-inlinesvg";
+
+import LoadingIcon from "../../resources/icons/loading.svg";
 
 import { Events } from "../../contexts/Events";
 import ObjectiveWeightButton from "./ObjectiveWeightButton";
 
 export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
-    const { emit } = useContext(Events);
+    const { emit, sub, unsub } = useContext(Events);
 
     // #################################################
     //   SPRING STYLE
@@ -34,6 +37,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     //   STATE
     // #################################################
 
+    const [registerLoadingDone, setRegisterLoadingDone] = useState(false);
     const [currentPhase, setCurrentPhase] = useState(0);
     const [error, setError] = useState(false);
     const [springs, api] = useSprings(cardPhases.length, (i) => ({ ...style(i, currentPhase) }));
@@ -42,11 +46,6 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     useEffect(() => {
         api.start((i) => ({ ...style(i, currentPhase) }));
     }, [api, currentPhase, style]);
-
-    const handleError = (error) => {
-        setError(error);
-        trigger();
-    };
 
     // #################################################
     //   NEXT & PREV
@@ -58,7 +57,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
 
         if (currentPhase < cardPhases.length - 1) {
             setCurrentPhase((prev) => prev + 1);
-        } else emit("onNextStage", parentId);
+        } else if (action !== "completeLogin" && action !== "completeRegistration") emit("onNextStage", parentId);
     }, 500);
 
     const prevPhase = useThrottle(() => {
@@ -69,10 +68,58 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
     }, 500);
 
     // #################################################
+    //   HANDLERS
+    // #################################################
+
+    const handleError = useCallback(
+        (error) => {
+            setError(error);
+            trigger();
+        },
+        [setError, trigger]
+    );
+
+    const handleLoginError = useCallback(
+        (error) => {
+            if (error.includes("email")) {
+                prevPhase();
+                setTimeout(() => {
+                    setError(error);
+                    trigger();
+                }, 300);
+            } else {
+                setError(error);
+                trigger();
+            }
+        },
+        [prevPhase, setError, trigger]
+    );
+
+    const handleLoadSuccess = useCallback(() => {
+        setRegisterLoadingDone(true);
+    }, []);
+
+    // #################################################
+    //   EVENTS
+    // #################################################
+
+    useEffect(() => {
+        sub("onLoginError", handleLoginError);
+        sub("onRegisterError", handleError);
+        sub("onLoadSuccess", handleLoadSuccess);
+
+        return () => {
+            unsub("onLoginError", handleLoginError);
+            unsub("onRegisterError", handleError);
+            unsub("onLoadSuccess", handleLoadSuccess);
+        };
+    }, [handleLoginError, handleError, handleLoadSuccess, sub, unsub]);
+
+    // #################################################
     //   RENDER
     // #################################################
 
-    const { title, subtitle } = cardPhases[currentPhase];
+    const { title, subtitle, loadUntilSuccess } = cardPhases[currentPhase];
 
     return (
         <div className={cn("Card", { shake: animating })}>
@@ -83,11 +130,20 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
             )}
 
             <div className={cn("header", { noInteractibles: cardPhases[currentPhase].interactibles.length <= 0 })}>
-                <h1>{title}</h1>
-                <div className={"subtitle"}>
-                    {subtitle}
-                    {error && <p>{error}</p>}
-                </div>
+                {loadUntilSuccess && !registerLoadingDone ? (
+                    <div className={"loadingContainer"}>
+                        <p className={"loadingText"}>{"Creating your account..."}</p>
+                        <SVG className={cn("loadingIcon", "spin", "infinite")} src={LoadingIcon} />
+                    </div>
+                ) : (
+                    <>
+                        <h1>{title}</h1>
+                        <div className={"subtitle"}>
+                            {subtitle}
+                            {error && <p>{error}</p>}
+                        </div>
+                    </>
+                )}
             </div>
 
             <div className="clip"></div>
