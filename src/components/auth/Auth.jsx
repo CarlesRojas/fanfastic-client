@@ -41,6 +41,7 @@ export default function Auth({ setLoggedIn }) {
         containerClass: "lateralPages",
         animationSpeed,
         animateFirst: false,
+        initialPage: 0,
     });
 
     // #################################################

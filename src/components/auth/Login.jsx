@@ -52,6 +52,7 @@ export default function Login({ parentId, setLoggedIn }) {
         containerClass: "lateralPages",
         animationSpeed,
         animateFirst: true,
+        initialPage: 0,
     });
 
     // #################################################

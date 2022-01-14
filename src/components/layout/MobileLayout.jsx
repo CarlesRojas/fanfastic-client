@@ -1,41 +1,52 @@
 import { useRef } from "react";
-import useGlobalState from "../../hooks/useGlobalState";
+import usePageAnimation from "../../hooks/usePageAnimation";
 import useThrottle from "../../hooks/useThrottle";
 
-import Page from "./Page";
 import Historic from "../Historic";
 import Home from "../Home";
 import Settings from "../Settings";
 
-export default function MobileLayout() {
-    const [currentPage, setCurrentPage] = useGlobalState("currentPage");
+const STAGES = ["historic", "home", "settings"];
 
-    const pages = useRef([
-        {
-            id: "historic",
-            page: <Historic />,
-        },
-        {
-            id: "home",
-            page: <Home />,
-        },
-        {
-            id: "settings",
-            page: <Settings />,
-        },
-    ]);
+export default function MobileLayout() {
+    // #################################################
+    //   PAGE ANIMATION
+    // #################################################
+
+    const currentPage = useRef(1);
+
+    const animationSpeed = 300;
+    const content = STAGES.map((id) => {
+        if (id === "historic") return <Historic />;
+        else if (id === "home") return <Home />;
+        else if (id === "settings") return <Settings />;
+        else return null;
+    });
+    const [renderedPages, nextPage, prevPage, setPage] = usePageAnimation({
+        pagesIds: STAGES,
+        pagesContents: content,
+        containerClass: "mainPages",
+        animationSpeed,
+        animateFirst: false,
+        initialPage: currentPage.current,
+    });
 
     const handleClick = useThrottle(() => {
-        setCurrentPage((prev) => (prev === "auth" ? "home" : "auth"));
+        if (currentPage.current === 0) {
+            currentPage.current = 1;
+            setPage(1);
+        } else if (currentPage.current === 1) {
+            currentPage.current = 2;
+            setPage(2);
+        } else if (currentPage.current === 2) {
+            currentPage.current = 0;
+            setPage(0);
+        }
     }, 500);
 
     return (
         <div className="MobileLayout">
-            {pages.current.map(({ id, page }) => (
-                <Page visible={currentPage === id} key={id}>
-                    {page}
-                </Page>
-            ))}
+            {renderedPages}
 
             <div className="change" onClick={handleClick}></div>
         </div>

@@ -1,12 +1,19 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import useCssOneTimeAnimation from "./useCssOneTimeAnimation";
 
-export default function usePageAnimation({ pagesIds, pagesContents, containerClass, animationSpeed, animateFirst }) {
+export default function usePageAnimation({
+    pagesIds,
+    pagesContents,
+    containerClass,
+    animationSpeed,
+    animateFirst,
+    initialPage,
+}) {
     // #################################################
     //   STATE
     // #################################################
 
-    const [pagesVisible, setPagesVisible] = useState(pagesIds.map((_, i) => i === 0));
+    const [pagesVisible, setPagesVisible] = useState(pagesIds.map((_, i) => i === initialPage));
     const pagesRef = useRef({});
 
     const updatePagesVisible = (index, newValue) => {
@@ -21,7 +28,7 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
     //   NEXT & PREV
     // #################################################
 
-    const page = useRef(0);
+    const page = useRef(initialPage);
     const animationState = useRef({
         shouldStartAnimation: false,
         goingBack: false,
@@ -147,9 +154,9 @@ export default function usePageAnimation({ pagesIds, pagesContents, containerCla
         if (!firstRun.current) return;
         firstRun.current = false;
 
-        if (animateFirst) pagesRef.current[0].classList.add("enterGoingFordward");
-        else pagesRef.current[0].classList.add("center");
-    }, [animateFirst]);
+        if (animateFirst) pagesRef.current[initialPage].classList.add("enterGoingFordward");
+        else pagesRef.current[initialPage].classList.add("center");
+    }, [animateFirst, initialPage]);
 
     // #################################################
     //   RENDER

@@ -127,6 +127,7 @@ export default function Register({ parentId, setLoggedIn }) {
         containerClass: "lateralPages",
         animationSpeed,
         animateFirst: true,
+        initialPage: 0,
     });
 
     // #################################################

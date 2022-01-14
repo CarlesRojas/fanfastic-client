@@ -1,5 +1,3 @@
-const initialState = {
-    currentPage: "auth",
-};
+const initialState = {};
 
 export default initialState;
