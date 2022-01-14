@@ -25,59 +25,59 @@
 
 .Card {
     position: relative;
-    height: 100%;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    width: 100%;
 
     .backButton {
         position: absolute;
-        top: $cardDistanceToTop - $authButtonHeight;
-        height: 4rem;
-        padding: 0 3rem;
         display: flex;
-        justify-content: center;
         align-items: center;
-        font-weight: 700;
-        color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        height: 4rem;
+        top: $cardDistanceToTop - $authButtonHeight;
         z-index: 140;
+        color: rgba(0, 0, 0, 0.5);
+        padding: 0 3rem;
+        font-weight: 700;
     }
 
     .header {
         position: absolute;
-        top: $cardDistanceToTop;
-        width: 90%;
-        height: $authHeaderHeight;
-        background-color: white;
-        padding: 1rem;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        height: $authHeaderHeight;
+        width: 90%;
+        top: $cardDistanceToTop;
+        z-index: 150;
+        background-color: white;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
-        z-index: 150;
+        padding: 1rem;
 
         h1 {
+            margin-bottom: 0.5rem;
             font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
         }
 
         &.noInteractibles {
-            border-radius: 1rem;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 1rem;
         }
 
         .subtitle {
             font-weight: 400;
 
             p {
+                color: rgb(233, 50, 50);
                 margin-top: 0.3rem;
                 font-size: 0.8rem;
                 font-weight: 500;
-                color: rgb(233, 50, 50);
 
                 &:first-letter {
                     text-transform: capitalize;
@@ -87,31 +87,31 @@
 
         .loadingContainer {
             position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             height: 100%;
             width: 100%;
             top: 0;
             left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
 
             .loadingText {
                 width: 100%;
                 opacity: 0.7;
+                margin-bottom: 1rem;
+                font-size: 0.9rem;
                 font-weight: 400;
                 text-align: center;
-                font-size: 0.9rem;
-                margin-bottom: 1rem;
             }
 
             .loadingIcon {
                 height: 2rem;
-                min-height: 2rem;
                 max-height: 2rem;
+                min-height: 2rem;
                 width: 2rem;
-                min-width: 2rem;
                 max-width: 2rem;
+                min-width: 2rem;
                 color: $backgrounOrange;
             }
         }
@@ -119,8 +119,8 @@
 
     .clip {
         position: absolute;
-        width: 100%;
         height: $cardDistanceToTop + $authHeaderHeight / 2;
+        width: 100%;
         top: 0;
         left: 0;
         z-index: 130;
@@ -129,30 +129,30 @@
 
     .interactions {
         position: absolute;
-        top: $cardDistanceToTop;
-        width: 90%;
         display: flex;
         flex-direction: column;
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
+        width: 90%;
+        top: $cardDistanceToTop;
+        background-color: rgb(230, 230, 230);
         border-bottom-left-radius: 2rem;
         border-bottom-right-radius: 2rem;
-        background-color: rgb(230, 230, 230);
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
 
         .separation {
-            background-color: white;
             height: 1rem;
+            background-color: white;
         }
 
         .fastPickerReplacement {
-            width: 100%;
             height: $authButtonHeight * 2;
+            width: 100%;
             background-color: white;
         }
 
         .healthPickerReplacement {
-            width: 100%;
             height: $authButtonHeight * 2;
+            width: 100%;
             background-color: rgb(230, 230, 230);
         }
     }
@@ -162,14 +162,14 @@
 // #######################################
 
 .Button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: $authButtonHeight;
     width: 100%;
     background-color: $backgrounOrange;
-    height: $authButtonHeight;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
     color: rgba(0, 0, 0, 0.5);
+    font-weight: 700;
 
     &.last {
         border-bottom-left-radius: 1rem;
@@ -182,11 +182,11 @@
 
 .ObjectiveWeightButton {
     position: relative;
-    width: 100%;
-    height: $authButtonHeight;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    height: $authButtonHeight;
+    width: 100%;
 
     &.last {
         border-bottom-left-radius: 1rem;
@@ -203,14 +203,14 @@
 
     .skip,
     .select {
-        width: 50%;
-        height: $authButtonHeight;
-        background-color: $backgrounOrange;
-        font-weight: 700;
-        color: rgba(0, 0, 0, 0.5);
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        height: $authButtonHeight;
+        width: 50%;
+        background-color: $backgrounOrange;
+        color: rgba(0, 0, 0, 0.5);
+        font-weight: 700;
     }
 
     .skip {
@@ -223,12 +223,12 @@
 
 .Input {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: $authButtonHeight;
     width: 100%;
     background-color: rgb(230, 230, 230);
-    height: $authButtonHeight;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     &.last {
         border-bottom-left-radius: 1rem;
@@ -240,45 +240,45 @@
     }
 
     input {
-        background-color: rgb(235, 235, 235);
-        width: calc(100% - $authButtonHeight);
+        user-select: all;
         height: $authButtonHeight;
+        width: calc(100% - $authButtonHeight);
+        background-color: rgb(235, 235, 235);
+        padding: 1rem;
         font-size: 1rem;
         font-weight: 500;
-        padding: 1rem;
-        user-select: all;
     }
 
     .enter {
         position: relative;
         height: $authButtonHeight;
-        min-height: $authButtonHeight;
         max-height: $authButtonHeight;
+        min-height: $authButtonHeight;
         width: $authButtonHeight;
-        min-width: $authButtonHeight;
         max-width: $authButtonHeight;
+        min-width: $authButtonHeight;
+        overflow: hidden;
         background-color: $backgrounOrange;
         border-bottom-right-radius: 1rem;
-        overflow: hidden;
 
         &.validating {
             pointer-events: none;
         }
 
         .icon {
-            transition: top 0.2s ease-in-out;
+            pointer-events: none;
             position: absolute;
+            transition: top 0.2s ease-in-out;
+            height: 100%;
+            max-height: 100%;
+            min-height: 100%;
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
             top: 0;
             left: 0;
             color: rgba(0, 0, 0, 0.5);
-            height: 100%;
-            min-height: 100%;
-            max-height: 100%;
-            width: 100%;
-            min-width: 100%;
-            max-width: 100%;
             padding: 1.3rem;
-            pointer-events: none;
 
             &.up {
                 top: -$authButtonHeight;
@@ -296,11 +296,11 @@
 
 .FastPicker {
     position: relative;
-    width: 100%;
-    height: $authButtonHeight * 2;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: $authButtonHeight * 2;
+    width: 100%;
     background-color: white;
 
     &.last {
@@ -310,50 +310,50 @@
 
     .pickerContainer {
         position: relative;
-        width: 100%;
-        background-color: rgb(230, 230, 230);
-        height: $authButtonHeight;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        height: $authButtonHeight;
+        width: 100%;
         overflow: hidden;
+        background-color: rgb(230, 230, 230);
 
         .element {
-            position: absolute;
-            width: $authButtonHeight;
-            min-width: $authButtonHeight;
-            max-width: $authButtonHeight;
-            height: $authButtonHeight;
-            min-height: $authButtonHeight;
-            max-height: $authButtonHeight;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.1rem;
             pointer-events: none;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: $authButtonHeight;
+            max-height: $authButtonHeight;
+            min-height: $authButtonHeight;
+            width: $authButtonHeight;
+            max-width: $authButtonHeight;
+            min-width: $authButtonHeight;
+            font-size: 1.1rem;
 
             .minutes {
+                opacity: 1;
                 margin-left: 0.05rem;
                 font-size: 0.6rem;
-                opacity: 1;
             }
         }
     }
 
     .infoContainer {
-        padding: 1rem;
-        position: relative;
-        width: 100%;
-        height: $authButtonHeight;
         pointer-events: none;
+        position: relative;
+        height: $authButtonHeight;
+        width: 100%;
+        padding: 1rem;
 
         .highlight {
             font-weight: 700;
         }
 
         .warning {
-            font-weight: 500;
             color: #ff5e00;
+            font-weight: 500;
         }
     }
 }
@@ -363,11 +363,11 @@
 
 .HealthPicker {
     position: relative;
-    width: 100%;
-    height: $authButtonHeight * 2;
     display: flex;
     align-items: center;
     justify-content: center;
+    height: $authButtonHeight * 2;
+    width: 100%;
     background-color: rgb(230, 230, 230);
 
     &.last {
@@ -377,42 +377,42 @@
 
     .pickerContainer {
         position: relative;
-        width: $authButtonHeight;
-        height: $authButtonHeight * 2;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        height: $authButtonHeight * 2;
+        width: $authButtonHeight;
         overflow: hidden;
 
         .element {
-            position: absolute;
-            width: $authButtonHeight;
-            min-width: $authButtonHeight;
-            max-width: $authButtonHeight;
-            height: $authButtonHeight;
-            min-height: $authButtonHeight;
-            max-height: $authButtonHeight;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.1rem;
             pointer-events: none;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: $authButtonHeight;
+            max-height: $authButtonHeight;
+            min-height: $authButtonHeight;
+            width: $authButtonHeight;
+            max-width: $authButtonHeight;
+            min-width: $authButtonHeight;
             opacity: 0;
+            font-size: 1.1rem;
         }
     }
 
     .infoContainer {
+        pointer-events: none;
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.2rem;
-        position: relative;
-        width: fit-content;
         height: $authButtonHeight * 2;
-        pointer-events: none;
-        font-size: 1.1rem;
+        width: fit-content;
         margin-right: 1rem;
         margin-top: 0.3rem;
+        padding: 0.2rem;
+        font-size: 1.1rem;
         font-weight: 600;
 
         &.point {
@@ -428,17 +428,111 @@
 
 .MobileLayout {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 100%;
     width: 100%;
-    background-color: rgb(0, 247, 255);
 
-    .change {
-        position: absolute;
+    .mainPagesContent {
+        position: relative;
+        height: calc(100% - #{$navBarheight});
         width: 100%;
-        height: 5rem;
-        top: 0;
-        left: 0;
-        background-color: rgb(21, 0, 78);
+    }
+}
+
+// #######################################
+//      NAVBAR
+// #######################################
+
+.Navbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: $navBarheight;
+    width: 100%;
+    background-color: white;
+
+    .container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.2s ease-in-out, width 0.2s ease-in-out;
+        width: calc(2rem + #{$navBarheight * 0.4});
+        background-color: transparent;
+        margin: 0 0.5rem;
+        border-radius: 100vw;
+        padding: 0.7rem 1rem;
+
+        &.selected {
+            width: 8.5rem;
+
+            &.navbarHome {
+                background-color: $homeColorBackground;
+            }
+
+            &.navbarHistory {
+                background-color: $historyColorBackground;
+            }
+
+            &.navbarSettings {
+                background-color: $settingsColorBackground;
+            }
+
+            .icon {
+                &.navbarHome {
+                    color: $homeColorForeground;
+                }
+
+                &.navbarHistory {
+                    color: $historyColorForeground;
+                }
+
+                &.navbarSettings {
+                    color: $settingsColorForeground;
+                }
+            }
+
+            .name {
+                transition: opacity 0.05s 0.15s ease-in-out, width 0.2s ease-in-out;
+                width: 5.5rem;
+                opacity: 1;
+            }
+        }
+
+        .icon {
+            transition: color 0.2s ease-in-out;
+            height: $navBarheight * 0.4;
+            max-height: $navBarheight * 0.4;
+            min-height: $navBarheight * 0.4;
+            width: $navBarheight * 0.4;
+            max-width: $navBarheight * 0.4;
+            min-width: $navBarheight * 0.4;
+            color: rgb(146, 146, 146);
+        }
+
+        .name {
+            transition: opacity 0.05s ease-in-out, width 0.2s ease-in-out;
+            width: 0%;
+            opacity: 0;
+            padding-left: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+
+            &.navbarHome {
+                color: $homeColorForeground;
+            }
+
+            &.navbarHistory {
+                color: $historyColorForeground;
+            }
+
+            &.navbarSettings {
+                color: $settingsColorForeground;
+            }
+        }
     }
 }
 

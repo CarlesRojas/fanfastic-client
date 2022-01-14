@@ -5,20 +5,21 @@ import useThrottle from "../../hooks/useThrottle";
 import Historic from "../Historic";
 import Home from "../Home";
 import Settings from "../Settings";
+import Navbar from "./Navbar";
 
-const STAGES = ["historic", "home", "settings"];
+const STAGES = ["home", "historic", "settings"];
 
 export default function MobileLayout() {
     // #################################################
     //   PAGE ANIMATION
     // #################################################
 
-    const currentPage = useRef(1);
+    const currentPage = useRef(0);
 
     const animationSpeed = 300;
     const content = STAGES.map((id) => {
-        if (id === "historic") return <Historic />;
-        else if (id === "home") return <Home />;
+        if (id === "home") return <Home />;
+        else if (id === "historic") return <Historic />;
         else if (id === "settings") return <Settings />;
         else return null;
     });
@@ -31,24 +32,11 @@ export default function MobileLayout() {
         initialPage: currentPage.current,
     });
 
-    const handleClick = useThrottle(() => {
-        if (currentPage.current === 0) {
-            currentPage.current = 1;
-            setPage(1);
-        } else if (currentPage.current === 1) {
-            currentPage.current = 2;
-            setPage(2);
-        } else if (currentPage.current === 2) {
-            currentPage.current = 0;
-            setPage(0);
-        }
-    }, 500);
-
     return (
         <div className="MobileLayout">
-            {renderedPages}
+            <div className="mainPagesContent">{renderedPages}</div>
 
-            <div className="change" onClick={handleClick}></div>
+            <Navbar setPage={setPage} prevPage={prevPage} nextPage={nextPage} currentPage={currentPage} />
         </div>
     );
 }

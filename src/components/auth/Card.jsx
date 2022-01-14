@@ -33,6 +33,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
         }),
         [cardPhases]
     );
+
     // #################################################
     //   STATE
     // #################################################
