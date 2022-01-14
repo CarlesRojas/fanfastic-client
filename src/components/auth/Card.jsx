@@ -29,7 +29,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
             marginTop: i < currentIndex ? `${10 - cardPhases[i].interactiblesHeight}rem` : "10rem",
             zIndex: 10 - (i - currentIndex),
             boxShadow: i < currentIndex ? "0 10px 20px rgba(0, 0, 0, 0)" : "0 10px 20px rgba(0, 0, 0, 0.15)",
-            filter: i > currentIndex ? `brightness(${100 - (i - currentIndex) * 5}%)` : "brightness(100%)",
+            filter: i > currentIndex ? `brightness(${100 - (i - currentIndex) * 3}%)` : "brightness(100%)",
         }),
         [cardPhases]
     );

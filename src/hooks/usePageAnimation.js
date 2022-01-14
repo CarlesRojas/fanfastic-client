@@ -176,5 +176,5 @@ export default function usePageAnimation({
             )
     );
 
-    return [renderedPages, nextPage, prevPage, setPage];
+    return [{ renderedPages, nextPage, prevPage, setPage }];
 }

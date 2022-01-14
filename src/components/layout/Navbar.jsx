@@ -1,6 +1,7 @@
-import { useState, useEffect, Fragment, useContext, useCallback } from "react";
+import { useState } from "react";
 import cn from "classnames";
 import SVG from "react-inlinesvg";
+import useThrottle from "../../hooks/useThrottle";
 
 import HomeIcon from "../../resources/icons/logo.svg";
 import HistoryIcon from "../../resources/icons/history.svg";
@@ -28,13 +29,13 @@ export default function Navbar({ setPage, currentPage }) {
 
     const [selected, updateSelected] = useState(currentPage.current);
 
-    const setSelected = (newIndex) => {
+    const setSelected = useThrottle((newIndex) => {
         if (selected === newIndex) return;
 
         currentPage.current = newIndex;
         updateSelected(newIndex);
         setPage(newIndex);
-    };
+    }, 300);
 
     // #################################################
     //   RENDER

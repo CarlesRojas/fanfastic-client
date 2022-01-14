@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import usePageAnimation from "../../hooks/usePageAnimation";
-import useThrottle from "../../hooks/useThrottle";
 
 import Historic from "../Historic";
 import Home from "../Home";
@@ -23,7 +22,7 @@ export default function MobileLayout() {
         else if (id === "settings") return <Settings />;
         else return null;
     });
-    const [renderedPages, nextPage, prevPage, setPage] = usePageAnimation({
+    const [{ renderedPages, setPage }] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
         containerClass: "mainPages",
@@ -36,7 +35,7 @@ export default function MobileLayout() {
         <div className="MobileLayout">
             <div className="mainPagesContent">{renderedPages}</div>
 
-            <Navbar setPage={setPage} prevPage={prevPage} nextPage={nextPage} currentPage={currentPage} />
+            <Navbar setPage={setPage} currentPage={currentPage} />
         </div>
     );
 }

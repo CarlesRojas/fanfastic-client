@@ -38,9 +38,9 @@
         align-items: center;
         justify-content: center;
         height: 4rem;
-        top: $cardDistanceToTop - $authButtonHeight;
+        top: $authCardDistanceToTop - $authButtonHeight;
         z-index: 140;
-        color: rgba(0, 0, 0, 0.5);
+        color: $authIconColor;
         padding: 0 3rem;
         font-weight: 700;
     }
@@ -52,9 +52,9 @@
         justify-content: space-between;
         height: $authHeaderHeight;
         width: 90%;
-        top: $cardDistanceToTop;
+        top: $authCardDistanceToTop;
         z-index: 150;
-        background-color: white;
+        background-color: $authCardBackground;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
         padding: 1rem;
@@ -66,7 +66,7 @@
         }
 
         &.noInteractibles {
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 20px $shadowColor;
             border-radius: 1rem;
         }
 
@@ -74,7 +74,7 @@
             font-weight: 400;
 
             p {
-                color: rgb(233, 50, 50);
+                color: $textWarning;
                 margin-top: 0.3rem;
                 font-size: 0.8rem;
                 font-weight: 500;
@@ -112,14 +112,14 @@
                 width: 2rem;
                 max-width: 2rem;
                 min-width: 2rem;
-                color: $backgrounOrange;
+                color: $authButtonOrange;
             }
         }
     }
 
     .clip {
         position: absolute;
-        height: $cardDistanceToTop + $authHeaderHeight / 2;
+        height: $authCardDistanceToTop + $authHeaderHeight / 2;
         width: 100%;
         top: 0;
         left: 0;
@@ -132,8 +132,8 @@
         display: flex;
         flex-direction: column;
         width: 90%;
-        top: $cardDistanceToTop;
-        background-color: rgb(230, 230, 230);
+        top: $authCardDistanceToTop;
+        background-color: $authButtonGrey;
         border-bottom-left-radius: 2rem;
         border-bottom-right-radius: 2rem;
         border-top-left-radius: 1rem;
@@ -141,19 +141,19 @@
 
         .separation {
             height: 1rem;
-            background-color: white;
+            background-color: $authCardBackground;
         }
 
         .fastPickerReplacement {
             height: $authButtonHeight * 2;
             width: 100%;
-            background-color: white;
+            background-color: $authCardBackground;
         }
 
         .healthPickerReplacement {
             height: $authButtonHeight * 2;
             width: 100%;
-            background-color: rgb(230, 230, 230);
+            background-color: $authButtonGrey;
         }
     }
 }
@@ -167,8 +167,8 @@
     justify-content: center;
     height: $authButtonHeight;
     width: 100%;
-    background-color: $backgrounOrange;
-    color: rgba(0, 0, 0, 0.5);
+    background-color: $authButtonOrange;
+    color: $authIconColor;
     font-weight: 700;
 
     &.last {
@@ -208,13 +208,13 @@
         justify-content: center;
         height: $authButtonHeight;
         width: 50%;
-        background-color: $backgrounOrange;
-        color: rgba(0, 0, 0, 0.5);
+        background-color: $authButtonOrange;
+        color: $authIconColor;
         font-weight: 700;
     }
 
     .skip {
-        background-color: rgb(230, 230, 230);
+        background-color: $authButtonGrey;
     }
 }
 
@@ -228,7 +228,7 @@
     justify-content: center;
     height: $authButtonHeight;
     width: 100%;
-    background-color: rgb(230, 230, 230);
+    background-color: $authButtonGrey;
 
     &.last {
         border-bottom-left-radius: 1rem;
@@ -243,7 +243,7 @@
         user-select: all;
         height: $authButtonHeight;
         width: calc(100% - $authButtonHeight);
-        background-color: rgb(235, 235, 235);
+        background-color: $authInputGrey;
         padding: 1rem;
         font-size: 1rem;
         font-weight: 500;
@@ -258,7 +258,7 @@
         max-width: $authButtonHeight;
         min-width: $authButtonHeight;
         overflow: hidden;
-        background-color: $backgrounOrange;
+        background-color: $authButtonOrange;
         border-bottom-right-radius: 1rem;
 
         &.validating {
@@ -277,7 +277,7 @@
             min-width: 100%;
             top: 0;
             left: 0;
-            color: rgba(0, 0, 0, 0.5);
+            color: $authIconColor;
             padding: 1.3rem;
 
             &.up {
@@ -301,7 +301,7 @@
     align-items: center;
     height: $authButtonHeight * 2;
     width: 100%;
-    background-color: white;
+    background-color: $authCardBackground;
 
     &.last {
         border-bottom-left-radius: 1rem;
@@ -316,7 +316,7 @@
         height: $authButtonHeight;
         width: 100%;
         overflow: hidden;
-        background-color: rgb(230, 230, 230);
+        background-color: $authButtonGrey;
 
         .element {
             pointer-events: none;
@@ -352,7 +352,7 @@
         }
 
         .warning {
-            color: #ff5e00;
+            color: $textWarning;
             font-weight: 500;
         }
     }
@@ -368,7 +368,7 @@
     justify-content: center;
     height: $authButtonHeight * 2;
     width: 100%;
-    background-color: rgb(230, 230, 230);
+    background-color: $authButtonGrey;
 
     &.last {
         border-bottom-left-radius: 1rem;
@@ -452,8 +452,12 @@
     align-items: center;
     justify-content: center;
     height: $navBarheight;
-    width: 100%;
-    background-color: white;
+    width: fit-content;
+    background-color: $navbarBackground;
+    box-shadow: 0 10px 20px $shadowColor;
+    border-radius: 100vw;
+    margin: $navbarPadding 0;
+    padding: $navbarPadding 0;
 
     .container {
         position: relative;
@@ -461,37 +465,38 @@
         align-items: center;
         transition: background-color 0.2s ease-in-out, width 0.2s ease-in-out;
         width: calc(2rem + #{$navBarheight * 0.4});
+        height: 100%;
         background-color: transparent;
-        margin: 0 0.5rem;
+        margin: 0 $navbarPadding;
         border-radius: 100vw;
-        padding: 0.7rem 1rem;
+        padding: 0 1rem;
 
         &.selected {
             width: 8.5rem;
 
             &.navbarHome {
-                background-color: $homeColorBackground;
+                background-color: $navbarHomeBackground;
             }
 
             &.navbarHistory {
-                background-color: $historyColorBackground;
+                background-color: $navbarHistoryBackground;
             }
 
             &.navbarSettings {
-                background-color: $settingsColorBackground;
+                background-color: $navbarSettingsBackground;
             }
 
             .icon {
                 &.navbarHome {
-                    color: $homeColorForeground;
+                    color: $navbarHomeForeground;
                 }
 
                 &.navbarHistory {
-                    color: $historyColorForeground;
+                    color: $navbarHistoryForeground;
                 }
 
                 &.navbarSettings {
-                    color: $settingsColorForeground;
+                    color: $navbarSettingsForeground;
                 }
             }
 
@@ -510,7 +515,7 @@
             width: $navBarheight * 0.4;
             max-width: $navBarheight * 0.4;
             min-width: $navBarheight * 0.4;
-            color: rgb(146, 146, 146);
+            color: $navbarIconColor;
         }
 
         .name {
@@ -522,15 +527,15 @@
             text-align: center;
 
             &.navbarHome {
-                color: $homeColorForeground;
+                color: $navbarHomeForeground;
             }
 
             &.navbarHistory {
-                color: $historyColorForeground;
+                color: $navbarHistoryForeground;
             }
 
             &.navbarSettings {
-                color: $settingsColorForeground;
+                color: $navbarSettingsForeground;
             }
         }
     }
@@ -554,7 +559,6 @@
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: rgb(102, 255, 0);
 }
 
 // #######################################
@@ -565,7 +569,6 @@
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: rgb(255, 217, 0);
 }
 
 // #######################################
@@ -576,5 +579,4 @@
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: rgb(0, 38, 255);
 }

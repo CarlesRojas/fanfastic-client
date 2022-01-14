@@ -46,7 +46,7 @@ export default function Login({ parentId, setLoggedIn }) {
     const content = STAGES.map((id) => (
         <Card cardPhases={CARDS[id]} canGoBack={true} parentData={loginData} parentId={PARENT_ID} />
     ));
-    const [renderedPages, nextPage, prevPage] = usePageAnimation({
+    const [{ renderedPages, nextPage, prevPage }] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
         containerClass: "lateralPages",

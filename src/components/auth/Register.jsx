@@ -121,7 +121,7 @@ export default function Register({ parentId, setLoggedIn }) {
             parentId={PARENT_ID}
         />
     ));
-    const [renderedPages, nextPage, prevPage, setPage] = usePageAnimation({
+    const [{ renderedPages, nextPage, prevPage, setPage }] = usePageAnimation({
         pagesIds: STAGES,
         pagesContents: content,
         containerClass: "lateralPages",
