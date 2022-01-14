@@ -2,7 +2,7 @@ import { useRef } from "react";
 import usePageAnimation from "../../hooks/usePageAnimation";
 
 import Historic from "../Historic";
-import Home from "../Home";
+import Home from "../home/Home";
 import Settings from "../Settings";
 import Navbar from "./Navbar";
 

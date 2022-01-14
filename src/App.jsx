@@ -12,17 +12,22 @@ export default function App() {
     const { isDesktop, isTablet, isLandscape } = useContext(MediaQuery);
 
     const [loggedIn, setLoggedIn] = useState(null);
+    const [userInfoReady, setUserInfoReady] = useState(false);
 
     useEffect(() => {
         const checkLogin = async () => {
-            if (await isLoggedIn()) setLoggedIn(true);
-            else setLoggedIn(false);
+            if (await isLoggedIn()) {
+                setLoggedIn(true);
+                setUserInfoReady(true);
+            } else setLoggedIn(false);
         };
 
         checkLogin();
     }, [isLoggedIn, loggedIn]);
 
     if (loggedIn === null) return null;
-    else if (loggedIn) return isDesktop || (isTablet && isLandscape) ? <DesktopLayout /> : <MobileLayout />;
-    else return <Auth setLoggedIn={setLoggedIn} />;
+    else if (!loggedIn) return <Auth setLoggedIn={setLoggedIn} />;
+    else if (loggedIn && userInfoReady)
+        return isDesktop || (isTablet && isLandscape) ? <DesktopLayout /> : <MobileLayout />;
+    else return null;
 }

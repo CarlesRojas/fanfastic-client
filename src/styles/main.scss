@@ -66,7 +66,7 @@
         }
 
         &.noInteractibles {
-            box-shadow: 0 10px 20px $shadowColor;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
             border-radius: 1rem;
         }
 
@@ -423,6 +423,9 @@
 }
 
 // #######################################
+//      LAYOUT
+// #######################################
+
 //      MOBILE LAYOUT
 // #######################################
 
@@ -442,7 +445,6 @@
     }
 }
 
-// #######################################
 //      NAVBAR
 // #######################################
 
@@ -453,10 +455,10 @@
     justify-content: center;
     height: $navBarheight;
     width: fit-content;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     background-color: $navbarBackground;
-    box-shadow: 0 10px 20px $shadowColor;
-    border-radius: 100vw;
     margin: $navbarPadding 0;
+    border-radius: 100vw;
     padding: $navbarPadding 0;
 
     .container {
@@ -464,8 +466,8 @@
         display: flex;
         align-items: center;
         transition: background-color 0.2s ease-in-out, width 0.2s ease-in-out;
-        width: calc(2rem + #{$navBarheight * 0.4});
         height: 100%;
+        width: calc(2rem + #{$navBarheight * 0.4});
         background-color: transparent;
         margin: 0 $navbarPadding;
         border-radius: 100vw;
@@ -541,7 +543,6 @@
     }
 }
 
-// #######################################
 //      DESKTOP LAYOUT
 // #######################################
 
@@ -555,9 +556,143 @@
 //      HOME
 // #######################################
 
+//      HOME
+// #######################################
+
 .Home {
     position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100%;
+    max-height: 100%;
+    min-height: 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    overflow-y: auto;
+}
+
+//      FAST SECTION
+// #######################################
+
+.FastSection {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .progressBarContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        overflow: hidden;
+        padding: 3rem 0 2rem 0;
+
+        .insideProgress {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            p {
+                font-size: 2rem;
+                font-weight: 600;
+                opacity: 0.7;
+            }
+
+            .phaseIconContainer {
+                position: absolute;
+                height: 2.4rem;
+                max-height: 2.4rem;
+                min-height: 2.4rem;
+                width: 2.4rem;
+                max-width: 2.4rem;
+                min-width: 2.4rem;
+                border-radius: 100vw;
+                opacity: 0.5;
+                box-shadow: 0 5px 5px rgba(0, 0, 0, 0.05);
+
+                &.notYet {
+                    background-color: $fastIconOff !important;
+
+                    .phaseIcon {
+                        filter: brightness(1);
+                        color: rgba(0, 0, 0, 0.3) !important;
+                    }
+                }
+
+                &.current {
+                    opacity: 1;
+
+                    .phaseIcon {
+                        filter: brightness(0.4);
+                        animation: pulse 1.5s ease-in-out infinite;
+
+                        @keyframes pulse {
+                            0% {
+                                transform: scale(1);
+                            }
+                            50% {
+                                transform: scale(1.2);
+                            }
+                            100% {
+                                transform: scale(1);
+                            }
+                        }
+                    }
+                }
+
+                .phaseIcon {
+                    filter: brightness(0.4);
+                    height: 100%;
+                    max-height: 100%;
+                    min-height: 100%;
+                    width: 100%;
+                    max-width: 100%;
+                    min-width: 100%;
+                    padding: 0.6rem;
+                }
+            }
+        }
+    }
+}
+
+//      PROGRESS CIRCLE
+// #######################################
+
+.ProgressCircle {
+    position: relative;
+
+    &.animateProgress {
+        .track {
+            transition: stroke 0.3s ease-in-out;
+        }
+
+        .progress {
+            transition: stroke-dashoffset 0.3s ease-in-out, stroke 0.3s ease-in-out;
+        }
+    }
+
+    .track {
+        transition: none;
+        stroke-width: 0.3rem;
+    }
+
+    .progress {
+        transition: none;
+    }
+}
+
+//      WEIGHT SECTION
+// #######################################
+
+.WeightSection {
+    position: relative;
     width: 100%;
 }
 
