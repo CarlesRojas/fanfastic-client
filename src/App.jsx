@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import useHistory from "./hooks/useHistory";
 
 import DesktopLayout from "./components/layout/DesktopLayout";
 import MobileLayout from "./components/layout/MobileLayout";
@@ -13,8 +12,6 @@ export default function App() {
     const { isDesktop, isTablet, isLandscape } = useContext(MediaQuery);
 
     const [loggedIn, setLoggedIn] = useState(null);
-
-    useHistory();
 
     useEffect(() => {
         const checkLogin = async () => {
