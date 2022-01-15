@@ -301,8 +301,11 @@ export default function FastingSection() {
 
             {currentPhase && (
                 <div className="phase">
-                    <h2>{currentPhase.title}</h2>
-                    <p>{currentPhase.description}</p>
+                    <SVG className={"phaseIcon"} src={currentPhase.icon} />
+                    <div className="info">
+                        <h2>{currentPhase.title}</h2>
+                        <p>{currentPhase.description}</p>
+                    </div>
                 </div>
             )}
         </div>

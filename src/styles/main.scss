@@ -750,28 +750,44 @@
         background: $fastCardBackground;
         width: 90%;
         display: flex;
-        flex-direction: column;
         align-items: center;
         margin: 0.5rem 0 1rem;
         border-radius: 1rem;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         padding: 1rem;
 
-        h2 {
-            width: 100%;
-            text-align: left;
-            font-size: 1rem;
-            font-weight: 700;
-            opacity: 0.8;
-            margin-bottom: 0.3rem;
+        .phaseIcon {
+            height: 2rem;
+            max-height: 2rem;
+            min-height: 2rem;
+            width: 2rem;
+            max-width: 2rem;
+            min-width: 2rem;
+            color: $fastIconOn;
+            margin-right: 1rem;
         }
 
-        p {
-            width: 100%;
-            text-align: left;
-            font-size: 0.8rem;
-            font-weight: 600;
-            opacity: 0.5;
+        .info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h2 {
+                width: 100%;
+                text-align: left;
+                font-size: 1rem;
+                font-weight: 700;
+                opacity: 0.8;
+                margin-bottom: 0.3rem;
+            }
+
+            p {
+                width: 100%;
+                text-align: left;
+                font-size: 0.8rem;
+                font-weight: 600;
+                opacity: 0.5;
+            }
         }
     }
 }
