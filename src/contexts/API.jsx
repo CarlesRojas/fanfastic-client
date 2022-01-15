@@ -3,6 +3,7 @@ import { createContext, useContext } from "react";
 // Contexts
 import { Utils } from "./Utils";
 import { Data } from "./Data";
+import { GlobalState } from "./GlobalState";
 
 const API_VERSION = "api_v1";
 const API_URL = "https://fanfastic.herokuapp.com/"; // "http://localhost:3100/";
@@ -12,6 +13,7 @@ export const API = createContext();
 const APIProvider = (props) => {
     const { setCookie, getCookie, clearCookies, urlBase64ToUint8Array } = useContext(Utils);
     const { APP_NAME, token, user, fastHistoric, weightHistoric } = useContext(Data);
+    const { set, get } = useContext(GlobalState);
 
     // #################################################
     //   AUTH API
@@ -39,6 +41,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -120,6 +123,7 @@ const APIProvider = (props) => {
                 return response;
             }
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -148,6 +152,7 @@ const APIProvider = (props) => {
     const logout = () => {
         token.current = null;
         user.current = null;
+        set("userUpdated", get("userUpdated") + 1);
 
         clearCookies(APP_NAME);
     };
@@ -193,6 +198,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -220,6 +226,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -247,6 +254,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -304,6 +312,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -331,6 +340,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -361,6 +371,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -391,6 +402,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -421,6 +433,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -488,6 +501,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -518,6 +532,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {
@@ -545,6 +560,7 @@ const APIProvider = (props) => {
             // Save new user
             if ("error" in response) return response;
             user.current = response;
+            set("userUpdated", get("userUpdated") + 1);
 
             return response;
         } catch (error) {

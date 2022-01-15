@@ -4,9 +4,11 @@ import SVG from "react-inlinesvg";
 import cn from "classnames";
 import useResize from "../../hooks/useResize";
 import ProgressCircle from "./ProgressCircle";
+import useThrottle from "../../hooks/useThrottle";
 
 import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
+import { API } from "../../contexts/API";
 
 import BloodPlusIcon from "../../resources/icons/bloodPlus.svg";
 import BloodMinusIcon from "../../resources/icons/bloodMinus.svg";
@@ -23,11 +25,12 @@ const areSameDate = (date1, date2) => {
     );
 };
 
-export default function FastSection() {
+export default function FastingSection() {
     const { user } = useContext(Data);
     const { lerp } = useContext(Utils);
+    const { stopFasting } = useContext(API);
 
-    const { isFasting, fastObjectiveInMinutes, lastTimeUserStartedFasting, timezoneOffsetInMs } = user.current;
+    const { fastObjectiveInMinutes, lastTimeUserStartedFasting, timezoneOffsetInMs } = user.current;
 
     const phases = useRef([
         {
@@ -95,7 +98,7 @@ export default function FastSection() {
     //   PROGRESS
     // #################################################
 
-    const [progress, setProgress] = useState(80);
+    const [progress, setProgress] = useState(0);
 
     const recalculateProgress = useCallback(() => {
         const now = new Date();
@@ -178,17 +181,6 @@ export default function FastSection() {
     }, [progress, progressCircleRadius, updateIcons]);
 
     // #################################################
-    //   DELETE
-    // #################################################
-
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         setProgress((prev) => (prev + 10) % 100);
-    //     }, 500);
-    //     return () => clearInterval(interval);
-    // }, []);
-
-    // #################################################
     //   DATES
     // #################################################
 
@@ -222,6 +214,14 @@ export default function FastSection() {
     }, [lastTimeUserStartedFasting, timezoneOffsetInMs, fastObjectiveInMinutes]);
 
     // #################################################
+    //   HANDLERS
+    // #################################################
+
+    const handleStopFasting = useThrottle(async () => {
+        await stopFasting();
+    }, 2000);
+
+    // #################################################
     //   RENDER
     // #################################################
 
@@ -237,7 +237,7 @@ export default function FastSection() {
 
     return (
         <div className={"FastSection"} ref={containerRef}>
-            <h1>{isFasting ? "Fasting" : "Breaking fast"}</h1>
+            <h1>{"Fasting"}</h1>
 
             <div className={"progressBarContainer"}>
                 <ProgressCircle
@@ -249,21 +249,17 @@ export default function FastSection() {
                     trackStrokeColor={color}
                 >
                     <div className={"insideProgress"}>
-                        {durationCounter > 0 && (
-                            <>
-                                <p>Remaining</p>
-                                <div className="counter">
-                                    <p>{remainingHours < 10 ? `0${remainingHours}` : remainingHours}</p>
-                                    <p className={"colon"}>:</p>
-                                    <p>{remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes}</p>
-                                    <p className={"colon seconds"}>:</p>
-                                    <p className={" seconds"}>
-                                        {remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}
-                                    </p>
-                                </div>
-                                <p className="subtitle">{`Fasting for ${durationHours}h ${durationMinutes}m`}</p>
-                            </>
-                        )}
+                        <p>Remaining</p>
+                        <div className="counter">
+                            <p>{remainingHours < 10 ? `0${remainingHours}` : remainingHours}</p>
+                            <p className={"colon"}>:</p>
+                            <p>{remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes}</p>
+                            <p className={"colon seconds"}>:</p>
+                            <p className={" seconds"}>
+                                {remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}
+                            </p>
+                        </div>
+                        <p className="subtitle">{`Fasting for ${durationHours}h ${durationMinutes}m`}</p>
 
                         {phases.current.map(
                             ({ icon, current }, i) =>
@@ -288,8 +284,8 @@ export default function FastSection() {
                 </ProgressCircle>
             </div>
 
-            <div className="button" style={{ backgroundColor: color }}>
-                End Fasting
+            <div className="button" style={{ backgroundColor: color }} onClick={handleStopFasting}>
+                {"End Fasting"}
             </div>
 
             <div className="startEnd">

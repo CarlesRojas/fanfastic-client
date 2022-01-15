@@ -29,4 +29,6 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Bug with adding characters after validating in an input container
 -   [x] Loading icon on input enter
 -   [x] Call the apis.(On error, go back to the first stage and show the error).
+-   [ ] Handle start and stop fasting API errors.
+-   [ ] Better animation when going from not fasting to fasting (Join them again?)
 -   [ ] Integrate page history
