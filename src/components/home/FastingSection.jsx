@@ -191,11 +191,11 @@ export default function FastingSection() {
     // #################################################
 
     const chromaScale = useRef(chroma.scale(["#ffa862", "#bdd23f", "#64ad50"]));
-    const [color, setColor] = useState(isFasting ? chromaScale.current(0).hex() : "#2a92ec");
+    const [color, setColor] = useState(isFasting ? chromaScale.current(0).hex() : "#4faaff");
 
     useEffect(() => {
         if (isFasting) setColor(chromaScale.current(progress / 100).hex());
-        else setColor("#2a92ec");
+        else setColor("#4faaff");
     }, [progress, isFasting]);
 
     // #################################################
@@ -335,15 +335,10 @@ export default function FastingSection() {
     ]);
 
     // #################################################
-    //   FADE OUT WHILE CHANGING
-    // #################################################
-
-    const [fadedOut, setFadedOut] = useState(false);
-
-    // #################################################
     //   HANDLERS
     // #################################################
 
+    const [fadedOut, setFadedOut] = useState(false);
     const [error, setError] = useAutoResetState("", 10000);
 
     const handleStopFasting = useThrottle(async () => {
