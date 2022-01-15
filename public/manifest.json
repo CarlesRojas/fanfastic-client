@@ -36,6 +36,6 @@
     "orientation": "any",
     "start_url": ".",
     "display": "standalone",
-    "theme_color": "#000000",
-    "background_color": "#000000"
+    "theme_color": "#ebebeb",
+    "background_color": "#ebebeb"
 }
