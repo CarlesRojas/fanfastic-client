@@ -5,6 +5,7 @@ import cn from "classnames";
 import useResize from "../../hooks/useResize";
 import ProgressCircle from "./ProgressCircle";
 import useThrottle from "../../hooks/useThrottle";
+import useGlobalState from "../../hooks/useGlobalState";
 
 import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
@@ -28,9 +29,16 @@ const areSameDate = (date1, date2) => {
 export default function FastingSection() {
     const { user } = useContext(Data);
     const { lerp } = useContext(Utils);
-    const { stopFasting } = useContext(API);
+    const { stopFasting, startFasting } = useContext(API);
 
-    const { fastObjectiveInMinutes, lastTimeUserStartedFasting, timezoneOffsetInMs } = user.current;
+    const {
+        isFasting,
+        fastObjectiveInMinutes,
+        lastTimeUserStartedFasting,
+        lastTimeUserEndedFasting,
+        timezoneOffsetInMs,
+        fastDesiredStartTimeInMinutes,
+    } = user.current;
 
     const phases = useRef([
         {
@@ -83,6 +91,7 @@ export default function FastingSection() {
 
     const [durationCounter, setDurationCounter] = useState(0);
     const [remainingCounter, setRemainingCounter] = useState(0);
+    const [remainingUntilFastCounter, setRemainingUntilFastCounter] = useState(0);
 
     useEffect(() => {
         const timeout = durationCounter > 0 && setTimeout(() => setDurationCounter(durationCounter + 1), 1000 * 60);
@@ -94,6 +103,13 @@ export default function FastingSection() {
         return () => clearTimeout(timeout);
     }, [remainingCounter]);
 
+    useEffect(() => {
+        const timeout =
+            remainingUntilFastCounter > 0 &&
+            setTimeout(() => setRemainingUntilFastCounter(remainingUntilFastCounter - 1), 1000);
+        return () => clearTimeout(timeout);
+    }, [remainingUntilFastCounter]);
+
     // #################################################
     //   PROGRESS
     // #################################################
@@ -101,23 +117,71 @@ export default function FastingSection() {
     const [progress, setProgress] = useState(0);
 
     const recalculateProgress = useCallback(() => {
-        const now = new Date();
-        const fastStartTime = new Date(lastTimeUserStartedFasting);
-        fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);
+        if (isFasting) {
+            const now = new Date();
+            const fastStartTime = new Date(lastTimeUserStartedFasting);
+            fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);
 
-        const fastDurationInMilliseconds = Math.abs(now - fastStartTime);
-        const fastDurationInMinutes = Math.ceil(fastDurationInMilliseconds / 1000 / 60);
+            const fastDurationInMilliseconds = Math.abs(now - fastStartTime);
+            const fastDurationInMinutes = Math.ceil(fastDurationInMilliseconds / 1000 / 60);
 
-        setDurationCounter(fastDurationInMinutes);
-        setRemainingCounter(Math.max(0, fastObjectiveInMinutes - fastDurationInMinutes) * 60);
-        setProgress(Math.min(100, (fastDurationInMinutes / fastObjectiveInMinutes) * 100));
-    }, [lastTimeUserStartedFasting, timezoneOffsetInMs, fastObjectiveInMinutes]);
+            setDurationCounter(fastDurationInMinutes);
+            setRemainingCounter(Math.max(0, fastObjectiveInMinutes - fastDurationInMinutes) * 60);
+            console.log("Recalculate when fasting");
+            setProgress(Math.min(100, (fastDurationInMinutes / fastObjectiveInMinutes) * 100));
+        } else {
+            const now = new Date(); // Make const
+            const fastEndTime = new Date(lastTimeUserEndedFasting);
+            fastEndTime.setTime(fastEndTime.getTime() - timezoneOffsetInMs);
+            const notFastingDurationInMilliseconds = Math.abs(now - fastEndTime);
+            const notFastingDurationInMinutes = Math.ceil(notFastingDurationInMilliseconds / 1000 / 60);
 
-    const firstRun = useRef(true);
+            const midnight = new Date(now);
+            midnight.setHours(0);
+            midnight.setMinutes(0);
+            midnight.setSeconds(0);
+            midnight.setMilliseconds(0);
+            const millisecondsSinceMidnight = Math.abs(now - midnight);
+            const minutesSinceMidnight = Math.ceil(millisecondsSinceMidnight / 1000 / 60);
+
+            // If it has been less than 23h since user stoped fasting show time since then
+            if (notFastingDurationInMinutes < 23 * 60) {
+                const yesterdayNotFastingMinutes =
+                    minutesSinceMidnight > notFastingDurationInMinutes
+                        ? 0
+                        : Math.abs(notFastingDurationInMinutes - minutesSinceMidnight);
+
+                const totalNotFastingMinutes =
+                    minutesSinceMidnight > notFastingDurationInMinutes
+                        ? minutesSinceMidnight > fastDesiredStartTimeInMinutes
+                            ? Math.abs(24 * 60 - minutesSinceMidnight) +
+                              notFastingDurationInMinutes +
+                              fastDesiredStartTimeInMinutes
+                            : fastDesiredStartTimeInMinutes - minutesSinceMidnight + notFastingDurationInMinutes
+                        : yesterdayNotFastingMinutes + fastDesiredStartTimeInMinutes;
+
+                console.log("Recalculate when not fasting");
+                setProgress(Math.min(100, (notFastingDurationInMinutes / totalNotFastingMinutes) * 100));
+                setRemainingUntilFastCounter(Math.max(0, totalNotFastingMinutes - notFastingDurationInMinutes) * 60);
+            }
+
+            // Otherwise show time since midnight
+            else {
+                console.log("Recalculate when not fasting");
+                setProgress(Math.min(100, (minutesSinceMidnight / fastDesiredStartTimeInMinutes) * 100));
+                setRemainingUntilFastCounter(Math.max(0, fastDesiredStartTimeInMinutes - minutesSinceMidnight) * 60);
+            }
+        }
+    }, [
+        isFasting,
+        lastTimeUserStartedFasting,
+        lastTimeUserEndedFasting,
+        timezoneOffsetInMs,
+        fastObjectiveInMinutes,
+        fastDesiredStartTimeInMinutes,
+    ]);
+
     useEffect(() => {
-        if (!firstRun.current) return;
-        firstRun.current = false;
-
         recalculateProgress();
 
         const interval = setInterval(recalculateProgress, 1000 * 60 * 2);
@@ -129,11 +193,12 @@ export default function FastingSection() {
     // #################################################
 
     const chromaScale = useRef(chroma.scale(["#ffa862", "#bdd23f", "#64ad50"]));
-    const [color, setColor] = useState(chromaScale.current(0).hex());
+    const [color, setColor] = useState(isFasting ? chromaScale.current(0).hex() : "#2a92ec");
 
     useEffect(() => {
-        setColor(chromaScale.current(progress / 100).hex());
-    }, [progress]);
+        if (isFasting) setColor(chromaScale.current(progress / 100).hex());
+        else setColor("#2a92ec");
+    }, [progress, isFasting]);
 
     // #################################################
     //   RESIZE
@@ -177,8 +242,8 @@ export default function FastingSection() {
     );
 
     useEffect(() => {
-        updateIcons(progressCircleRadius);
-    }, [progress, progressCircleRadius, updateIcons]);
+        if (isFasting) updateIcons(progressCircleRadius);
+    }, [isFasting, progress, progressCircleRadius, updateIcons]);
 
     // #################################################
     //   DATES
@@ -187,31 +252,89 @@ export default function FastingSection() {
     const [startEndDate, setStartEndDate] = useState({ start: "", end: "" });
 
     useEffect(() => {
-        var startfastingDate = new Date(lastTimeUserStartedFasting);
-        startfastingDate.setTime(startfastingDate.getTime() - timezoneOffsetInMs);
+        if (isFasting) {
+            var startfastingDate = new Date(lastTimeUserStartedFasting);
+            startfastingDate.setTime(startfastingDate.getTime() - timezoneOffsetInMs);
 
-        var endfastingDate = new Date(startfastingDate.getTime() + fastObjectiveInMinutes * 60 * 1000);
+            var endfastingDate = new Date(startfastingDate.getTime() + fastObjectiveInMinutes * 60 * 1000);
 
-        const today = new Date();
-        var yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        var tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
+            const today = new Date();
+            var yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
 
-        var startDate = "";
-        if (areSameDate(startfastingDate, today))
-            startDate = `Today, ${startfastingDate.getHours()}:${startfastingDate.getMinutes()}`;
-        else if (areSameDate(startfastingDate, yesterday))
-            startDate = `Yesterday, ${startfastingDate.getHours()}:${startfastingDate.getMinutes()}`;
+            var startDate = "";
+            if (areSameDate(startfastingDate, today))
+                startDate = `Today, ${startfastingDate.getHours()}:${startfastingDate.getMinutes()}`;
+            else if (areSameDate(startfastingDate, yesterday))
+                startDate = `Yesterday, ${startfastingDate.getHours()}:${startfastingDate.getMinutes()}`;
 
-        var endDate = "";
-        if (areSameDate(endfastingDate, today))
-            endDate = `Today, ${endfastingDate.getHours()}:${endfastingDate.getMinutes()}`;
-        else if (areSameDate(endfastingDate, tomorrow))
-            endDate = `Tomorrow, ${endfastingDate.getHours()}:${endfastingDate.getMinutes()}`;
+            var endDate = "";
+            if (areSameDate(endfastingDate, today))
+                endDate = `Today, ${endfastingDate.getHours()}:${endfastingDate.getMinutes()}`;
+            else if (areSameDate(endfastingDate, tomorrow))
+                endDate = `Tomorrow, ${endfastingDate.getHours()}:${endfastingDate.getMinutes()}`;
 
-        setStartEndDate({ start: startDate, end: endDate });
-    }, [lastTimeUserStartedFasting, timezoneOffsetInMs, fastObjectiveInMinutes]);
+            setStartEndDate({ start: startDate, end: endDate });
+        } else {
+            const now = new Date();
+            const fastEndTime = new Date(lastTimeUserEndedFasting);
+            fastEndTime.setTime(fastEndTime.getTime() - timezoneOffsetInMs);
+            const notFastingDurationInMilliseconds = Math.abs(now - fastEndTime);
+            const notFastingDurationInMinutes = Math.ceil(notFastingDurationInMilliseconds / 1000 / 60);
+
+            const midnight = new Date(now);
+            midnight.setHours(0);
+            midnight.setMinutes(0);
+            midnight.setSeconds(0);
+            midnight.setMilliseconds(0);
+            const millisecondsSinceMidnight = Math.abs(now - midnight);
+            var minutesSinceMidnight = Math.ceil(millisecondsSinceMidnight / 1000 / 60);
+
+            const today = new Date();
+            yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            startDate = "";
+            if (notFastingDurationInMinutes < 23 * 60) {
+                var hours = fastEndTime.getHours();
+                hours = hours < 10 ? `0${hours}` : hours;
+                var minutes = fastEndTime.getMinutes();
+                minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+                if (areSameDate(fastEndTime, today)) startDate = `Today, ${hours}:${minutes}`;
+                else if (areSameDate(fastEndTime, yesterday)) startDate = `Yesterday, ${hours}:${minutes}`;
+            } else {
+                startDate = `Today, 00:00`;
+            }
+
+            var fastStartTime =
+                minutesSinceMidnight > fastDesiredStartTimeInMinutes
+                    ? new Date(midnight.getTime() + (fastDesiredStartTimeInMinutes * 60 * 1000 + 24 * 60 * 60 * 1000))
+                    : new Date(midnight.getTime() + fastDesiredStartTimeInMinutes * 60 * 1000);
+
+            hours = fastStartTime.getHours();
+            hours = hours < 10 ? `0${hours}` : hours;
+            minutes = fastStartTime.getMinutes();
+            minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+            endDate = "";
+            if (areSameDate(fastStartTime, today)) endDate = `Today, ${hours}:${minutes}`;
+            else if (areSameDate(fastStartTime, tomorrow)) endDate = `Tomorrow, ${hours}:${minutes}`;
+
+            setStartEndDate({ start: startDate, end: endDate });
+        }
+    }, [
+        isFasting,
+        lastTimeUserStartedFasting,
+        lastTimeUserEndedFasting,
+        timezoneOffsetInMs,
+        fastObjectiveInMinutes,
+        fastDesiredStartTimeInMinutes,
+    ]);
 
     // #################################################
     //   HANDLERS
@@ -220,6 +343,17 @@ export default function FastingSection() {
     const handleStopFasting = useThrottle(async () => {
         await stopFasting();
     }, 2000);
+
+    const handleStartFasting = useThrottle(async () => {
+        await startFasting();
+    }, 2000);
+
+    // #################################################
+    //   USER UPDATED
+    // #################################################
+
+    // eslint-disable-next-line
+    const [userUpdated] = useGlobalState("userUpdated");
 
     // #################################################
     //   RENDER
@@ -230,6 +364,11 @@ export default function FastingSection() {
     const remainingMinutes = Math.floor(remainingUpdatedSeconds / 60);
     const remainingSeconds = remainingUpdatedSeconds % 60;
 
+    const remainingUntilFastHours = Math.floor(remainingUntilFastCounter / 3600);
+    const remainingUntilFastUpdatedSeconds = remainingUntilFastCounter % 3600;
+    const remainingUntilFastMinutes = Math.floor(remainingUntilFastUpdatedSeconds / 60);
+    const remainingUntilFastSeconds = remainingUntilFastUpdatedSeconds % 60;
+
     const durationHours = Math.floor(durationCounter / 60);
     const durationMinutes = durationCounter % 60;
 
@@ -237,7 +376,7 @@ export default function FastingSection() {
 
     return (
         <div className={"FastSection"} ref={containerRef}>
-            <h1>{"Fasting"}</h1>
+            <h1>{isFasting ? "Fasting" : "Breaking fast"}</h1>
 
             <div className={"progressBarContainer"}>
                 <ProgressCircle
@@ -248,58 +387,101 @@ export default function FastingSection() {
                     strokeColor={color}
                     trackStrokeColor={color}
                 >
-                    <div className={"insideProgress"}>
-                        <p>Remaining</p>
-                        <div className="counter">
-                            <p>{remainingHours < 10 ? `0${remainingHours}` : remainingHours}</p>
-                            <p className={"colon"}>:</p>
-                            <p>{remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes}</p>
-                            <p className={"colon seconds"}>:</p>
-                            <p className={" seconds"}>
-                                {remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}
-                            </p>
-                        </div>
-                        <p className="subtitle">{`Fasting for ${durationHours}h ${durationMinutes}m`}</p>
+                    {isFasting ? (
+                        <div className={"insideProgress"}>
+                            <p>Remaining</p>
+                            <div className="counter">
+                                <p>{remainingHours < 10 ? `0${remainingHours}` : remainingHours}</p>
+                                <p className={"colon"}>:</p>
+                                <p>{remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes}</p>
+                                <p className={"colon seconds"}>:</p>
+                                <p className={" seconds"}>
+                                    {remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}
+                                </p>
+                            </div>
+                            <p className="subtitle">{`Fasting for ${durationHours}h ${durationMinutes}m`}</p>
 
-                        {phases.current.map(
-                            ({ icon, current }, i) =>
-                                phases.current[i].percentage <= 100 && (
-                                    <div
-                                        className={cn(
-                                            "phaseIconContainer",
-                                            { notYet: phases.current[i].percentage > progress },
-                                            { current }
-                                        )}
-                                        style={{
-                                            backgroundColor: color,
-                                            transform: `translate3d(${iconsPosition[i].x}px,${iconsPosition[i].y}px,0)`,
-                                        }}
-                                        key={i}
-                                    >
-                                        <SVG className={"phaseIcon"} src={icon} style={{ color }} />
-                                    </div>
-                                )
-                        )}
-                    </div>
+                            {phases.current.map(
+                                ({ icon, current }, i) =>
+                                    phases.current[i].percentage <= 100 && (
+                                        <div
+                                            className={cn(
+                                                "phaseIconContainer",
+                                                { notYet: phases.current[i].percentage > progress },
+                                                { current }
+                                            )}
+                                            style={{
+                                                backgroundColor: color,
+                                                transform: `translate3d(${iconsPosition[i].x}px,${iconsPosition[i].y}px,0)`,
+                                            }}
+                                            key={i}
+                                        >
+                                            <SVG className={"phaseIcon"} src={icon} style={{ color }} />
+                                        </div>
+                                    )
+                            )}
+                        </div>
+                    ) : (
+                        <div className={"insideProgress"}>
+                            <p>Breaking Fast</p>
+                            <div className="counter">
+                                <p>
+                                    {remainingUntilFastHours < 10
+                                        ? `0${remainingUntilFastHours}`
+                                        : remainingUntilFastHours}
+                                </p>
+                                <p className={"colon"}>:</p>
+                                <p>
+                                    {remainingUntilFastMinutes < 10
+                                        ? `0${remainingUntilFastMinutes}`
+                                        : remainingUntilFastMinutes}
+                                </p>
+                                <p className={"colon seconds"}>:</p>
+                                <p className={" seconds"}>
+                                    {remainingUntilFastSeconds < 10
+                                        ? `0${remainingUntilFastSeconds}`
+                                        : remainingUntilFastSeconds}
+                                </p>
+                            </div>
+                        </div>
+                    )}
                 </ProgressCircle>
             </div>
 
-            <div className="button" style={{ backgroundColor: color }} onClick={handleStopFasting}>
-                {"End Fasting"}
-            </div>
-
-            <div className="startEnd">
-                <div className="start">
-                    <p>start</p>
-                    <p className="date">{startEndDate.start}</p>
+            {isFasting ? (
+                <div className="button" style={{ backgroundColor: color }} onClick={handleStopFasting}>
+                    {"End Fasting"}
                 </div>
-                <div className="end">
-                    <p>end</p>
-                    <p className="date">{startEndDate.end}</p>
+            ) : (
+                <div className="button" style={{ backgroundColor: color }} onClick={handleStartFasting}>
+                    {"Start Fasting"}
                 </div>
-            </div>
+            )}
+            {isFasting ? (
+                <div className="startEnd">
+                    <div className="start">
+                        <p>start</p>
+                        <p className="date">{startEndDate.start}</p>
+                    </div>
+                    <div className="end">
+                        <p>end</p>
+                        <p className="date">{startEndDate.end}</p>
+                    </div>
+                </div>
+            ) : (
+                <div className="startEnd">
+                    <div className="start">
+                        <p>from</p>
+                        <p className="date">{startEndDate.start}</p>
+                    </div>
+                    <div className="end">
+                        <p>until</p>
+                        <p className="date">{startEndDate.end}</p>
+                    </div>
+                </div>
+            )}
 
-            {currentPhase && (
+            {isFasting && currentPhase && (
                 <div className="phase">
                     <SVG className={"phaseIcon"} src={currentPhase.icon} />
                     <div className="info">
