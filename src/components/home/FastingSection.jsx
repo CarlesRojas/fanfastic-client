@@ -127,7 +127,6 @@ export default function FastingSection() {
 
             setDurationCounter(fastDurationInMinutes);
             setRemainingCounter(Math.max(0, fastObjectiveInMinutes - fastDurationInMinutes) * 60);
-            console.log("Recalculate when fasting");
             setProgress(Math.min(100, (fastDurationInMinutes / fastObjectiveInMinutes) * 100));
         } else {
             const now = new Date(); // Make const
@@ -160,14 +159,12 @@ export default function FastingSection() {
                             : fastDesiredStartTimeInMinutes - minutesSinceMidnight + notFastingDurationInMinutes
                         : yesterdayNotFastingMinutes + fastDesiredStartTimeInMinutes;
 
-                console.log("Recalculate when not fasting");
                 setProgress(Math.min(100, (notFastingDurationInMinutes / totalNotFastingMinutes) * 100));
                 setRemainingUntilFastCounter(Math.max(0, totalNotFastingMinutes - notFastingDurationInMinutes) * 60);
             }
 
             // Otherwise show time since midnight
             else {
-                console.log("Recalculate when not fasting");
                 setProgress(Math.min(100, (minutesSinceMidnight / fastDesiredStartTimeInMinutes) * 100));
                 setRemainingUntilFastCounter(Math.max(0, fastDesiredStartTimeInMinutes - minutesSinceMidnight) * 60);
             }
