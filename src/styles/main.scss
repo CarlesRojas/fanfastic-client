@@ -588,6 +588,8 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+    top: 0;
+    left: 0;
 
     .blur {
         pointer-events: all;
@@ -605,6 +607,7 @@
         height: fit-content;
         max-height: 90%;
         width: calc(100% - 2rem);
+        max-width: 50rem;
         z-index: 1000;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         background-color: $background;
