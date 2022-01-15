@@ -423,7 +423,7 @@ export default function FastingSection() {
         const { icon, titleInfo, subtitleInfo, description } = phases.current[phaseI];
 
         set("showPopup", {
-            show: true,
+            visible: true,
             content: (
                 <div className="scroll">
                     <div className="header">
@@ -519,7 +519,7 @@ export default function FastingSection() {
                         </div>
                     ) : (
                         <div className={"insideProgress"}>
-                            <p>Breaking Fast</p>
+                            <p>Remaining</p>
                             <div className="counter">
                                 <p>
                                     {remainingUntilFastHours < 10

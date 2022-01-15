@@ -3,26 +3,26 @@ import { useTransition, animated } from "react-spring";
 import useGlobalState from "../../hooks/useGlobalState";
 
 export default function Popup() {
-    const [visible, setVisible] = useGlobalState("showPopup");
+    const [information, setInformation] = useGlobalState("showPopup");
 
-    const { show, content } = visible;
+    const { visible, content } = information;
 
     // #################################################
     //   TRANSITIONS
     // #################################################
 
-    const blurTransition = useTransition(show, {
+    const blurTransition = useTransition(visible, {
         from: { backgroundColor: "rgba(0, 0, 0, 0)", backdropFilter: "blur(10px) opacity(0)" },
         enter: { backgroundColor: "rgba(0, 0, 0, 0.3)", backdropFilter: "blur(10px) opacity(1)" },
         leave: { backgroundColor: "rgba(0, 0, 0, 0)", backdropFilter: "blur(10px) opacity(0)" },
-        reverse: show,
+        reverse: visible,
     });
 
-    const contentTransition = useTransition(show, {
+    const contentTransition = useTransition(visible, {
         from: { translateY: "100vh" },
         enter: { translateY: "0vh" },
         leave: { translateY: "100vh" },
-        reverse: show,
+        reverse: visible,
     });
 
     // #################################################
@@ -37,7 +37,7 @@ export default function Popup() {
                         <animated.div
                             className="blur"
                             style={styles}
-                            onClick={() => setVisible({ show: false, content: null })}
+                            onClick={() => setInformation({ ...information, visible: false })}
                         ></animated.div>
                     )
             )}
@@ -46,7 +46,7 @@ export default function Popup() {
                     item && (
                         <animated.div className="contentContainer" style={styles}>
                             {content}
-                            <div className="button" onClick={() => setVisible({ show: false, content: null })}>
+                            <div className="button" onClick={() => setInformation({ ...information, visible: false })}>
                                 Close
                             </div>
                         </animated.div>
