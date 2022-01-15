@@ -1,13 +1,12 @@
 import { createContext, useEffect } from "react";
 import cn from "classnames";
 import { useMediaQuery } from "react-responsive";
-import { isMobile as isTouchScreen } from "react-device-detect";
+import { isMobile as isTouchScreen, isMobileOnly } from "react-device-detect";
 
 export const MediaQuery = createContext();
 const MediaQueryProvider = (props) => {
     const isDesktop = useMediaQuery({ minWidth: 1100 });
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1100 });
-    const isMobile = useMediaQuery({ maxWidth: 768 });
     const isLandscape = useMediaQuery({ orientation: "landscape" });
     const isNotTouchscreen = !isTouchScreen;
 
@@ -30,7 +29,7 @@ const MediaQueryProvider = (props) => {
                 // MEDIA QUERIES
                 isDesktop,
                 isTablet,
-                isMobile,
+                isMobile: isMobileOnly,
                 isLandscape,
                 isNotTouchscreen,
 

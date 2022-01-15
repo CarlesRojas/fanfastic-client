@@ -9,7 +9,7 @@ import Auth from "./components/auth/Auth";
 
 export default function App() {
     const { isLoggedIn } = useContext(API);
-    const { isDesktop, isTablet, isLandscape } = useContext(MediaQuery);
+    const { isMobile, isTablet, isLandscape } = useContext(MediaQuery);
 
     const [loggedIn, setLoggedIn] = useState(null);
     const [userInfoReady, setUserInfoReady] = useState(false);
@@ -28,6 +28,6 @@ export default function App() {
     if (loggedIn === null) return null;
     else if (!loggedIn) return <Auth setLoggedIn={setLoggedIn} />;
     else if (loggedIn && userInfoReady)
-        return isDesktop || (isTablet && isLandscape) ? <DesktopLayout /> : <MobileLayout />;
+        return isMobile || (isTablet && !isLandscape) ? <MobileLayout /> : <DesktopLayout />;
     else return null;
 }
