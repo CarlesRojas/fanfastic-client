@@ -1,6 +1,7 @@
 import Historic from "../Historic";
 import Home from "../home/Home";
 import Settings from "../Settings";
+import Popup from "./Popup";
 
 export default function DesktopLayout() {
     return (
@@ -18,6 +19,8 @@ export default function DesktopLayout() {
                     <Settings />
                 </div>
             </div>
+
+            <Popup />
         </div>
     );
 }

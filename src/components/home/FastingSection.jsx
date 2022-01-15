@@ -11,6 +11,7 @@ import useAutoResetState from "../../hooks/useAutoResetState";
 import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
 import { API } from "../../contexts/API";
+import { GlobalState } from "../../contexts/GlobalState";
 
 import BloodPlusIcon from "../../resources/icons/bloodPlus.svg";
 import BloodMinusIcon from "../../resources/icons/bloodMinus.svg";
@@ -31,6 +32,7 @@ export default function FastingSection() {
     const { user } = useContext(Data);
     const { lerp, sleep } = useContext(Utils);
     const { stopFasting, startFasting } = useContext(API);
+    const { set } = useContext(GlobalState);
 
     const {
         isFasting,
@@ -44,45 +46,95 @@ export default function FastingSection() {
     const phases = useRef([
         {
             title: "Blood sugar level rises",
-            description: "Your body starts digesting the meal and releases insulin.",
+            subtitle: "Your body starts digesting the meal and releases insulin.",
+            titleInfo: "Blood sugar level rises",
+            subtitleInfo: "Begins right after your meal",
+            description: [
+                "Your body starts the digestion process immediately after food intake. Ingested carbohydrates are being processed and released into the bloodstream as glucose (sugar). This increases the blood glucose level. As a result, your blood sugar level rises. This in turn causes your body to start producing insulin. This hormone has two important functions:",
+                "Firstly, it stimulates the absorption of blood sugar(glucose) into the tissues for a quick supply of energy, immediately after eating.",
+                "Secondly, it stores energy - usually, the body does not need all the energy that is being released through excessive consumption of carbohydrates or sugar. For this reason, insulin stimulates the conversion of glucose into its storage form, glycogen.",
+                "Glycogen is stored in your liver and muscles, only to be released when energy is needed again. Once the glycogen stores are full, the excess glycogen is stored in your fatty tissue in the form of fat.",
+            ],
             startTimeInMinutes: 0,
             icon: BloodPlusIcon,
             current: false,
+            index: 0,
         },
         {
             title: "Blood sugar level drops",
-            description: "",
+            subtitle: "",
+            titleInfo: "Blood sugar level drops",
+            subtitleInfo: "Begins 3h after your last meal",
+            description: [
+                "Insulin transports the glucose in the blood to our cell sand tissues. As a result, the level of glucose in the blood drops and the blood sugar level drops again.",
+                "Whilst the hormone insulin is in our circulation, the cells are poised to absorb energy. During this time, and as long as glucose is in our blood and glycogen in our muscles or liver, fat is not used as a primary source of energy.",
+                "Our body switches to energy production from fat once the glucose in our blood has been depleted and the glycogen reserves are used up.",
+            ],
             startTimeInMinutes: 3 * 60,
             icon: BloodMinusIcon,
             current: false,
+            index: 1,
         },
         {
             title: "Blood sugar level stabilizes",
-            description: "Insulin is no longer being produced. Your body is now using up previously stored energy.",
+            subtitle: "Insulin is no longer being produced. Your body is now using up previously stored energy.",
+            titleInfo: "Blood sugar level settles down",
+            subtitleInfo: "Begins 9h after your last meal",
+            description: [
+                "After the food has been digested and our body has stopped producing insulin, there is a brief resting period. However, this state does not last long, because our organs, muscles and cognitive processes are continuously consuming energy. A new player enters the ﬁeld of hormones: glucagon.",
+                "As soon as our blood sugar level drops, the body has to react. Glucagon's task is to release the previously stored glycogen back into the bloodstream. With this, your blood sugar level remains constant, and energy supply is ensured.",
+            ],
             startTimeInMinutes: 9 * 60,
             icon: BloodTickIcon,
             current: false,
+            index: 2,
         },
         {
             title: "The fat burning process kicks in!",
-            description: "Your body starts burning stored fat in order to turn it into energy.",
+            subtitle: "Your body starts burning stored fat in order to turn it into energy.",
+            titleInfo: "Fat burning",
+            subtitleInfo: "Begins 11h after your last meal",
+            description: [
+                "The unending energy needs of your body are taking their toll. Even the energy reserves from the previously stored glycogen are soon exhausted. Now it is time to fall back on a larger resource: your fat reserves. The average calorie supply of an adult person in the form of fat reserves amounts to about 80,000 calories.",
+                "In order to tap into these reserves, your body starts producing fat-burning hormones. An impressive 6 hormones are involved in this vital mechanism. These hormones perform more or less the same function of fat metabolism.",
+            ],
             startTimeInMinutes: 11 * 60,
             icon: FireIcon,
             current: false,
+            index: 3,
         },
         {
             title: "Ketosis has begun!",
-            description: "Your body is now turning fat into ketones which in turn, produce energy.",
+            subtitle: "Your body is now turning fat into ketones which in turn, produce energy.",
+            titleInfo: "Ketosis",
+            subtitleInfo: "Begins 14-16h after your last meal",
+            description: [
+                "After your army of fat-metabolising hormones has set to work and providing your body with new energy, something interesting happens. Ketones are produced in the liver as a by-product of fat burning. This process begins 14-16 hours after your last meal, and increases in intensity depending on how long you fast.",
+                "Ketones are fatty acid molecules that are formed when fat cells are broken down. They are known to provide energy to the heart, brain and vital organs.",
+                "Ketones activate your nerve cells, strengthen intellectual capacity and develop new cells from your brain's stem cells. They are the reason why you may feel particularly concentrated and productive during the fasting period.",
+                "Pro-tip: Remember, there really can be too much of a good thing. For optimal results, we recommend fasting for around 16 hours, with occasional longer challenges. The most important is that fasting works for you - so be sure to always listen to your body.",
+            ],
             startTimeInMinutes: 14 * 60,
             icon: LiverIcon,
             current: false,
+            index: 4,
         },
         {
             title: "Autophagy is activated!",
-            description: "Your body cells have begun to regenerate and recycle.",
+            subtitle: "Your body cells have begun to regenerate and recycle.",
+            titleInfo: "Autophagy",
+            subtitleInfo: "Begins around 16h after your last meal",
+            description: [
+                "Introducing, autophagy! A process kick-started by a longer fast and fat-burning, autophagy comes into play after around 16 hours of fasting.",
+                "An interesting word with an even more fascinating function. Autophagy is translated from the ancient Greek 'autóphagos', meaning 'to consume oneself.' This is exactly what happens during autophagy. Your cells begin to process 'themselves'.",
+                "Old cell components and so-called 'misfolded' proteins are recycled during this phase. Not only are they recycled, but they are completely renewed.",
+                "Your body undergoes a big clear out and proper cleanup. This not only makes your cells more efficient, it also prolongs the life of your cells and with that, your own.",
+                "Pro-tip: Remember, there really can be too much of a good thing. For optimal results, we recommend fasting for around 16 hours, with occasional longer challenges. The most important is that fasting works for you - so be sure to always listen to your body.",
+            ],
             startTimeInMinutes: 16 * 60,
             icon: CellIcon,
             current: false,
+            index: 5,
         },
     ]);
 
@@ -365,6 +417,32 @@ export default function FastingSection() {
         setFadedOut(false);
     }, 2000);
 
+    const showPhaseInfo = (phaseI) => {
+        if (phaseI < 0 || phaseI >= phases.current.length) return;
+
+        const { icon, titleInfo, subtitleInfo, description } = phases.current[phaseI];
+
+        set("showPopup", {
+            show: true,
+            content: (
+                <div className="scroll">
+                    <div className="header">
+                        <SVG src={icon} className="icon"></SVG>
+
+                        <div className="title">
+                            <h1>{titleInfo}</h1>
+                            <h2>{subtitleInfo}</h2>
+                        </div>
+                    </div>
+
+                    {description.map((text, i) => (
+                        <p key={i}>{text}</p>
+                    ))}
+                </div>
+            ),
+        });
+    };
+
     // #################################################
     //   USER UPDATED
     // #################################################
@@ -432,6 +510,7 @@ export default function FastingSection() {
                                                 transform: `translate3d(${iconsPosition[i].x}px,${iconsPosition[i].y}px,0)`,
                                             }}
                                             key={i}
+                                            onClick={() => showPhaseInfo(i)}
                                         >
                                             <SVG className={"phaseIcon"} src={icon} style={{ color }} />
                                         </div>
@@ -502,11 +581,11 @@ export default function FastingSection() {
             )}
 
             {isFasting && currentPhase && (
-                <div className="phase">
+                <div className="phase" onClick={() => showPhaseInfo(currentPhase.index)}>
                     <SVG className={"phaseIcon"} src={currentPhase.icon} />
                     <div className="info">
                         <h2>{currentPhase.title}</h2>
-                        <p>{currentPhase.description}</p>
+                        <p>{currentPhase.subtitle}</p>
                     </div>
                 </div>
             )}

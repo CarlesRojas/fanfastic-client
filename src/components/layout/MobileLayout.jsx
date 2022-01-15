@@ -5,6 +5,7 @@ import Historic from "../Historic";
 import Home from "../home/Home";
 import Settings from "../Settings";
 import Navbar from "./Navbar";
+import Popup from "./Popup";
 
 const STAGES = ["home", "historic", "settings"];
 
@@ -36,6 +37,8 @@ export default function MobileLayout() {
             <div className="mainPagesContent">{renderedPages}</div>
 
             <Navbar setPage={setPage} currentPage={currentPage} />
+
+            <Popup />
         </div>
     );
 }

@@ -576,6 +576,109 @@
 }
 
 // #######################################
+//      POPUP
+// #######################################
+
+.Popup {
+    pointer-events: none;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+    .blur {
+        pointer-events: all;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    }
+
+    .contentContainer {
+        pointer-events: all;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        height: fit-content;
+        max-height: 90%;
+        width: calc(100% - 2rem);
+        z-index: 1000;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        background-color: $background;
+        border-radius: 1rem;
+        padding: 1rem;
+
+        .scroll {
+            width: 100%;
+            overflow: auto;
+            margin-bottom: 1rem;
+
+            .header {
+                display: flex;
+                // align-items: center;
+                margin-bottom: 2rem;
+
+                .icon {
+                    height: 2.5rem;
+                    max-height: 2.5rem;
+                    min-height: 2.5rem;
+                    width: 2.5rem;
+                    max-width: 2.5rem;
+                    min-width: 2.5rem;
+                    color: $fastIconOn;
+                    margin-right: 1rem;
+                }
+
+                .title {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+
+                    h1 {
+                        width: 100%;
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                        opacity: 0.9;
+                        margin-bottom: 0.1rem;
+                    }
+
+                    h2 {
+                        width: 100%;
+                        font-size: 0.9rem;
+                        font-weight: 500;
+                        opacity: 0.9;
+                    }
+                }
+            }
+
+            p {
+                width: 100%;
+                font-size: 0.9rem;
+                font-weight: 500;
+                opacity: 0.6;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .button {
+            pointer-events: all;
+            width: fit-content;
+            text-align: center;
+            font-weight: 700;
+            border-radius: 100vw;
+            padding: 0.8rem 1.6rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            background-color: $closeButtonColor;
+        }
+    }
+}
+
+// #######################################
 //      HOME
 // #######################################
 
