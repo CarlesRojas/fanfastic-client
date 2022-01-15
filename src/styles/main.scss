@@ -599,11 +599,17 @@
 // #######################################
 
 .FastSection {
+    transition: opacity 0.2s ease-in-out;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    opacity: 1;
+
+    &.fadedOut {
+        opacity: 0;
+    }
 
     h1 {
         width: 100%;
@@ -738,6 +744,25 @@
         margin-top: -1rem;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         color: $background;
+    }
+
+    .error {
+        transition: height 0.2s ease-in-out, opacity 0.2s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 0;
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        opacity: 0;
+        color: $homeTextWarning;
+
+        &.visible {
+            opacity: 1;
+            height: 2rem;
+        }
     }
 
     .startEnd {

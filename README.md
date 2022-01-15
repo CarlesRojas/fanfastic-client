@@ -29,8 +29,7 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Bug with adding characters after validating in an input container
 -   [x] Loading icon on input enter
 -   [x] Call the apis.(On error, go back to the first stage and show the error).
--   [ ] Handle start and stop fasting API errors.
+-   [x] Handle start and stop fasting API errors.
 -   [x] Better animation when going from not fasting to fasting (Join them again?)
--   [ ] Fade out - fade in when the user starts or stops fasting
--   [ ] Popup to confirm te start and stop of fasting ?
+-   [x] Fade out - fade in when the user starts or stops fasting
 -   [ ] Integrate page history

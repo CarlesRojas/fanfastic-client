@@ -6,6 +6,7 @@ import useResize from "../../hooks/useResize";
 import ProgressCircle from "./ProgressCircle";
 import useThrottle from "../../hooks/useThrottle";
 import useGlobalState from "../../hooks/useGlobalState";
+import useAutoResetState from "../../hooks/useAutoResetState";
 
 import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
@@ -28,7 +29,7 @@ const areSameDate = (date1, date2) => {
 
 export default function FastingSection() {
     const { user } = useContext(Data);
-    const { lerp } = useContext(Utils);
+    const { lerp, sleep } = useContext(Utils);
     const { stopFasting, startFasting } = useContext(API);
 
     const {
@@ -334,15 +335,39 @@ export default function FastingSection() {
     ]);
 
     // #################################################
+    //   FADE OUT WHILE CHANGING
+    // #################################################
+
+    const [fadedOut, setFadedOut] = useState(false);
+
+    // #################################################
     //   HANDLERS
     // #################################################
 
+    const [error, setError] = useAutoResetState("", 10000);
+
     const handleStopFasting = useThrottle(async () => {
-        await stopFasting();
+        setFadedOut(true);
+        await sleep(200);
+
+        const result = await stopFasting();
+        if ("error" in result) setError(result.error);
+
+        await sleep(200);
+
+        setFadedOut(false);
     }, 2000);
 
     const handleStartFasting = useThrottle(async () => {
-        await startFasting();
+        setFadedOut(true);
+        await sleep(200);
+
+        const result = await startFasting();
+        if ("error" in result) setError(result.error);
+
+        await sleep(200);
+
+        setFadedOut(false);
     }, 2000);
 
     // #################################################
@@ -372,7 +397,7 @@ export default function FastingSection() {
     const currentPhase = phases.current.find(({ current }) => current);
 
     return (
-        <div className={"FastSection"} ref={containerRef}>
+        <div className={cn("FastSection", { fadedOut })} ref={containerRef}>
             <h1>{isFasting ? "Fasting" : "Breaking fast"}</h1>
 
             <div className={"progressBarContainer"}>
@@ -454,6 +479,9 @@ export default function FastingSection() {
                     {"Start Fasting"}
                 </div>
             )}
+
+            <div className={cn("error", { visible: error !== "" })}>{error}</div>
+
             {isFasting ? (
                 <div className="startEnd">
                     <div className="start">
