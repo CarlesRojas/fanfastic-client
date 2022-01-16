@@ -4,6 +4,7 @@ import usePageAnimation from "../../hooks/usePageAnimation";
 import Historic from "../Historic";
 import Home from "../home/Home";
 import Settings from "../Settings";
+import Loading from "./Loading";
 import Navbar from "./Navbar";
 import Popup from "./Popup";
 
@@ -39,6 +40,7 @@ export default function MobileLayout() {
             <Navbar setPage={setPage} currentPage={currentPage} />
 
             <Popup />
+            <Loading />
         </div>
     );
 }

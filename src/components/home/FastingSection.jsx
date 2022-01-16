@@ -400,6 +400,7 @@ export default function FastingSection() {
 
     const handleStopFasting = useThrottle(async () => {
         setFadedOut(true);
+        set("loadingVisible", true);
         await sleep(200);
 
         const result = await stopFasting();
@@ -407,11 +408,13 @@ export default function FastingSection() {
 
         await sleep(200);
 
+        set("loadingVisible", false);
         setFadedOut(false);
     }, 2000);
 
     const handleStartFasting = useThrottle(async () => {
         setFadedOut(true);
+        set("loadingVisible", true);
         await sleep(200);
 
         const result = await startFasting();
@@ -419,6 +422,7 @@ export default function FastingSection() {
 
         await sleep(200);
 
+        set("loadingVisible", false);
         setFadedOut(false);
     }, 2000);
 
