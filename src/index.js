@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import * as serviceWorker from "./serviceWorker";
 import ReactDOM from "react-dom";
 import App from "./App";
+import Loading from "./components/layout/Loading";
 import "./styles/main.scss";
 
 // Contexts
@@ -23,6 +24,7 @@ ReactDOM.render(
                             <LanguageProvider>
                                 <MediaQueryProvider>
                                     <App />
+                                    <Loading />
                                 </MediaQueryProvider>
                             </LanguageProvider>
                         </APIProvider>

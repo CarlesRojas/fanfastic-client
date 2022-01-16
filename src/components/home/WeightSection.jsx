@@ -82,7 +82,7 @@ export default function WeightSection() {
 
     if (weightObjectiveInKg < 0) return null;
 
-    const color = "#c375ff";
+    const color = "#aaaaaa";
 
     return (
         <div className={"WeightSection"}>

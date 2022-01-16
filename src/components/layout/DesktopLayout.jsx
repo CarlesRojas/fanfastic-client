@@ -1,7 +1,6 @@
 import Historic from "../Historic";
 import Home from "../home/Home";
 import Settings from "../Settings";
-import Loading from "./Loading";
 import Popup from "./Popup";
 
 export default function DesktopLayout() {
@@ -22,7 +21,6 @@ export default function DesktopLayout() {
             </div>
 
             <Popup />
-            <Loading />
         </div>
     );
 }
