@@ -147,7 +147,7 @@ export default function FastingSection() {
     const [remainingUntilFastCounter, setRemainingUntilFastCounter] = useState(0);
 
     useEffect(() => {
-        const timeout = durationCounter > 0 && setTimeout(() => setDurationCounter(durationCounter + 1), 1000 * 60);
+        const timeout = durationCounter > 0 && setTimeout(() => setDurationCounter(durationCounter + 1), 1000);
         return () => clearTimeout(timeout);
     }, [durationCounter]);
 
@@ -177,9 +177,10 @@ export default function FastingSection() {
 
             const fastDurationInMilliseconds = Math.abs(now - fastStartTime);
             const fastDurationInMinutes = Math.ceil(fastDurationInMilliseconds / 1000 / 60);
+            const fastDurationInSeconds = Math.ceil(fastDurationInMilliseconds / 1000);
 
-            setDurationCounter(fastDurationInMinutes);
-            setRemainingCounter(Math.max(0, fastObjectiveInMinutes - fastDurationInMinutes) * 60);
+            setDurationCounter(fastDurationInSeconds);
+            setRemainingCounter(Math.max(0, fastObjectiveInMinutes * 60 - fastDurationInSeconds));
             setProgress(Math.min(100, (fastDurationInMinutes / fastObjectiveInMinutes) * 100));
         } else {
             const now = new Date(); // Make const
@@ -187,6 +188,7 @@ export default function FastingSection() {
             fastEndTime.setTime(fastEndTime.getTime() - timezoneOffsetInMs);
             const notFastingDurationInMilliseconds = Math.abs(now - fastEndTime);
             const notFastingDurationInMinutes = Math.ceil(notFastingDurationInMilliseconds / 1000 / 60);
+            const notFastingDurationInSeconds = Math.ceil(notFastingDurationInMilliseconds / 1000);
 
             const midnight = new Date(now);
             midnight.setHours(0);
@@ -195,25 +197,28 @@ export default function FastingSection() {
             midnight.setMilliseconds(0);
             const millisecondsSinceMidnight = Math.abs(now - midnight);
             const minutesSinceMidnight = Math.ceil(millisecondsSinceMidnight / 1000 / 60);
+            const secondsSinceMidnight = Math.ceil(millisecondsSinceMidnight / 1000);
 
             // If it has been less than 23h since user stoped fasting show time since then
             if (notFastingDurationInMinutes < 23 * 60) {
-                const yesterdayNotFastingMinutes =
-                    minutesSinceMidnight > notFastingDurationInMinutes
+                const yesterdayNotFastingSeconds =
+                    secondsSinceMidnight > notFastingDurationInSeconds
                         ? 0
-                        : Math.abs(notFastingDurationInMinutes - minutesSinceMidnight);
+                        : Math.abs(notFastingDurationInSeconds - secondsSinceMidnight);
 
-                const totalNotFastingMinutes =
-                    minutesSinceMidnight > notFastingDurationInMinutes
-                        ? minutesSinceMidnight > fastDesiredStartTimeInMinutes
-                            ? Math.abs(24 * 60 - minutesSinceMidnight) +
-                              notFastingDurationInMinutes +
-                              fastDesiredStartTimeInMinutes
-                            : fastDesiredStartTimeInMinutes - minutesSinceMidnight + notFastingDurationInMinutes
-                        : yesterdayNotFastingMinutes + fastDesiredStartTimeInMinutes;
+                const fastDesiredStartTimeInSeconds = fastDesiredStartTimeInMinutes * 60;
 
-                setProgress(Math.min(100, (notFastingDurationInMinutes / totalNotFastingMinutes) * 100));
-                setRemainingUntilFastCounter(Math.max(0, totalNotFastingMinutes - notFastingDurationInMinutes) * 60);
+                const totalNotFastingSeconds =
+                    secondsSinceMidnight > notFastingDurationInSeconds
+                        ? secondsSinceMidnight > fastDesiredStartTimeInSeconds
+                            ? Math.abs(24 * 60 * 60 - secondsSinceMidnight) +
+                              notFastingDurationInSeconds +
+                              fastDesiredStartTimeInSeconds
+                            : fastDesiredStartTimeInSeconds - secondsSinceMidnight + notFastingDurationInSeconds
+                        : yesterdayNotFastingSeconds + fastDesiredStartTimeInSeconds;
+
+                setProgress(Math.min(100, (notFastingDurationInSeconds / totalNotFastingSeconds) * 100));
+                setRemainingUntilFastCounter(Math.max(0, totalNotFastingSeconds - notFastingDurationInSeconds));
             }
 
             // Otherwise show time since midnight
@@ -464,8 +469,10 @@ export default function FastingSection() {
     const remainingUntilFastMinutes = Math.floor(remainingUntilFastUpdatedSeconds / 60);
     const remainingUntilFastSeconds = remainingUntilFastUpdatedSeconds % 60;
 
-    const durationHours = Math.floor(durationCounter / 60);
-    const durationMinutes = durationCounter % 60;
+    const durationHours = Math.floor(durationCounter / 3600);
+    const durationUpdatedSeconds = durationCounter % 3600;
+    const durationMinutes = Math.floor(durationUpdatedSeconds / 60);
+    // const durationSeconds = durationUpdatedSeconds % 60;
 
     const currentPhase = phases.current.find(({ current }) => current);
 
