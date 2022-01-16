@@ -11,13 +11,28 @@ import { Utils } from "../../contexts/Utils";
 import { API } from "../../contexts/API";
 import { GlobalState } from "../../contexts/GlobalState";
 
+const areSameDate = (date1, date2) => {
+    return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+    );
+};
+
 export default function WeightSection() {
     const { user } = useContext(Data);
     const { invlerp, sleep } = useContext(Utils);
     const { setWeight } = useContext(API);
     const { set } = useContext(GlobalState);
 
-    const { weightInKg, startingWeightObjectiveInKg, weightObjectiveInKg } = user.current;
+    const {
+        weightInKg,
+        startingWeightObjectiveInKg,
+        weightObjectiveInKg,
+        lastTimeUserEnteredWeight,
+        timezoneOffsetInMs,
+    } = user.current;
+    console.log(user.current);
 
     // #################################################
     //   PROGRESS
@@ -35,6 +50,26 @@ export default function WeightSection() {
         const interval = setInterval(recalculateProgress, 1000 * 60 * 2);
         return () => clearInterval(interval);
     }, [recalculateProgress]);
+
+    // #################################################
+    //   UPDATE WEIGHT
+    // #################################################
+
+    const [canUpdateWeight, setCanUpdateWeight] = useState(true);
+
+    const updateWeight = useCallback(() => {
+        var lastWeightEntry = new Date(lastTimeUserEnteredWeight);
+        lastWeightEntry.setTime(lastWeightEntry.getTime() - timezoneOffsetInMs);
+
+        console.log(lastWeightEntry);
+
+        const today = new Date();
+        setCanUpdateWeight(!areSameDate(lastWeightEntry, today));
+    }, [lastTimeUserEnteredWeight, timezoneOffsetInMs]);
+
+    useEffect(() => {
+        updateWeight();
+    }, [updateWeight]);
 
     // #################################################
     //   RESIZE
@@ -105,9 +140,11 @@ export default function WeightSection() {
                 <p className="weight">{`${weightObjectiveInKg}kg`}</p>
             </div>
 
-            <div className="button" style={{ backgroundColor: color }} onClick={handleUpdateWeight}>
-                {"Update Weight"}
-            </div>
+            {canUpdateWeight && (
+                <div className="button" style={{ backgroundColor: color }} onClick={handleUpdateWeight}>
+                    {"Update Weight"}
+                </div>
+            )}
 
             <div className={cn("error", { visible: error !== "" })}>{error}</div>
         </div>
