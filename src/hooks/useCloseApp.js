@@ -20,10 +20,9 @@ export default function useCloseApp() {
                 content: (
                     <div className="closeApp">
                         <SVG className="logoColor" src={Logo}></SVG>
-                        <h1>{"Close Fanfastic app?"}</h1>
+                        <h1>{"Click back again to close the app."}</h1>
 
                         <div className="closeButtons">
-                            <div className="closeButton low">Close</div>
                             <div className="closeButton">Stay</div>
                         </div>
                     </div>
@@ -39,13 +38,9 @@ export default function useCloseApp() {
                     <div className="closeApp">
                         <SVG className="logoColor" src={Logo}></SVG>
 
-                        <h1>{"Close Fanfastic app?"}</h1>
+                        <h1>{"Click back again to close the app."}</h1>
 
                         <div className="closeButtons">
-                            <div className="closeButton low" onClick={() => window.history.back()}>
-                                Close
-                            </div>
-
                             <div className="closeButton" onClick={handleStayInApp}>
                                 Stay
                             </div>
