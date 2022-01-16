@@ -34,5 +34,6 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Fade out - fade in when the user starts or stops fasting
 -   [x] Timer seconds reset every time we return to the page (Fix bug)
 -   [x] Integrate page history
--   [ ] When user is fasting and remaining time reaches 00:00:00 -> change to show a timer of the fasting duration.
+-   [x] When user is fasting and remaining time reaches 00:00:00 -> change to show a timer of the fasting duration.
 -   [ ] End fasting screen where user can change the start and end time
+-   [ ] When weight objective is achieved, show a button to set a new one

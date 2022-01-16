@@ -319,17 +319,27 @@ export default function FastingSection() {
             var tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
 
+            var startFastingDateHours = startfastingDate.getHours();
+            startFastingDateHours = startFastingDateHours < 10 ? `0${startFastingDateHours}` : startFastingDateHours;
+            var startFastingDateMinutes = startfastingDate.getMinutes();
+            startFastingDateMinutes =
+                startFastingDateMinutes < 10 ? `0${startFastingDateMinutes}` : startFastingDateMinutes;
+
+            var endfastingDateHours = endfastingDate.getHours();
+            endfastingDateHours = endfastingDateHours < 10 ? `0${endfastingDateHours}` : endfastingDateHours;
+            var endfastingDateMinutes = endfastingDate.getMinutes();
+            endfastingDateMinutes = endfastingDateMinutes < 10 ? `0${endfastingDateMinutes}` : endfastingDateMinutes;
+
             var startDate = "";
             if (areSameDate(startfastingDate, today))
-                startDate = `Today, ${startfastingDate.getHours()}:${startfastingDate.getMinutes()}`;
+                startDate = `Today, ${startFastingDateHours}:${startFastingDateMinutes}`;
             else if (areSameDate(startfastingDate, yesterday))
-                startDate = `Yesterday, ${startfastingDate.getHours()}:${startfastingDate.getMinutes()}`;
+                startDate = `Yesterday, ${startFastingDateHours}:${startFastingDateMinutes}`;
 
             var endDate = "";
-            if (areSameDate(endfastingDate, today))
-                endDate = `Today, ${endfastingDate.getHours()}:${endfastingDate.getMinutes()}`;
+            if (areSameDate(endfastingDate, today)) endDate = `Today, ${endfastingDateHours}:${endfastingDateMinutes}`;
             else if (areSameDate(endfastingDate, tomorrow))
-                endDate = `Tomorrow, ${endfastingDate.getHours()}:${endfastingDate.getMinutes()}`;
+                endDate = `Tomorrow, ${endfastingDateHours}:${endfastingDateMinutes}`;
 
             setStartEndDate({ start: startDate, end: endDate });
         } else {
@@ -472,7 +482,7 @@ export default function FastingSection() {
     const durationHours = Math.floor(durationCounter / 3600);
     const durationUpdatedSeconds = durationCounter % 3600;
     const durationMinutes = Math.floor(durationUpdatedSeconds / 60);
-    // const durationSeconds = durationUpdatedSeconds % 60;
+    const durationSeconds = durationUpdatedSeconds % 60;
 
     const currentPhase = phases.current.find(({ current }) => current);
 
@@ -491,17 +501,34 @@ export default function FastingSection() {
                 >
                     {isFasting ? (
                         <div className={"insideProgress"}>
-                            <p>Remaining</p>
-                            <div className="counter">
-                                <p>{remainingHours < 10 ? `0${remainingHours}` : remainingHours}</p>
-                                <p className={"colon"}>:</p>
-                                <p>{remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes}</p>
-                                <p className={"colon seconds"}>:</p>
-                                <p className={" seconds"}>
-                                    {remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}
-                                </p>
-                            </div>
-                            <p className="subtitle">{`Fasting for ${durationHours}h ${durationMinutes}m`}</p>
+                            {remainingCounter > 0 ? (
+                                <>
+                                    <p>Remaining</p>
+                                    <div className="counter">
+                                        <p>{remainingHours < 10 ? `0${remainingHours}` : remainingHours}</p>
+                                        <p className={"colon"}>:</p>
+                                        <p>{remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes}</p>
+                                        <p className={"colon seconds"}>:</p>
+                                        <p className={" seconds"}>
+                                            {remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds}
+                                        </p>
+                                    </div>
+                                    <p className="subtitle">{`Fasting for ${durationHours}h ${durationMinutes}m`}</p>
+                                </>
+                            ) : (
+                                <>
+                                    <p>You've fasted for:</p>
+                                    <div className="counter">
+                                        <p>{durationHours < 10 ? `0${durationHours}` : durationHours}</p>
+                                        <p className={"colon"}>:</p>
+                                        <p>{durationMinutes < 10 ? `0${durationMinutes}` : durationMinutes}</p>
+                                        <p className={"colon seconds"}>:</p>
+                                        <p className={" seconds"}>
+                                            {durationSeconds < 10 ? `0${durationSeconds}` : durationSeconds}
+                                        </p>
+                                    </div>
+                                </>
+                            )}
 
                             {phases.current.map(
                                 ({ icon, current }, i) =>

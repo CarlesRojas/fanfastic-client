@@ -82,6 +82,8 @@ export default function WeightSection() {
 
     if (weightObjectiveInKg < 0) return null;
 
+    const color = "#c375ff";
+
     return (
         <div className={"WeightSection"}>
             <h1>{"Weight Progress"}</h1>
@@ -93,8 +95,8 @@ export default function WeightSection() {
                     <ProgressLine
                         progress={progress}
                         totalWidth={progressWidth}
-                        strokeColor={"#4faaff"}
-                        trackStrokeColor={"#4faaff"}
+                        strokeColor={color}
+                        trackStrokeColor={color}
                         text={`${weightInKg}kg`}
                         fontSize={14}
                     ></ProgressLine>
@@ -103,7 +105,7 @@ export default function WeightSection() {
                 <p className="weight">{`${weightObjectiveInKg}kg`}</p>
             </div>
 
-            <div className="button" style={{ backgroundColor: "#4faaff" }} onClick={handleUpdateWeight}>
+            <div className="button" style={{ backgroundColor: color }} onClick={handleUpdateWeight}>
                 {"Update Weight"}
             </div>
 
