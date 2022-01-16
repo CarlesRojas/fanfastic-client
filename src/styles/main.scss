@@ -620,7 +620,6 @@
 
             .header {
                 display: flex;
-                // align-items: center;
                 margin-bottom: 2rem;
 
                 .icon {
@@ -663,6 +662,59 @@
                 font-weight: 500;
                 opacity: 0.6;
                 margin-bottom: 0.5rem;
+            }
+        }
+
+        .closeApp {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .logoColor {
+                height: 3rem;
+                max-height: 3rem;
+                min-height: 3rem;
+                width: 3rem;
+                max-width: 3rem;
+                min-width: 3rem;
+                margin-bottom: 0.5rem;
+            }
+
+            h1 {
+                width: 100%;
+                font-size: 1.3rem;
+                font-weight: 700;
+                opacity: 0.9;
+                margin-bottom: 1.5rem;
+                text-align: center;
+            }
+
+            .closeButtons {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                .closeButton {
+                    width: 12rem;
+                    pointer-events: all;
+                    min-width: fit-content;
+                    text-align: center;
+                    font-weight: 700;
+                    border-radius: 100vw;
+                    padding: 0.8rem 1.6rem;
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+                    z-index: 1000;
+                    background-color: $closeButtonColor;
+
+                    &.low {
+                        margin-bottom: 1rem;
+                        background-color: rgba(0, 0, 0, 0.1);
+                    }
+                }
             }
         }
 

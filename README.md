@@ -33,4 +33,4 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Better animation when going from not fasting to fasting (Join them again?)
 -   [x] Fade out - fade in when the user starts or stops fasting
 -   [x] Timer seconds reset every time we return to the page (Fix bug)
--   [ ] Integrate page history
+-   [x] Integrate page history

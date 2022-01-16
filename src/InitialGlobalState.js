@@ -1,6 +1,6 @@
 const initialState = {
     userUpdated: 0,
-    showPopup: { show: false, content: null },
+    showPopup: { show: false, canClose: false, content: null },
     loadingVisible: false,
 };
 

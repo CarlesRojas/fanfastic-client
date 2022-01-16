@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-
+import useCloseApp from "./hooks/useCloseApp";
+import Auth from "./components/auth/Auth";
 import DesktopLayout from "./components/layout/DesktopLayout";
 import MobileLayout from "./components/layout/MobileLayout";
 
 import { API } from "./contexts/API";
 import { MediaQuery } from "./contexts/MediaQuery";
-import Auth from "./components/auth/Auth";
 
 export default function App() {
     const { isLoggedIn } = useContext(API);
@@ -13,6 +13,8 @@ export default function App() {
 
     const [loggedIn, setLoggedIn] = useState(null);
     const [userInfoReady, setUserInfoReady] = useState(false);
+
+    useCloseApp();
 
     useEffect(() => {
         const checkLogin = async () => {
