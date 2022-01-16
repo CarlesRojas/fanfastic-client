@@ -62,7 +62,7 @@ export default function FastingSection() {
         },
         {
             title: "Blood sugar level drops",
-            subtitle: "",
+            subtitle: "Digestion is almost complete, Your cells are using energy from your food.",
             titleInfo: "Blood sugar level drops",
             subtitleInfo: "Begins 3h after your last meal",
             description: [
