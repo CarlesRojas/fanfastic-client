@@ -575,7 +575,7 @@ export default function FastingSection() {
                         <p className="date">{startEndDate.start}</p>
                     </div>
                     <div className="end">
-                        <p>end</p>
+                        <p>goal</p>
                         <p className="date">{startEndDate.end}</p>
                     </div>
                 </div>

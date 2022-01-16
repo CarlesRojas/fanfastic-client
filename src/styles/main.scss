@@ -1056,6 +1056,33 @@
     }
 }
 
+//      PROGRESS LINE
+// #######################################
+
+.ProgressLine {
+    position: relative;
+    height: fit-content;
+
+    &.animateProgress {
+        .track {
+            transition: all 0.3s linear;
+        }
+
+        .progress {
+            transition: all 0.3s linear;
+        }
+    }
+
+    .track {
+        transition: none;
+        stroke-width: 0.3rem;
+    }
+
+    .progress {
+        transition: none;
+    }
+}
+
 //      WEIGHT SECTION
 // #######################################
 
