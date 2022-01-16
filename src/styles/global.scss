@@ -28,6 +28,7 @@ body {
     touch-action: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: contain;
 }
 
 #root {

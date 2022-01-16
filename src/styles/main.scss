@@ -747,6 +747,7 @@
     justify-content: center;
     opacity: 0;
     pointer-events: none;
+    background-color: $background;
 
     &.visible {
         opacity: 1;
@@ -782,24 +783,18 @@
     width: 100%;
     max-width: 100%;
     min-width: 100%;
-    // overflow-y: auto;
+    overflow-y: auto;
 }
 
 //      FAST SECTION
 // #######################################
 
 .FastSection {
-    transition: opacity 0.2s ease-in-out;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    opacity: 1;
-
-    &.fadedOut {
-        opacity: 0;
-    }
 
     h1 {
         width: 100%;
@@ -1030,6 +1025,86 @@
     }
 }
 
+//      WEIGHT SECTION
+// #######################################
+
+.WeightSection {
+    $weightLabelWidth: 3rem;
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h1 {
+        width: 100%;
+        text-align: center;
+        margin: 1rem 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        opacity: 0.9;
+    }
+
+    .progress {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .progressLineContainer {
+            width: calc(100% - #{$weightLabelWidth * 2});
+            min-width: calc(100% - #{$weightLabelWidth * 2});
+            max-width: calc(100% - #{$weightLabelWidth * 2});
+        }
+
+        .weight {
+            margin-top: 12px; // Must be the same as the font-size of the label in the ProgressLine
+            width: $weightLabelWidth;
+            min-width: $weightLabelWidth;
+            max-width: $weightLabelWidth;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            opacity: 0.6;
+        }
+    }
+
+    .button {
+        width: fit-content;
+        text-align: center;
+        font-weight: 700;
+        border-radius: 100vw;
+        padding: 0.8rem 1.6rem;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        color: $background;
+        margin-top: 0.5rem;
+    }
+
+    .error {
+        transition: height 0.2s ease-in-out, opacity 0.2s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 0;
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        opacity: 0;
+        color: $homeTextWarning;
+
+        &.visible {
+            opacity: 1;
+            height: 2rem;
+        }
+    }
+}
+
 //      PROGRESS CIRCLE
 // #######################################
 
@@ -1049,6 +1124,7 @@
     .track {
         transition: none;
         stroke-width: 0.3rem;
+        opacity: 0.5;
     }
 
     .progress {
@@ -1063,6 +1139,10 @@
     position: relative;
     height: fit-content;
 
+    svg {
+        overflow: visible;
+    }
+
     &.animateProgress {
         .track {
             transition: all 0.3s linear;
@@ -1076,19 +1156,17 @@
     .track {
         transition: none;
         stroke-width: 0.3rem;
+        opacity: 0.5;
     }
 
     .progress {
         transition: none;
     }
-}
 
-//      WEIGHT SECTION
-// #######################################
-
-.WeightSection {
-    position: relative;
-    width: 100%;
+    .progresslabel {
+        font-weight: 600;
+        opacity: 0.9;
+    }
 }
 
 // #######################################

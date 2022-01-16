@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import chroma from "chroma-js";
 import SVG from "react-inlinesvg";
 import cn from "classnames";
-import useResize from "../../hooks/useResize";
 import ProgressCircle from "./ProgressCircle";
+import useResize from "../../hooks/useResize";
 import useThrottle from "../../hooks/useThrottle";
 import useGlobalState from "../../hooks/useGlobalState";
 import useAutoResetState from "../../hooks/useAutoResetState";
@@ -395,11 +395,9 @@ export default function FastingSection() {
     //   HANDLERS
     // #################################################
 
-    const [fadedOut, setFadedOut] = useState(false);
     const [error, setError] = useAutoResetState("", 10000);
 
     const handleStopFasting = useThrottle(async () => {
-        setFadedOut(true);
         set("loadingVisible", true);
         await sleep(200);
 
@@ -409,11 +407,9 @@ export default function FastingSection() {
         await sleep(200);
 
         set("loadingVisible", false);
-        setFadedOut(false);
     }, 2000);
 
     const handleStartFasting = useThrottle(async () => {
-        setFadedOut(true);
         set("loadingVisible", true);
         await sleep(200);
 
@@ -423,7 +419,6 @@ export default function FastingSection() {
         await sleep(200);
 
         set("loadingVisible", false);
-        setFadedOut(false);
     }, 2000);
 
     const showPhaseInfo = (phaseI) => {
@@ -482,7 +477,7 @@ export default function FastingSection() {
     const currentPhase = phases.current.find(({ current }) => current);
 
     return (
-        <div className={cn("FastSection", { fadedOut })} ref={containerRef}>
+        <div className={"FastSection"} ref={containerRef}>
             <h1>{isFasting ? "Fasting" : "Breaking fast"}</h1>
 
             <div className={"progressBarContainer"}>

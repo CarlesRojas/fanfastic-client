@@ -78,7 +78,7 @@ const ProgressLine = ({
                         stroke={strokeColor}
                         strokeWidth={strokeWidth}
                         strokeLinecap={strokeLinecap}
-                        strokeDasharray={`${getProgressWidth()}, ${width}`}
+                        strokeDasharray={`${getProgressWidth()}, ${width + 1}`}
                         className="progress"
                     />
                 )}
