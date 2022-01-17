@@ -3,6 +3,7 @@ import chroma from "chroma-js";
 import SVG from "react-inlinesvg";
 import cn from "classnames";
 import ProgressCircle from "./ProgressCircle";
+import ConfirmEndFastingPopup from "./ConfirmEndFastingPopup";
 import useResize from "../../hooks/useResize";
 import useThrottle from "../../hooks/useThrottle";
 import useGlobalState from "../../hooks/useGlobalState";
@@ -31,7 +32,7 @@ const areSameDate = (date1, date2) => {
 export default function FastingSection() {
     const { user } = useContext(Data);
     const { lerp, sleep } = useContext(Utils);
-    const { stopFasting, startFasting } = useContext(API);
+    const { startFasting } = useContext(API);
     const { set } = useContext(GlobalState);
 
     const {
@@ -407,17 +408,26 @@ export default function FastingSection() {
 
     const [error, setError] = useAutoResetState("", 10000);
 
-    const handleStopFasting = useThrottle(async () => {
-        set("loadingVisible", true);
-        await sleep(200);
+    // const handleStopFasting = useThrottle(async () => {
+    //     set("loadingVisible", true);
+    //     await sleep(200);
 
-        const result = await stopFasting();
-        if ("error" in result) setError(result.error);
+    //     const result = await stopFasting();
+    //     if ("error" in result) setError(result.error);
 
-        await sleep(200);
+    //     await sleep(200);
 
-        set("loadingVisible", false);
-    }, 2000);
+    //     set("loadingVisible", false);
+    // }, 2000);
+
+    const handleStopFasting = () => {
+        set("showPopup", {
+            visible: true,
+            canClose: false,
+            addPadding: false,
+            content: <ConfirmEndFastingPopup />,
+        });
+    };
 
     const handleStartFasting = useThrottle(async () => {
         set("loadingVisible", true);

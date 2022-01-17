@@ -807,6 +807,17 @@
         }
     }
 
+    .editDateButton {
+        height: fit-content;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        opacity: 0.8;
+    }
+
     .separation {
         height: 1rem;
         background-color: $authCardBackground;

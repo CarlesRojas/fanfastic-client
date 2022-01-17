@@ -348,8 +348,8 @@ const APIProvider = (props) => {
         }
     };
 
-    const startFasting = async () => {
-        const date = new Date();
+    const startFasting = async (override) => {
+        const date = override ? new Date(override) : new Date();
         const timezoneOffsetInMs = -date.getTimezoneOffset() * 60 * 1000;
 
         const postData = { date, timezoneOffsetInMs };
@@ -379,8 +379,8 @@ const APIProvider = (props) => {
         }
     };
 
-    const stopFasting = async () => {
-        const date = new Date();
+    const stopFasting = async (override) => {
+        const date = override ? new Date(override) : new Date();
         const timezoneOffsetInMs = -date.getTimezoneOffset() * 60 * 1000;
 
         const postData = { date, timezoneOffsetInMs };

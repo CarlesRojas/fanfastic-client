@@ -34,7 +34,7 @@ export default function UpdateWeightPopup() {
         return false;
     };
 
-    const handleUpdateWeightClick = useThrottle(async () => {
+    const handleConfirmClick = useThrottle(async () => {
         const { weight } = data.current;
         setLoading(true);
 
@@ -67,7 +67,7 @@ export default function UpdateWeightPopup() {
             <WeightPicker data={{ pickerType: "weight" }} parentData={data} />
 
             <div className="separation"></div>
-            <Button data={{ content: "Update Weight" }} nextPhase={handleUpdateWeightClick} />
+            <Button data={{ content: "Update Weight" }} nextPhase={handleConfirmClick} />
 
             <div className="separation"></div>
             <Button data={{ content: "Cancel" }} low={true} nextPhase={handleCancelClick} isLastInteractible={true} />

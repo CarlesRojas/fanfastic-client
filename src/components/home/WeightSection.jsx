@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useContext, useCallback } from "react";
-import cn from "classnames";
 import useResize from "../../hooks/useResize";
 import useGlobalState from "../../hooks/useGlobalState";
 import ProgressLine from "./ProgressLine";
