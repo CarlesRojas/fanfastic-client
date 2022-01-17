@@ -6,10 +6,12 @@ import MobileLayout from "./components/layout/MobileLayout";
 
 import { API } from "./contexts/API";
 import { MediaQuery } from "./contexts/MediaQuery";
+import { GlobalState } from "./contexts/GlobalState";
 
 export default function App() {
     const { isLoggedIn } = useContext(API);
     const { isMobile, isTablet, isLandscape } = useContext(MediaQuery);
+    const { set } = useContext(GlobalState);
 
     const [loggedIn, setLoggedIn] = useState(null);
     const [userInfoReady, setUserInfoReady] = useState(false);
@@ -22,10 +24,12 @@ export default function App() {
                 setLoggedIn(true);
                 setUserInfoReady(true);
             } else setLoggedIn(false);
+
+            set("loadingVisible", false);
         };
 
         checkLogin();
-    }, [isLoggedIn, loggedIn]);
+    }, [isLoggedIn, loggedIn, set]);
 
     if (loggedIn === null) return null;
     else if (!loggedIn) return <Auth setLoggedIn={setLoggedIn} />;
