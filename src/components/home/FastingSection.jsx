@@ -439,6 +439,7 @@ export default function FastingSection() {
         set("showPopup", {
             visible: true,
             canClose: true,
+            addPadding: true,
             content: (
                 <div className="scroll">
                     <div className="header">

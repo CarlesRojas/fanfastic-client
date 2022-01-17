@@ -17,6 +17,7 @@ export default function useCloseApp() {
             set("showPopup", {
                 visible: false,
                 canClose: false,
+                addPadding: true,
                 content: (
                     <div className="closeApp">
                         <SVG className="logoColor" src={Logo}></SVG>
@@ -34,6 +35,7 @@ export default function useCloseApp() {
             set("showPopup", {
                 visible: true,
                 canClose: false,
+                addPadding: true,
                 content: (
                     <div className="closeApp">
                         <SVG className="logoColor" src={Logo}></SVG>

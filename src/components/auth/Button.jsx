@@ -1,6 +1,6 @@
 import cn from "classnames";
 
-export default function Button({ data, nextPhase, isLastInteractible }) {
+export default function Button({ data, nextPhase, isLastInteractible, low }) {
     const { content } = data;
 
     // #################################################
@@ -8,7 +8,7 @@ export default function Button({ data, nextPhase, isLastInteractible }) {
     // #################################################
 
     return (
-        <div className={cn("Button", { last: isLastInteractible })} onClick={nextPhase}>
+        <div className={cn("Button", { last: isLastInteractible }, { low })} onClick={nextPhase}>
             {content}
         </div>
     );

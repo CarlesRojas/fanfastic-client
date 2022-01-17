@@ -1,14 +1,12 @@
 import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import cn from "classnames";
 import useResize from "../../hooks/useResize";
-import useThrottle from "../../hooks/useThrottle";
 import useGlobalState from "../../hooks/useGlobalState";
-import useAutoResetState from "../../hooks/useAutoResetState";
 import ProgressLine from "./ProgressLine";
+import UpdateWeightPopup from "./UpdateWeightPopup";
 
 import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
-import { API } from "../../contexts/API";
 import { GlobalState } from "../../contexts/GlobalState";
 
 const areSameDate = (date1, date2) => {
@@ -21,8 +19,7 @@ const areSameDate = (date1, date2) => {
 
 export default function WeightSection() {
     const { user } = useContext(Data);
-    const { invlerp, sleep } = useContext(Utils);
-    const { setWeight } = useContext(API);
+    const { invlerp } = useContext(Utils);
     const { set } = useContext(GlobalState);
 
     const {
@@ -32,7 +29,6 @@ export default function WeightSection() {
         lastTimeUserEnteredWeight,
         timezoneOffsetInMs,
     } = user.current;
-    console.log(user.current);
 
     // #################################################
     //   PROGRESS
@@ -61,8 +57,6 @@ export default function WeightSection() {
         var lastWeightEntry = new Date(lastTimeUserEnteredWeight);
         lastWeightEntry.setTime(lastWeightEntry.getTime() - timezoneOffsetInMs);
 
-        console.log(lastWeightEntry);
-
         const today = new Date();
         setCanUpdateWeight(!areSameDate(lastWeightEntry, today));
     }, [lastTimeUserEnteredWeight, timezoneOffsetInMs]);
@@ -88,21 +82,14 @@ export default function WeightSection() {
     //   HANDLERS
     // #################################################
 
-    const [error, setError] = useAutoResetState("", 10000);
-
-    const handleUpdateWeight = useThrottle(async () => {
-        set("loadingVisible", true);
-        await sleep(200);
-
-        setError("Already updated weight today");
-        // ROJAS TODO
-        // const result = await setWeight();
-        // if ("error" in result) setError(result.error);
-
-        await sleep(200);
-
-        set("loadingVisible", false);
-    }, 2000);
+    const handleUpdateWeight = () => {
+        set("showPopup", {
+            visible: true,
+            canClose: false,
+            addPadding: false,
+            content: <UpdateWeightPopup />,
+        });
+    };
 
     // #################################################
     //   USER UPDATED
@@ -145,8 +132,6 @@ export default function WeightSection() {
                     {"Update Weight"}
                 </div>
             )}
-
-            <div className={cn("error", { visible: error !== "" })}>{error}</div>
         </div>
     );
 }

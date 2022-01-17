@@ -1,11 +1,12 @@
 import React from "react";
+import cn from "classnames";
 import { useTransition, animated } from "react-spring";
 import useGlobalState from "../../hooks/useGlobalState";
 
 export default function Popup() {
     const [information, setInformation] = useGlobalState("showPopup");
 
-    const { visible, canClose, content } = information;
+    const { visible, canClose, content, addPadding } = information;
 
     // #################################################
     //   TRANSITIONS
@@ -44,7 +45,7 @@ export default function Popup() {
             {contentTransition(
                 (styles, item) =>
                     item && (
-                        <animated.div className="contentContainer" style={styles}>
+                        <animated.div className={cn("contentContainer", { addPadding })} style={styles}>
                             {content}
                             {canClose && (
                                 <div

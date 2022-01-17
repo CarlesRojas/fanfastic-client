@@ -171,6 +171,10 @@
     color: $authIconColor;
     font-weight: 700;
 
+    &.low {
+        background-color: $authButtonGrey;
+    }
+
     &.last {
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 1rem;
@@ -611,7 +615,10 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         background-color: $background;
         border-radius: 1rem;
-        padding: 1rem;
+
+        &.addPadding {
+            padding: 1rem;
+        }
 
         .scroll {
             width: 100%;
@@ -729,6 +736,80 @@
             z-index: 1000;
             background-color: $closeButtonColor;
         }
+    }
+}
+
+//      POPUP CONTENT
+// #######################################
+
+.PopupContent {
+    background-color: $authCardBackground;
+    border-radius: 1rem;
+
+    h1 {
+        margin-bottom: 0.5rem;
+        font-size: 1.8rem;
+        font-weight: 700;
+        padding: 1rem 1rem 0 1rem;
+    }
+
+    &.noInteractibles {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        border-radius: 1rem;
+    }
+
+    .subtitle {
+        font-weight: 400;
+        padding: 0 1rem;
+
+        p {
+            transition: opacity 0.2s ease-in-out;
+            color: $textWarning;
+            margin-top: 0.3rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            opacity: 0;
+
+            &.visible {
+                opacity: 1;
+            }
+
+            &:first-letter {
+                text-transform: capitalize;
+            }
+        }
+    }
+
+    .loadingContainer {
+        transform: opacity 0.2s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: fit-content;
+        width: 100%;
+        padding: 1rem 0;
+
+        .loadingIcon {
+            transition: opacity 0.2s ease-in-out;
+            height: 1.5rem;
+            max-height: 1.5rem;
+            min-height: 1.5rem;
+            width: 1.5rem;
+            max-width: 1.5rem;
+            min-width: 1.5rem;
+            color: $authButtonOrange;
+            opacity: 0;
+
+            &.visible {
+                opacity: 1;
+            }
+        }
+    }
+
+    .separation {
+        height: 1rem;
+        background-color: $authCardBackground;
     }
 }
 
@@ -1083,25 +1164,6 @@
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         color: $background;
         margin-top: 0.5rem;
-    }
-
-    .error {
-        transition: height 0.2s ease-in-out, opacity 0.2s ease-in-out;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 0;
-        text-align: center;
-        font-size: 0.8rem;
-        font-weight: 600;
-        opacity: 0;
-        color: $homeTextWarning;
-
-        &.visible {
-            opacity: 1;
-            height: 2rem;
-        }
     }
 }
 
