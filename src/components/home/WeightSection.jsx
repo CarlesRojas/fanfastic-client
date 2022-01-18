@@ -84,7 +84,8 @@ export default function WeightSection() {
     const handleUpdateWeight = () => {
         set("showPopup", {
             visible: true,
-            canClose: false,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
             addPadding: false,
             content: <UpdateWeightPopup />,
         });

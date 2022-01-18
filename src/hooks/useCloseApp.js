@@ -16,7 +16,8 @@ export default function useCloseApp() {
 
             set("showPopup", {
                 visible: false,
-                canClose: false,
+                canCloseWithBackground: false,
+                closeButtonVisible: false,
                 addPadding: true,
                 content: (
                     <div className="closeApp">
@@ -34,7 +35,8 @@ export default function useCloseApp() {
         const handleBrowserBack = () => {
             set("showPopup", {
                 visible: true,
-                canClose: false,
+                canCloseWithBackground: false,
+                closeButtonVisible: false,
                 addPadding: true,
                 content: (
                     <div className="closeApp">

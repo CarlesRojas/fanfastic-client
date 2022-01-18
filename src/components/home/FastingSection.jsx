@@ -423,7 +423,8 @@ export default function FastingSection() {
     const handleStopFasting = () => {
         set("showPopup", {
             visible: true,
-            canClose: false,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
             addPadding: false,
             content: <ConfirmEndFastingPopup />,
         });
@@ -448,7 +449,8 @@ export default function FastingSection() {
 
         set("showPopup", {
             visible: true,
-            canClose: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: true,
             addPadding: true,
             content: (
                 <div className="scroll">

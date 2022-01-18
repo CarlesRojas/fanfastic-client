@@ -6,7 +6,7 @@ import useGlobalState from "../../hooks/useGlobalState";
 export default function Popup() {
     const [information, setInformation] = useGlobalState("showPopup");
 
-    const { visible, canClose, content, addPadding } = information;
+    const { visible, canCloseWithBackground, closeButtonVisible, content, addPadding } = information;
 
     // #################################################
     //   TRANSITIONS
@@ -38,7 +38,7 @@ export default function Popup() {
                         <animated.div
                             className="blur"
                             style={styles}
-                            onClick={() => canClose && setInformation({ ...information, visible: false })}
+                            onClick={() => canCloseWithBackground && setInformation({ ...information, visible: false })}
                         ></animated.div>
                     )
             )}
@@ -47,7 +47,7 @@ export default function Popup() {
                     item && (
                         <animated.div className={cn("contentContainer", { addPadding })} style={styles}>
                             {content}
-                            {canClose && (
+                            {closeButtonVisible && (
                                 <div
                                     className="button"
                                     onClick={() => setInformation({ ...information, visible: false })}
