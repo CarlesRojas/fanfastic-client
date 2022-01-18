@@ -392,6 +392,7 @@ export default function FastingSection() {
         timezoneOffsetInMs,
         fastObjectiveInMinutes,
         fastDesiredStartTimeInMinutes,
+        areSameDate,
     ]);
 
     // #################################################
@@ -399,18 +400,6 @@ export default function FastingSection() {
     // #################################################
 
     const [error, setError] = useAutoResetState("", 10000);
-
-    // const handleStopFasting = useThrottle(async () => {
-    //     set("loadingVisible", true);
-    //     await sleep(200);
-
-    //     const result = await stopFasting();
-    //     if ("error" in result) setError(result.error);
-
-    //     await sleep(200);
-
-    //     set("loadingVisible", false);
-    // }, 2000);
 
     const handleStopFasting = () => {
         set("showPopup", {
@@ -490,6 +479,11 @@ export default function FastingSection() {
     const durationSeconds = durationUpdatedSeconds % 60;
 
     const currentPhase = phases.current.find(({ current }) => current);
+
+    const now = new Date();
+    const fastStartTime = new Date(lastTimeUserStartedFasting);
+    fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);
+    const canStartFasting = !isFasting && !areSameDate(now, fastStartTime);
 
     return (
         <div className={"FastSection"} ref={containerRef}>
@@ -588,7 +582,11 @@ export default function FastingSection() {
                     {"End Fasting"}
                 </div>
             ) : (
-                <div className="button" style={{ backgroundColor: color }} onClick={handleStartFasting}>
+                <div
+                    className={cn("button", { hidden: !canStartFasting })}
+                    style={{ backgroundColor: color }}
+                    onClick={handleStartFasting}
+                >
                     {"Start Fasting"}
                 </div>
             )}

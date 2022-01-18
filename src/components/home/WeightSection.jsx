@@ -50,7 +50,7 @@ export default function WeightSection() {
 
         const today = new Date();
         setCanUpdateWeight(!areSameDate(lastWeightEntry, today));
-    }, [lastTimeUserEnteredWeight, timezoneOffsetInMs]);
+    }, [lastTimeUserEnteredWeight, timezoneOffsetInMs, areSameDate]);
 
     useEffect(() => {
         updateWeight();

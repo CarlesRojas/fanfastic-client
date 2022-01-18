@@ -1013,6 +1013,7 @@
     }
 
     .button {
+        transition: opacity 0.2s ease-in-out;
         width: fit-content;
         text-align: center;
         font-weight: 700;
@@ -1021,6 +1022,12 @@
         margin-top: -1rem;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         color: $background;
+        opacity: 1;
+
+        &.hidden {
+            pointer-events: none;
+            opacity: 0;
+        }
     }
 
     .error {

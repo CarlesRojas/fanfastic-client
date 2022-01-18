@@ -68,7 +68,7 @@ export default function ConfirmEndFastingPopup() {
         if (checkError(result)) return;
 
         set("showPopup", { ...get("showPopup"), visible: false });
-    }, 1500);
+    }, 2000);
 
     const handleCancelClick = () => {
         set("showPopup", { ...get("showPopup"), visible: false });
