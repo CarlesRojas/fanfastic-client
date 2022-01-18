@@ -14,10 +14,12 @@ $authInputGrey: rgb(235, 235, 235);
 $authIconColor: rgba(0, 0, 0, 0.5);
 
 // MOBILE LAYOUT
-$navBarheight: 4rem;
+$navBarheight: 3.5rem;
 $navbarBackground: rgb(255, 255, 255);
-$navbarHomeBackground: rgb(255, 222, 190);
-$navbarHomeForeground: rgb(255, 125, 19);
+$navbarFastBackground: rgb(199, 245, 170);
+$navbarFastForeground: rgb(87, 170, 35);
+$navbarWeightBackground: rgb(255, 222, 190);
+$navbarWeightForeground: rgb(255, 125, 19);
 $navbarHistoryBackground: rgb(245, 213, 255);
 $navbarHistoryForeground: rgb(182, 64, 218);
 $navbarSettingsBackground: rgb(199, 228, 255);
@@ -31,7 +33,7 @@ $desktopLayoutBackground: rgb(221, 221, 221);
 // POPUP
 $closeButtonColor: rgb(255, 169, 56);
 
-// HOME
+// FASTING
 $fastIconOn: rgba(0, 0, 0, 0.5);
 $fastIconOff: rgba(0, 0, 0, 0.1);
 $fastCardBackground: rgb(255, 255, 255);

@@ -1,6 +1,7 @@
-import Historic from "../Historic";
-import Home from "../home/Home";
-import Settings from "../Settings";
+import Historic from "../historic/Historic";
+import Fasting from "../fasting/Fasting";
+import Settings from "../settings/Settings";
+import Weight from "../weight/Weight";
 import Popup from "./Popup";
 
 export default function DesktopLayout() {
@@ -12,7 +13,11 @@ export default function DesktopLayout() {
                 </div>
 
                 <div className="sectionContainer">
-                    <Home />
+                    <Fasting />
+                </div>
+
+                <div className="sectionContainer">
+                    <Weight />
                 </div>
 
                 <div className="sectionContainer">

@@ -3,14 +3,19 @@ import cn from "classnames";
 import SVG from "react-inlinesvg";
 import useThrottle from "../../hooks/useThrottle";
 
-import HomeIcon from "../../resources/icons/logo.svg";
+import FastingIcon from "../../resources/icons/logo.svg";
+import WeightIcon from "../../resources/icons/weight.svg";
 import HistoryIcon from "../../resources/icons/history.svg";
 import SettingsIcon from "../../resources/icons/settings.svg";
 
 const PAGES = [
     {
-        name: "Home",
-        icon: HomeIcon,
+        name: "Fasting",
+        icon: FastingIcon,
+    },
+    {
+        name: "Weight",
+        icon: WeightIcon,
     },
     {
         name: "History",

@@ -478,10 +478,14 @@
         padding: 0 1rem;
 
         &.selected {
-            width: 8.5rem;
+            width: 8rem;
 
-            &.navbarHome {
-                background-color: $navbarHomeBackground;
+            &.navbarFasting {
+                background-color: $navbarFastBackground;
+            }
+
+            &.navbarWeight {
+                background-color: $navbarWeightBackground;
             }
 
             &.navbarHistory {
@@ -493,8 +497,12 @@
             }
 
             .icon {
-                &.navbarHome {
-                    color: $navbarHomeForeground;
+                &.navbarFasting {
+                    color: $navbarFastForeground;
+                }
+
+                &.navbarWeight {
+                    color: $navbarWeightForeground;
                 }
 
                 &.navbarHistory {
@@ -508,7 +516,7 @@
 
             .name {
                 transition: opacity 0.05s 0.15s ease-in-out, width 0.2s ease-in-out;
-                width: 5.5rem;
+                width: 5rem;
                 opacity: 1;
             }
         }
@@ -530,10 +538,15 @@
             opacity: 0;
             padding-left: 0.5rem;
             font-weight: 600;
+            font-size: 0.9rem;
             text-align: center;
 
-            &.navbarHome {
-                color: $navbarHomeForeground;
+            &.navbarFasting {
+                color: $navbarFastForeground;
+            }
+
+            &.navbarWeight {
+                color: $navbarWeightForeground;
             }
 
             &.navbarHistory {
@@ -559,7 +572,7 @@
 
     .grid {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
         grid-gap: 1rem;
         height: 100%;
         width: 100%;
@@ -859,13 +872,13 @@
 }
 
 // #######################################
-//      HOME
+//      FASTING
 // #######################################
 
-//      HOME
+//      FASTING
 // #######################################
 
-.Home {
+.Fasting {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1246,6 +1259,16 @@
         font-weight: 600;
         opacity: 0.9;
     }
+}
+
+// #######################################
+//      WEIGHT
+// #######################################
+
+.Weight {
+    position: relative;
+    height: 100%;
+    width: 100%;
 }
 
 // #######################################
