@@ -4,6 +4,7 @@ import SVG from "react-inlinesvg";
 import cn from "classnames";
 import ProgressCircle from "./ProgressCircle";
 import ConfirmEndFastingPopup from "./ConfirmEndFastingPopup";
+import ConfirmStartFastingPopup from "./ConfirmStartFastingPopup";
 import useResize from "../../hooks/useResize";
 import useThrottle from "../../hooks/useThrottle";
 import useGlobalState from "../../hooks/useGlobalState";
@@ -399,8 +400,6 @@ export default function FastingSection() {
     //   HANDLERS
     // #################################################
 
-    const [error, setError] = useAutoResetState("", 10000);
-
     const handleStopFasting = () => {
         set("showPopup", {
             visible: true,
@@ -411,17 +410,15 @@ export default function FastingSection() {
         });
     };
 
-    const handleStartFasting = useThrottle(async () => {
-        set("loadingVisible", true);
-        await sleep(200);
-
-        const result = await startFasting();
-        if ("error" in result) setError(result.error);
-
-        await sleep(200);
-
-        set("loadingVisible", false);
-    }, 2000);
+    const handleStartFasting = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            content: <ConfirmStartFastingPopup />,
+        });
+    };
 
     const showPhaseInfo = (phaseI) => {
         if (phaseI < 0 || phaseI >= phases.current.length) return;
@@ -590,8 +587,6 @@ export default function FastingSection() {
                     {"Start Fasting"}
                 </div>
             )}
-
-            <div className={cn("error", { visible: error !== "" })}>{error}</div>
 
             {isFasting ? (
                 <div className="startEnd">

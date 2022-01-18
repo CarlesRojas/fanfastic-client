@@ -382,7 +382,6 @@ const APIProvider = (props) => {
     const stopFasting = async (override) => {
         const date = override ? new Date(override) : new Date();
         const timezoneOffsetInMs = -date.getTimezoneOffset() * 60 * 1000;
-        console.log(date);
 
         const postData = { date, timezoneOffsetInMs };
 

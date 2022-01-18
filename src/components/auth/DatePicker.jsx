@@ -5,7 +5,7 @@ import cn from "classnames";
 
 import { Utils } from "../../contexts/Utils";
 
-export default function DatePicker({ data, isLastInteractible, parentData, min, max }) {
+export default function DatePicker({ data, isLastInteractible, parentData, min, max, updateParent }) {
     const { clamp } = useContext(Utils);
     const { pickerType } = data;
 
@@ -145,13 +145,15 @@ export default function DatePicker({ data, isLastInteractible, parentData, min, 
     useEffect(() => {
         if (!(pickerType in parentData.current)) return;
         parentData.current[pickerType].h = currentHour;
-    }, [currentHour, parentData, pickerType]);
+        if (updateParent) updateParent();
+    }, [currentHour, parentData, pickerType, updateParent]);
 
     // Save the minute data when the picker changes
     useEffect(() => {
         if (!(pickerType in parentData.current)) return;
         parentData.current[pickerType].m = currentMinute;
-    }, [currentMinute, parentData, pickerType]);
+        if (updateParent) updateParent();
+    }, [currentMinute, parentData, pickerType, updateParent]);
 
     // #################################################
     //   RENDER

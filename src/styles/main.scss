@@ -1030,25 +1030,6 @@
         }
     }
 
-    .error {
-        transition: height 0.2s ease-in-out, opacity 0.2s ease-in-out;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 0;
-        text-align: center;
-        font-size: 0.8rem;
-        font-weight: 600;
-        opacity: 0;
-        color: $homeTextWarning;
-
-        &.visible {
-            opacity: 1;
-            height: 2rem;
-        }
-    }
-
     .startEnd {
         width: 100%;
         display: grid;
