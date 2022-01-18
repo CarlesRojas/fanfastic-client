@@ -6,13 +6,10 @@ import ProgressCircle from "./ProgressCircle";
 import ConfirmEndFastingPopup from "./ConfirmEndFastingPopup";
 import ConfirmStartFastingPopup from "./ConfirmStartFastingPopup";
 import useResize from "../../hooks/useResize";
-import useThrottle from "../../hooks/useThrottle";
 import useGlobalState from "../../hooks/useGlobalState";
-import useAutoResetState from "../../hooks/useAutoResetState";
 
 import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
-import { API } from "../../contexts/API";
 import { GlobalState } from "../../contexts/GlobalState";
 
 import BloodPlusIcon from "../../resources/icons/bloodPlus.svg";
@@ -24,8 +21,7 @@ import CellIcon from "../../resources/icons/cell.svg";
 
 export default function FastingSection() {
     const { user } = useContext(Data);
-    const { lerp, sleep, areSameDate } = useContext(Utils);
-    const { startFasting } = useContext(API);
+    const { lerp, areSameDate } = useContext(Utils);
     const { set } = useContext(GlobalState);
 
     const {

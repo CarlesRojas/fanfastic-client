@@ -42,7 +42,7 @@ export default function ConfirmStartFastingPopup() {
     const [error, setError] = useState(false);
     const [editDate, setEditDate] = useState(false);
     const data = useRef({ date: { h: maxHours, m: maxMinutes } });
-    const [update, setUpdate] = useState(true);
+    const [, setUpdate] = useState(true);
 
     // #################################################
     //   UPDATE PARENT
