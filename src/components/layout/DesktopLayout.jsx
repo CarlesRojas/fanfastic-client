@@ -14,9 +14,6 @@ export default function DesktopLayout() {
 
                 <div className="sectionContainer">
                     <Fasting />
-                </div>
-
-                <div className="sectionContainer">
                     <Weight />
                 </div>
 

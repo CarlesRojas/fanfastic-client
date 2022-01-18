@@ -34,6 +34,10 @@ export default function MobileLayout() {
         initialPage: currentPage.current,
     });
 
+    // #################################################
+    //   RENDER
+    // #################################################
+
     return (
         <div className="MobileLayout">
             <div className="mainPagesContent">{renderedPages}</div>
