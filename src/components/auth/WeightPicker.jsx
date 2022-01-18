@@ -5,7 +5,7 @@ import cn from "classnames";
 
 import { Utils } from "../../contexts/Utils";
 
-export default function WeightPicker({ data, isLastInteractible, parentData }) {
+export default function WeightPicker({ data, isLastInteractible, parentData, minKg }) {
     const { clamp } = useContext(Utils);
     const { pickerType } = data;
 

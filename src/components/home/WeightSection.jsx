@@ -3,6 +3,7 @@ import useResize from "../../hooks/useResize";
 import useGlobalState from "../../hooks/useGlobalState";
 import ProgressLine from "./ProgressLine";
 import UpdateWeightPopup from "./UpdateWeightPopup";
+import UpdateWeightObjectivePopup from "./UpdateWeightObjectivePopup";
 
 import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
@@ -64,6 +65,8 @@ export default function WeightSection() {
     const [progressWidth, setProgressWidth] = useState(200);
 
     const handleResize = () => {
+        if (weightObjectiveInKg < 0) return;
+
         const containerWidth = containerRef.current.getBoundingClientRect().width;
         setProgressWidth(containerWidth);
     };
@@ -83,6 +86,16 @@ export default function WeightSection() {
         });
     };
 
+    const handleNewWeightObjective = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            content: <UpdateWeightObjectivePopup />,
+        });
+    };
+
     // #################################################
     //   USER UPDATED
     // #################################################
@@ -94,9 +107,25 @@ export default function WeightSection() {
     //   RENDER
     // #################################################
 
-    if (weightObjectiveInKg < 0) return null;
+    const goalReached = weightInKg <= weightObjectiveInKg;
 
     const color = "#aaaaaa";
+    const colorGoal = "#64ad50";
+
+    if (weightObjectiveInKg < 0)
+        return (
+            <div className={"WeightSection"}>
+                <h1>{"Your weight"}</h1>
+
+                <p className="currentWeight" style={{ color: colorGoal }}>{`${weightInKg}kg`}</p>
+
+                {canUpdateWeight && (
+                    <div className="button" style={{ backgroundColor: color }} onClick={handleUpdateWeight}>
+                        {"Update Weight"}
+                    </div>
+                )}
+            </div>
+        );
 
     return (
         <div className={"WeightSection"}>
@@ -109,8 +138,8 @@ export default function WeightSection() {
                     <ProgressLine
                         progress={progress}
                         totalWidth={progressWidth}
-                        strokeColor={color}
-                        trackStrokeColor={color}
+                        strokeColor={goalReached ? colorGoal : color}
+                        trackStrokeColor={goalReached ? colorGoal : color}
                         text={`${weightInKg}kg`}
                         fontSize={14}
                     ></ProgressLine>
@@ -118,6 +147,15 @@ export default function WeightSection() {
 
                 <p className="weight">{`${weightObjectiveInKg}kg`}</p>
             </div>
+
+            {goalReached && (
+                <>
+                    <h2 style={{ color: colorGoal }}>{"Goal reached. Congratulations!"}</h2>
+                    <div className="button" style={{ backgroundColor: colorGoal }} onClick={handleNewWeightObjective}>
+                        {"Set new weight goal"}
+                    </div>
+                </>
+            )}
 
             {canUpdateWeight && (
                 <div className="button" style={{ backgroundColor: color }} onClick={handleUpdateWeight}>

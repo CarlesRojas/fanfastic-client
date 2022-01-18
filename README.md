@@ -39,4 +39,4 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Popup when user starts fasting to change time.
 -   [x] Don't show the start fasting if user already fasted today.
 -   [x] End fasting popup -> Limit hours and send the edited time to the API
--   [ ] When weight objective is achieved, show a button to set a new one
+-   [x] When weight objective is achieved, show a button to set a new one

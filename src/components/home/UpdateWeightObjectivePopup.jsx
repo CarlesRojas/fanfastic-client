@@ -11,9 +11,9 @@ import { GlobalState } from "../../contexts/GlobalState";
 
 import LoadingIcon from "../../resources/icons/loading.svg";
 
-export default function UpdateWeightPopup() {
+export default function UpdateWeightObjectivePopup() {
     const { user } = useContext(Data);
-    const { setWeight } = useContext(API);
+    const { setWeightObjective } = useContext(API);
     const { set, get } = useContext(GlobalState);
 
     const { weightInKg } = user.current;
@@ -24,7 +24,10 @@ export default function UpdateWeightPopup() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const data = useRef({ weight: { kg: Math.floor(weightInKg), dg: Math.floor((weightInKg % 1) * 10) } });
+    const data = useRef({
+        weight: { kg: Math.floor(weightInKg), dg: Math.floor((weightInKg % 1) * 10) },
+        objectiveWeight: { kg: 80, dg: 0 },
+    });
 
     // #################################################
     //   HANDLERS
@@ -39,17 +42,17 @@ export default function UpdateWeightPopup() {
     };
 
     const handleConfirmClick = useThrottle(async () => {
-        const { weight } = data.current;
+        const { objectiveWeight } = data.current;
         setLoading(true);
 
-        const setWeightResult = await setWeight(weight.kg + weight.dg / 10);
+        const setWeightResult = await setWeightObjective(objectiveWeight.kg + objectiveWeight.dg / 10);
         setLoading(false);
         if (checkError(setWeightResult)) return;
 
         set("showPopup", { ...get("showPopup"), visible: false });
     }, 1500);
 
-    const handleCancelClick = () => {
+    const handleSkip = () => {
         set("showPopup", { ...get("showPopup"), visible: false });
     };
 
@@ -59,22 +62,26 @@ export default function UpdateWeightPopup() {
 
     return (
         <div className="PopupContent">
-            <h1>{"Enter your current weight"}</h1>
+            <h1>{"What weight would you like to have?"}</h1>
             <div className={"subtitle"}>
-                {"It is better to be consistent about the time of the day you weight yourself."}
                 <p className={cn({ visible: error })}>{error || "Error"}</p>
             </div>
             <div className={"loadingContainer"}>
                 <SVG className={cn("loadingIcon", "spin", "infinite", { visible: loading })} src={LoadingIcon} />
             </div>
 
-            <WeightPicker data={{ pickerType: "weight" }} parentData={data} />
+            <WeightPicker data={{ pickerType: "objectiveWeight" }} parentData={data} />
 
             <div className="separation"></div>
-            <Button data={{ content: "Update Weight" }} nextPhase={handleConfirmClick} />
+            <Button data={{ content: "Set new objective weight" }} nextPhase={handleConfirmClick} />
 
             <div className="separation"></div>
-            <Button data={{ content: "Cancel" }} low={true} nextPhase={handleCancelClick} isLastInteractible={true} />
+            <Button
+                data={{ content: "Don't set and objective weight" }}
+                low={true}
+                nextPhase={handleSkip}
+                isLastInteractible={true}
+            />
         </div>
     );
 }
