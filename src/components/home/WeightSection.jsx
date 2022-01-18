@@ -8,17 +8,9 @@ import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
 import { GlobalState } from "../../contexts/GlobalState";
 
-const areSameDate = (date1, date2) => {
-    return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
-    );
-};
-
 export default function WeightSection() {
     const { user } = useContext(Data);
-    const { invlerp } = useContext(Utils);
+    const { invlerp, areSameDate } = useContext(Utils);
     const { set } = useContext(GlobalState);
 
     const {

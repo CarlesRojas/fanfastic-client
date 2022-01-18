@@ -21,17 +21,9 @@ import FireIcon from "../../resources/icons/fire.svg";
 import LiverIcon from "../../resources/icons/liver.svg";
 import CellIcon from "../../resources/icons/cell.svg";
 
-const areSameDate = (date1, date2) => {
-    return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
-    );
-};
-
 export default function FastingSection() {
     const { user } = useContext(Data);
-    const { lerp, sleep } = useContext(Utils);
+    const { lerp, sleep, areSameDate } = useContext(Utils);
     const { startFasting } = useContext(API);
     const { set } = useContext(GlobalState);
 

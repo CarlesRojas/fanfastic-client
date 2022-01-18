@@ -18,9 +18,21 @@ export default function ConfirmEndFastingPopup() {
 
     const { fastObjectiveInMinutes, lastTimeUserStartedFasting, timezoneOffsetInMs } = user.current;
 
+    // #################################################
+    //   DATE LIMIT
+    // #################################################
+
+    const today = new Date();
+
+    // Lower limit
+    const fastStartTime = new Date(lastTimeUserStartedFasting);
+    fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);
+    var minHours = 0;
+
+    // Upper limit
     const currTime = new Date();
-    var hours = currTime.getHours();
-    var minutes = currTime.getMinutes();
+    var maxHours = currTime.getHours();
+    var maxMinutes = currTime.getMinutes();
 
     // #################################################
     //   STATE
@@ -29,7 +41,7 @@ export default function ConfirmEndFastingPopup() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [editDate, setEditDate] = useState(false);
-    const data = useRef({ date: { h: hours, m: minutes } });
+    const data = useRef({ date: { h: maxHours, m: maxMinutes } });
 
     // #################################################
     //   HANDLERS
@@ -47,7 +59,11 @@ export default function ConfirmEndFastingPopup() {
         const { date } = data.current;
         setLoading(true);
 
-        const result = await stopFasting();
+        const stopFastingDate = new Date();
+        stopFastingDate.setHours(date.h);
+        stopFastingDate.setMinutes(date.m);
+
+        const result = await stopFasting(stopFastingDate);
         setLoading(false);
         if (checkError(result)) return;
 
@@ -62,11 +78,7 @@ export default function ConfirmEndFastingPopup() {
     //   RENDER
     // #################################################
 
-    const now = new Date();
-    const fastStartTime = new Date(lastTimeUserStartedFasting);
-    fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);
-
-    const fastDurationInMilliseconds = Math.abs(now - fastStartTime);
+    const fastDurationInMilliseconds = Math.abs(today - fastStartTime);
     const fastDurationInMinutes = Math.ceil(fastDurationInMilliseconds / 1000 / 60);
     const fastDurationInSeconds = Math.ceil(fastDurationInMilliseconds / 1000);
 
@@ -90,10 +102,10 @@ export default function ConfirmEndFastingPopup() {
             </div>
 
             {editDate ? (
-                <DatePicker data={{ pickerType: "date" }} parentData={data} />
+                <DatePicker data={{ pickerType: "date" }} parentData={data} min={minHours} max={maxHours} />
             ) : (
                 <div className="editDateButton" onClick={() => setEditDate(true)}>
-                    {"Edit end date & time"}
+                    {"Edit end time"}
                 </div>
             )}
 

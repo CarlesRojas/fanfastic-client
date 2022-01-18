@@ -157,6 +157,14 @@ const UtilsProvider = (props) => {
         return getFormattedDate(date);
     };
 
+    const areSameDate = (date1, date2) => {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        );
+    };
+
     // ###################################################
     //      NUMBER FORMAT
     // ###################################################
@@ -277,6 +285,7 @@ const UtilsProvider = (props) => {
                 // DATE AND TIME
                 unixTimeToDate,
                 timeAgo,
+                areSameDate,
 
                 // FORMAT NUMBERS
                 format_number,

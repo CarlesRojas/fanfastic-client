@@ -5,12 +5,12 @@ import cn from "classnames";
 
 import { Utils } from "../../contexts/Utils";
 
-export default function DatePicker({ data, isLastInteractible, parentData }) {
+export default function DatePicker({ data, isLastInteractible, parentData, min, max }) {
     const { clamp } = useContext(Utils);
     const { pickerType } = data;
 
     const getHoursPickerLength = () => {
-        return 24;
+        return Math.max(1, Math.abs(max - min + 1));
     };
 
     const getMinutesPickerLength = () => {
@@ -18,7 +18,7 @@ export default function DatePicker({ data, isLastInteractible, parentData }) {
     };
 
     const getHoursPickerValue = (i) => {
-        return i;
+        return min + i;
     };
 
     const getMinutesPickerValue = (i) => {

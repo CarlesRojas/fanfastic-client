@@ -37,5 +37,6 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] When user is fasting and remaining time reaches 00:00:00 -> change to show a timer of the fasting duration.
 -   [x] End fasting screen where user can change the start and end time
 -   [ ] Popup when user starts fasting to change time.
--   [ ] End fasting popup -> Limit hours and send the edited time to the API
+-   [ ] Don't show the start fasting if user already fasted today.
+-   [x] End fasting popup -> Limit hours and send the edited time to the API
 -   [ ] When weight objective is achieved, show a button to set a new one
