@@ -1,3 +1,9 @@
 export default function Settings() {
-    return <div className="Settings"></div>;
+    return (
+        <div className="Settings">
+            <h1>{"Settings"}</h1>
+
+            <div className="fastingContainer"></div>
+        </div>
+    );
 }

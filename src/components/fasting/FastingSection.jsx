@@ -480,8 +480,6 @@ export default function FastingSection() {
 
     return (
         <div className={"FastSection"} ref={containerRef}>
-            <h1>{isFasting ? "Fasting" : "Breaking fast"}</h1>
-
             <div className={"progressBarContainer"}>
                 <ProgressCircle
                     progress={progress}

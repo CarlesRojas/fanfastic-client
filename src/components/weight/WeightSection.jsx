@@ -124,8 +124,6 @@ export default function WeightSection() {
     if (weightObjectiveInKg < 0)
         return (
             <div className={"WeightSection"}>
-                <h1>{"Your weight"}</h1>
-
                 <p className="currentWeight" style={{ color }}>{`${weightInKg}kg`}</p>
 
                 {canUpdateWeight && (
@@ -138,8 +136,6 @@ export default function WeightSection() {
 
     return (
         <div className={"WeightSection"}>
-            <h1>{"Weight Progress"}</h1>
-
             <div className="progress">
                 <p className="weight">{`${startingWeightObjectiveInKg}kg`}</p>
 
