@@ -1058,6 +1058,12 @@
             pointer-events: none;
             opacity: 0;
         }
+
+        &.weeklyPass {
+            margin: 1rem 0;
+            color: $weeklyPassColor;
+            box-shadow: unset;
+        }
     }
 
     .startEnd {

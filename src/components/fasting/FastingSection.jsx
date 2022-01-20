@@ -5,6 +5,7 @@ import cn from "classnames";
 import ProgressCircle from "./ProgressCircle";
 import ConfirmEndFastingPopup from "./ConfirmEndFastingPopup";
 import ConfirmStartFastingPopup from "./ConfirmStartFastingPopup";
+import UseWeeklyPassPopup from "./UseWeeklyPassPopup";
 import useResize from "../../hooks/useResize";
 import useGlobalState from "../../hooks/useGlobalState";
 
@@ -31,6 +32,8 @@ export default function FastingSection() {
         lastTimeUserEndedFasting,
         timezoneOffsetInMs,
         fastDesiredStartTimeInMinutes,
+        hasWeeklyPass,
+        lastTimeUserUsedWeeklyPass,
     } = user.current;
 
     const phases = useRef([
@@ -189,8 +192,48 @@ export default function FastingSection() {
             const minutesSinceMidnight = Math.ceil(millisecondsSinceMidnight / 1000 / 60);
             const secondsSinceMidnight = Math.ceil(millisecondsSinceMidnight / 1000);
 
+            const lastWeeklyPassDate = new Date(lastTimeUserUsedWeeklyPass);
+            lastWeeklyPassDate.setTime(lastWeeklyPassDate.getTime() - timezoneOffsetInMs);
+
+            const fastStartTime = new Date(lastTimeUserStartedFasting);
+            fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);
+
+            // If user used weekly pass today
+            if (!hasWeeklyPass && areSameDate(lastWeeklyPassDate, now)) {
+                const timeSinceWeeklyPassInMilliseconds = Math.abs(now - lastWeeklyPassDate);
+                const timeSinceWeeklyPassInSeconds = Math.ceil(timeSinceWeeklyPassInMilliseconds / 1000);
+
+                // If user canceled todays fast
+                if (areSameDate(fastStartTime, now)) {
+                    const newFastStartTime = new Date(
+                        midnight.getTime() + (fastDesiredStartTimeInMinutes * 60 * 1000 + 24 * 60 * 60 * 1000)
+                    );
+
+                    const notFastingDurationInMilliseconds = Math.abs(newFastStartTime - lastWeeklyPassDate);
+                    const notFastingDurationInSeconds = Math.ceil(notFastingDurationInMilliseconds / 1000);
+
+                    setProgress(Math.min(100, (timeSinceWeeklyPassInSeconds / notFastingDurationInSeconds) * 100));
+                    setRemainingUntilFastCounter(
+                        Math.max(0, notFastingDurationInSeconds - timeSinceWeeklyPassInSeconds)
+                    );
+                }
+
+                // If the user canceled yesterdays fast
+                else {
+                    const newFastStartTime = new Date(midnight.getTime() + fastDesiredStartTimeInMinutes * 60 * 1000);
+
+                    const notFastingDurationInMilliseconds = Math.abs(newFastStartTime - lastWeeklyPassDate);
+                    const notFastingDurationInSeconds = Math.ceil(notFastingDurationInMilliseconds / 1000);
+
+                    setProgress(Math.min(100, (timeSinceWeeklyPassInSeconds / notFastingDurationInSeconds) * 100));
+                    setRemainingUntilFastCounter(
+                        Math.max(0, notFastingDurationInSeconds - timeSinceWeeklyPassInSeconds)
+                    );
+                }
+            }
+
             // If it has been less than 23h since user stoped fasting show time since then
-            if (notFastingDurationInMinutes < 23 * 60) {
+            else if (notFastingDurationInMinutes < 23 * 60) {
                 const yesterdayNotFastingSeconds =
                     secondsSinceMidnight > notFastingDurationInSeconds
                         ? 0
@@ -224,6 +267,9 @@ export default function FastingSection() {
         timezoneOffsetInMs,
         fastObjectiveInMinutes,
         fastDesiredStartTimeInMinutes,
+        hasWeeklyPass,
+        lastTimeUserUsedWeeklyPass,
+        areSameDate,
     ]);
 
     useEffect(() => {
@@ -334,10 +380,12 @@ export default function FastingSection() {
             setStartEndDate({ start: startDate, end: endDate });
         } else {
             const now = new Date();
-            const fastEndTime = new Date(lastTimeUserEndedFasting);
-            fastEndTime.setTime(fastEndTime.getTime() - timezoneOffsetInMs);
-            const notFastingDurationInMilliseconds = Math.abs(now - fastEndTime);
-            const notFastingDurationInMinutes = Math.ceil(notFastingDurationInMilliseconds / 1000 / 60);
+
+            const today = new Date();
+            yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
 
             const midnight = new Date(now);
             midnight.setHours(0);
@@ -347,40 +395,105 @@ export default function FastingSection() {
             const millisecondsSinceMidnight = Math.abs(now - midnight);
             var minutesSinceMidnight = Math.ceil(millisecondsSinceMidnight / 1000 / 60);
 
-            const today = new Date();
-            yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
+            const lastWeeklyPassDate = new Date(lastTimeUserUsedWeeklyPass);
+            lastWeeklyPassDate.setTime(lastWeeklyPassDate.getTime() - timezoneOffsetInMs);
+
+            const fastStartTime = new Date(lastTimeUserStartedFasting);
+            fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);
+
+            var lastWeeklyPassDateHours = lastWeeklyPassDate.getHours();
+            lastWeeklyPassDateHours =
+                lastWeeklyPassDateHours < 10 ? `0${lastWeeklyPassDateHours}` : lastWeeklyPassDateHours;
+            var lastWeeklyPassDateMinutes = lastWeeklyPassDate.getMinutes();
+            lastWeeklyPassDateMinutes =
+                lastWeeklyPassDateMinutes < 10 ? `0${lastWeeklyPassDateMinutes}` : lastWeeklyPassDateMinutes;
 
             startDate = "";
-            if (notFastingDurationInMinutes < 23 * 60) {
-                var hours = fastEndTime.getHours();
+            if (areSameDate(lastWeeklyPassDate, today))
+                startDate = `Today, ${lastWeeklyPassDateHours}:${lastWeeklyPassDateMinutes}`;
+            else if (areSameDate(lastWeeklyPassDate, yesterday))
+                startDate = `Yesterday, ${lastWeeklyPassDateHours}:${lastWeeklyPassDateMinutes}`;
+
+            // If user used weekly pass today
+            if (!hasWeeklyPass && areSameDate(lastWeeklyPassDate, now)) {
+                // If user canceled todays fast
+                if (areSameDate(fastStartTime, now)) {
+                    const newFastStartTime = new Date(
+                        midnight.getTime() + (fastDesiredStartTimeInMinutes * 60 * 1000 + 24 * 60 * 60 * 1000)
+                    );
+
+                    var newFastStartTimeHours = newFastStartTime.getHours();
+                    newFastStartTimeHours =
+                        newFastStartTimeHours < 10 ? `0${newFastStartTimeHours}` : newFastStartTimeHours;
+                    var newFastStartTimeMinutes = newFastStartTime.getMinutes();
+                    newFastStartTimeMinutes =
+                        newFastStartTimeMinutes < 10 ? `0${newFastStartTimeMinutes}` : newFastStartTimeMinutes;
+
+                    endDate = "";
+                    if (areSameDate(newFastStartTime, today))
+                        endDate = `Today, ${newFastStartTimeHours}:${newFastStartTimeMinutes}`;
+                    else if (areSameDate(newFastStartTime, tomorrow))
+                        endDate = `Tomorrow, ${newFastStartTimeHours}:${newFastStartTimeMinutes}`;
+
+                    setStartEndDate({ start: startDate, end: endDate });
+                }
+
+                // If the user canceled yesterdays fast
+                else {
+                    const newFastStartTime = new Date(midnight.getTime() + fastDesiredStartTimeInMinutes * 60 * 1000);
+
+                    newFastStartTimeHours = newFastStartTime.getHours();
+                    newFastStartTimeHours =
+                        newFastStartTimeHours < 10 ? `0${newFastStartTimeHours}` : newFastStartTimeHours;
+                    newFastStartTimeMinutes = newFastStartTime.getMinutes();
+                    newFastStartTimeMinutes =
+                        newFastStartTimeMinutes < 10 ? `0${newFastStartTimeMinutes}` : newFastStartTimeMinutes;
+
+                    endDate = "";
+                    if (areSameDate(newFastStartTime, today))
+                        endDate = `Today, ${newFastStartTimeHours}:${newFastStartTimeMinutes}`;
+                    else if (areSameDate(newFastStartTime, tomorrow))
+                        endDate = `Tomorrow, ${newFastStartTimeHours}:${newFastStartTimeMinutes}`;
+
+                    setStartEndDate({ start: startDate, end: endDate });
+                }
+            } else {
+                const fastEndTime = new Date(lastTimeUserEndedFasting);
+                fastEndTime.setTime(fastEndTime.getTime() - timezoneOffsetInMs);
+                const notFastingDurationInMilliseconds = Math.abs(now - fastEndTime);
+                const notFastingDurationInMinutes = Math.ceil(notFastingDurationInMilliseconds / 1000 / 60);
+
+                startDate = "";
+                if (notFastingDurationInMinutes < 23 * 60) {
+                    var hours = fastEndTime.getHours();
+                    hours = hours < 10 ? `0${hours}` : hours;
+                    var minutes = fastEndTime.getMinutes();
+                    minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+                    if (areSameDate(fastEndTime, today)) startDate = `Today, ${hours}:${minutes}`;
+                    else if (areSameDate(fastEndTime, yesterday)) startDate = `Yesterday, ${hours}:${minutes}`;
+                } else {
+                    startDate = `Today, 00:00`;
+                }
+
+                const fastStartTime =
+                    minutesSinceMidnight > fastDesiredStartTimeInMinutes
+                        ? new Date(
+                              midnight.getTime() + (fastDesiredStartTimeInMinutes * 60 * 1000 + 24 * 60 * 60 * 1000)
+                          )
+                        : new Date(midnight.getTime() + fastDesiredStartTimeInMinutes * 60 * 1000);
+
+                hours = fastStartTime.getHours();
                 hours = hours < 10 ? `0${hours}` : hours;
-                var minutes = fastEndTime.getMinutes();
+                minutes = fastStartTime.getMinutes();
                 minutes = minutes < 10 ? `0${minutes}` : minutes;
 
-                if (areSameDate(fastEndTime, today)) startDate = `Today, ${hours}:${minutes}`;
-                else if (areSameDate(fastEndTime, yesterday)) startDate = `Yesterday, ${hours}:${minutes}`;
-            } else {
-                startDate = `Today, 00:00`;
+                endDate = "";
+                if (areSameDate(fastStartTime, today)) endDate = `Today, ${hours}:${minutes}`;
+                else if (areSameDate(fastStartTime, tomorrow)) endDate = `Tomorrow, ${hours}:${minutes}`;
+
+                setStartEndDate({ start: startDate, end: endDate });
             }
-
-            var fastStartTime =
-                minutesSinceMidnight > fastDesiredStartTimeInMinutes
-                    ? new Date(midnight.getTime() + (fastDesiredStartTimeInMinutes * 60 * 1000 + 24 * 60 * 60 * 1000))
-                    : new Date(midnight.getTime() + fastDesiredStartTimeInMinutes * 60 * 1000);
-
-            hours = fastStartTime.getHours();
-            hours = hours < 10 ? `0${hours}` : hours;
-            minutes = fastStartTime.getMinutes();
-            minutes = minutes < 10 ? `0${minutes}` : minutes;
-
-            endDate = "";
-            if (areSameDate(fastStartTime, today)) endDate = `Today, ${hours}:${minutes}`;
-            else if (areSameDate(fastStartTime, tomorrow)) endDate = `Tomorrow, ${hours}:${minutes}`;
-
-            setStartEndDate({ start: startDate, end: endDate });
         }
     }, [
         isFasting,
@@ -389,6 +502,8 @@ export default function FastingSection() {
         timezoneOffsetInMs,
         fastObjectiveInMinutes,
         fastDesiredStartTimeInMinutes,
+        hasWeeklyPass,
+        lastTimeUserUsedWeeklyPass,
         areSameDate,
     ]);
 
@@ -413,6 +528,16 @@ export default function FastingSection() {
             closeButtonVisible: false,
             addPadding: false,
             content: <ConfirmStartFastingPopup />,
+        });
+    };
+
+    const handleUseWeeklyPass = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            content: <UseWeeklyPassPopup />,
         });
     };
 
@@ -476,7 +601,10 @@ export default function FastingSection() {
     const now = new Date();
     const fastStartTime = new Date(lastTimeUserStartedFasting);
     fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);
+
     const canStartFasting = !isFasting && !areSameDate(now, fastStartTime);
+    const canUseWeeklyPass =
+        hasWeeklyPass && ((isFasting && durationMinutes < fastObjectiveInMinutes) || canStartFasting);
 
     return (
         <div className={"FastSection"} ref={containerRef}>
@@ -613,6 +741,12 @@ export default function FastingSection() {
                         <h2>{currentPhase.title}</h2>
                         <p>{currentPhase.subtitle}</p>
                     </div>
+                </div>
+            )}
+
+            {canUseWeeklyPass && (
+                <div className="button weeklyPass" onClick={handleUseWeeklyPass}>
+                    {isFasting ? "Cancel Fasting" : "Skip Fasting Today"}
                 </div>
             )}
         </div>

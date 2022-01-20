@@ -42,6 +42,15 @@ export default function ConfirmEndFastingPopup() {
     const [error, setError] = useState(false);
     const [editDate, setEditDate] = useState(false);
     const data = useRef({ date: { h: maxHours, m: maxMinutes } });
+    const [, setUpdate] = useState(true);
+
+    // #################################################
+    //   UPDATE PARENT
+    // #################################################
+
+    const handleUpdateParent = () => {
+        setUpdate((prev) => !prev);
+    };
 
     // #################################################
     //   HANDLERS
@@ -78,7 +87,11 @@ export default function ConfirmEndFastingPopup() {
     //   RENDER
     // #################################################
 
-    const fastDurationInMilliseconds = Math.abs(today - fastStartTime);
+    const editedStopFastingDate = new Date();
+    editedStopFastingDate.setHours(data.current.date.h);
+    editedStopFastingDate.setMinutes(data.current.date.m);
+
+    const fastDurationInMilliseconds = Math.abs(editedStopFastingDate - fastStartTime);
     const fastDurationInMinutes = Math.ceil(fastDurationInMilliseconds / 1000 / 60);
     const fastDurationInSeconds = Math.ceil(fastDurationInMilliseconds / 1000);
 
@@ -102,7 +115,13 @@ export default function ConfirmEndFastingPopup() {
             </div>
 
             {editDate ? (
-                <DatePicker data={{ pickerType: "date" }} parentData={data} min={minHours} max={maxHours} />
+                <DatePicker
+                    data={{ pickerType: "date" }}
+                    parentData={data}
+                    min={minHours}
+                    max={maxHours}
+                    updateParent={handleUpdateParent}
+                />
             ) : (
                 <div className="editDateButton" onClick={() => setEditDate(true)}>
                     {"Edit end time"}
