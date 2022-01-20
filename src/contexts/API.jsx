@@ -149,6 +149,7 @@ const APIProvider = (props) => {
         return true;
     };
 
+    // TODO
     const logout = () => {
         token.current = null;
         user.current = null;
@@ -178,6 +179,7 @@ const APIProvider = (props) => {
         return false;
     };
 
+    // TODO
     const changeEmail = async (password, newEmail) => {
         const postData = { password, email: newEmail.toLowerCase() };
 
@@ -206,6 +208,7 @@ const APIProvider = (props) => {
         }
     };
 
+    // TODO
     const changeUsername = async (password, newUsername) => {
         const postData = { password, username: newUsername };
 
@@ -234,6 +237,7 @@ const APIProvider = (props) => {
         }
     };
 
+    // TODO
     const changePassword = async (password, newPassword) => {
         const postData = { password, newPassword };
 
@@ -262,6 +266,7 @@ const APIProvider = (props) => {
         }
     };
 
+    // TODO
     const deleteAccount = async (password) => {
         const postData = { password };
 
@@ -292,6 +297,7 @@ const APIProvider = (props) => {
     //   FASTING API
     // #################################################
 
+    // TODO
     const setFastDesiredStartTime = async (fastDesiredStartTimeInMinutes) => {
         const postData = { fastDesiredStartTimeInMinutes };
 
@@ -320,6 +326,7 @@ const APIProvider = (props) => {
         }
     };
 
+    // TODO
     const setFastObjective = async (fastObjectiveInMinutes) => {
         const postData = { fastObjectiveInMinutes };
 
@@ -441,6 +448,7 @@ const APIProvider = (props) => {
         }
     };
 
+    // TODO
     const getMonthFastEntries = async () => {
         const date = new Date();
         const month = date.getMonth() + 1;
@@ -481,6 +489,7 @@ const APIProvider = (props) => {
     //   HEALTH API
     // #################################################
 
+    // TODO
     const setHeight = async (heightInCm) => {
         const postData = { heightInCm };
 
@@ -540,6 +549,7 @@ const APIProvider = (props) => {
         }
     };
 
+    // TODO
     const setWeightObjective = async (weightObjectiveInKg) => {
         const postData = { weightObjectiveInKg };
 
@@ -568,6 +578,7 @@ const APIProvider = (props) => {
         }
     };
 
+    // TODO
     const getWeightHistoric = async () => {
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/health/getWeightHistoric`, {
@@ -601,6 +612,7 @@ const APIProvider = (props) => {
     //   PUSH API
     // #################################################
 
+    // TODO
     const subscribeToPuhsNotifications = async () => {
         if (!("serviceWorker" in navigator)) return;
 
