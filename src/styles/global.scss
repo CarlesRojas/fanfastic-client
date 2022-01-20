@@ -79,23 +79,24 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-// /* width */
-// ::-webkit-scrollbar {
-//     width: 0;
-//     height: 0;
-// }
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
 
-// /* Track */
-// ::-webkit-scrollbar-track {
-//     background: #f1f1f1;
-// }
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
 
-// /* Handle */
-// ::-webkit-scrollbar-thumb {
-//     background: #888;
-// }
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 100vw;
+}
 
-// /* Handle on hover */
-// ::-webkit-scrollbar-thumb:hover {
-//     background: #555;
-// }
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
