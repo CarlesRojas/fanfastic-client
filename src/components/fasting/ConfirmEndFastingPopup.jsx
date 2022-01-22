@@ -22,8 +22,6 @@ export default function ConfirmEndFastingPopup() {
     //   DATE LIMIT
     // #################################################
 
-    const today = new Date();
-
     // Lower limit
     const fastStartTime = new Date(lastTimeUserStartedFasting);
     fastStartTime.setTime(fastStartTime.getTime() - timezoneOffsetInMs);

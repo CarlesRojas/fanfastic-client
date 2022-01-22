@@ -2,6 +2,9 @@ import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import useGlobalState from "../../hooks/useGlobalState";
 import Elem from "./Elem";
 import SettingsButton from "./SettingsButton";
+
+import SetFastStartTimePopup from "./SetFastStartTimePopup";
+import SetFastDurationPopup from "./SetFastDurationPopup";
 import UpdateHeightPopup from "./UpdateHeightPopup";
 import UpdateWeightPopup from "../weight/UpdateWeightPopup";
 import UpdateWeightObjectivePopup from "../weight/UpdateWeightObjectivePopup";
@@ -30,15 +33,39 @@ export default function SettingsSection() {
     //     unsubscribeFromPushNotifications,
     // } = useContext(API);
 
-    const { heightInCm, weightInKg, weightObjectiveInKg } = user.current;
+    const { heightInCm, weightInKg, weightObjectiveInKg, fastDesiredStartTimeInMinutes, fastObjectiveInMinutes } =
+        user.current;
+
+    const getTimeFormated = () => {
+        const hours = Math.floor(fastDesiredStartTimeInMinutes / 60);
+        const minutes = fastDesiredStartTimeInMinutes % 60;
+
+        return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
+    };
 
     // #################################################
     //   HANDLERS
     // #################################################
 
-    const handleSetStartTime = () => {};
+    const handleSetStartTime = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            content: <SetFastStartTimePopup />,
+        });
+    };
 
-    const handleSetFastDuration = () => {};
+    const handleSetFastDuration = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            content: <SetFastDurationPopup />,
+        });
+    };
 
     const handleSetHeight = () => {
         set("showPopup", {
@@ -98,8 +125,18 @@ export default function SettingsSection() {
     return (
         <div className={"SettingsSection"}>
             <h2 className={"sectionTitle"}>Fasting</h2>
-            <Elem title={"Fast start time"} value={"9:30"} actionText={"change"} handleClick={handleSetStartTime} />
-            <Elem title={"Fast duration"} value={"16h"} actionText={"change"} handleClick={handleSetFastDuration} />
+            <Elem
+                title={"Fast start time"}
+                value={getTimeFormated()}
+                actionText={"change"}
+                handleClick={handleSetStartTime}
+            />
+            <Elem
+                title={"Fast duration"}
+                value={`${fastObjectiveInMinutes / 60}h`}
+                actionText={"change"}
+                handleClick={handleSetFastDuration}
+            />
 
             <h2 className={"sectionTitle"}>Health</h2>
             <Elem title={"Height"} value={heightInCm} actionText={"change"} handleClick={handleSetHeight} />
@@ -113,7 +150,7 @@ export default function SettingsSection() {
 
             <h2 className={"sectionTitle"}>Notifications</h2>
             <SettingsButton text={"Get notifications"} blue={true} handleClick={handleSubToNotifications} />
-            <SettingsButton text={"Stop notifications"} blue={true} handleClick={handleUnsubToNotifications} />
+            <SettingsButton text={"Stop notifications"} red={true} handleClick={handleUnsubToNotifications} />
 
             <h2 className={"sectionTitle"}>Account</h2>
             <SettingsButton text={"Change Email"} handleClick={handleChangeEmail} />
