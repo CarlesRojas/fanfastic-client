@@ -917,6 +917,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        &.weight {
+            position: relative;
+        }
     }
 
     .fastingContainer {

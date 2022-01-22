@@ -10,7 +10,7 @@ import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
 import { GlobalState } from "../../contexts/GlobalState";
 
-export default function WeightSection() {
+export default function WeightSection({ showTitle }) {
     const { user } = useContext(Data);
     const { invlerp, areSameDate } = useContext(Utils);
     const { set } = useContext(GlobalState);
@@ -138,6 +138,8 @@ export default function WeightSection() {
 
     return (
         <div className={"WeightSection"}>
+            {showTitle && <h1 className="weight">{weightObjectiveInKg < 0 ? "Your weight" : "Weight Progress"}</h1>}
+
             <div className="progress">
                 <p className="weight">{`${startingWeightObjectiveInKg}kg`}</p>
 
