@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext, useCallback } from "react";
+import { useContext } from "react";
 import useGlobalState from "../../hooks/useGlobalState";
 import Elem from "./Elem";
 import SettingsButton from "./SettingsButton";
