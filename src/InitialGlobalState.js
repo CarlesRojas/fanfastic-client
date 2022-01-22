@@ -6,6 +6,7 @@ const initialState = {
         closeButtonVisible: true,
         content: null,
         addPadding: true,
+        fullscreen: false,
     },
     loadingVisible: true,
 };

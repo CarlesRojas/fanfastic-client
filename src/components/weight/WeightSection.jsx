@@ -94,6 +94,7 @@ export default function WeightSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <UpdateWeightPopup />,
         });
     };
@@ -104,6 +105,7 @@ export default function WeightSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <UpdateWeightObjectivePopup />,
         });
     };

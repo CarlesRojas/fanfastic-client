@@ -14,6 +14,7 @@ import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
 import { GlobalState } from "../../contexts/GlobalState";
 import UnsubNotificationsPopup from "./UnsubNotificationsPopup";
+import ChangeEmailPopup from "./ChangeEmailPopup";
 // import { API } from "../../contexts/API";
 
 export default function SettingsSection() {
@@ -55,6 +56,7 @@ export default function SettingsSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <SetFastStartTimePopup />,
         });
     };
@@ -65,6 +67,7 @@ export default function SettingsSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <SetFastDurationPopup />,
         });
     };
@@ -75,6 +78,7 @@ export default function SettingsSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <UpdateHeightPopup />,
         });
     };
@@ -85,6 +89,7 @@ export default function SettingsSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <UpdateWeightPopup />,
         });
     };
@@ -95,6 +100,7 @@ export default function SettingsSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <UpdateWeightObjectivePopup />,
         });
     };
@@ -105,6 +111,7 @@ export default function SettingsSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <SubNotificationsPopup />,
         });
     };
@@ -115,11 +122,21 @@ export default function SettingsSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <UnsubNotificationsPopup />,
         });
     };
 
-    const handleChangeEmail = () => {};
+    const handleChangeEmail = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            fullscreen: true,
+            content: <ChangeEmailPopup />,
+        });
+    };
 
     const handleChangeUsername = () => {};
 

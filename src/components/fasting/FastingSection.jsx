@@ -517,6 +517,7 @@ export default function FastingSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <ConfirmEndFastingPopup />,
         });
     };
@@ -527,6 +528,7 @@ export default function FastingSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <ConfirmStartFastingPopup />,
         });
     };
@@ -537,6 +539,7 @@ export default function FastingSection() {
             canCloseWithBackground: true,
             closeButtonVisible: false,
             addPadding: false,
+            fullscreen: false,
             content: <UseWeeklyPassPopup />,
         });
     };
@@ -551,6 +554,7 @@ export default function FastingSection() {
             canCloseWithBackground: true,
             closeButtonVisible: true,
             addPadding: true,
+            fullscreen: false,
             content: (
                 <div className="scroll">
                     <div className="header">

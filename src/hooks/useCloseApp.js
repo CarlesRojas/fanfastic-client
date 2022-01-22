@@ -19,6 +19,7 @@ export default function useCloseApp() {
                 canCloseWithBackground: false,
                 closeButtonVisible: false,
                 addPadding: true,
+                fullscreen: false,
                 content: (
                     <div className="closeApp">
                         <SVG className="logoColor" src={Logo}></SVG>
@@ -38,6 +39,7 @@ export default function useCloseApp() {
                 canCloseWithBackground: false,
                 closeButtonVisible: false,
                 addPadding: true,
+                fullscreen: false,
                 content: (
                     <div className="closeApp">
                         <SVG className="logoColor" src={Logo}></SVG>

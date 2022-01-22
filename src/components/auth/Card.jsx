@@ -16,7 +16,7 @@ import LoadingIcon from "../../resources/icons/loading.svg";
 import { Events } from "../../contexts/Events";
 import ObjectiveWeightButton from "./ObjectiveWeightButton";
 
-export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
+export default function Card({ cardPhases, canGoBack, parentData, parentId, hideClip }) {
     const { emit, sub, unsub } = useContext(Events);
 
     // #################################################
@@ -147,12 +147,12 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId }) {
                 )}
             </div>
 
-            <div className="clip"></div>
+            {!hideClip && <div className="clip"></div>}
 
             {springs.map((styles, phase) => (
                 <animated.div
                     className={"interactions"}
-                    style={{ ...styles, pointerEvents: phase === currentPhase ? "inherit" : "none" }}
+                    style={{ ...styles, pointerEvents: hideClip ? "all" : phase === currentPhase ? "inherit" : "none" }}
                     key={phase}
                 >
                     {cardPhases[phase].interactibles.map((interactible, i) => {
