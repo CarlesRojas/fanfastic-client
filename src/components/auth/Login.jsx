@@ -72,8 +72,10 @@ export default function Login({ parentId, setLoggedIn }) {
     const checkError = useCallback(
         (data) => {
             if ("error" in data) {
-                setPage(0);
-                setTimeout(() => emit("onLoginError", data.error), animationSpeed);
+                setTimeout(async () => {
+                    setPage(0);
+                    setTimeout(() => emit("onLoginError", data.error), animationSpeed);
+                }, animationSpeed);
                 return true;
             }
             return false;
@@ -87,12 +89,6 @@ export default function Login({ parentId, setLoggedIn }) {
 
         const result = await login(email, password);
         if (checkError(result)) return;
-
-        const sleep = (ms) => {
-            return new Promise((resolve) => setTimeout(resolve, ms));
-        };
-
-        await sleep(3000);
 
         emit("onLoadSuccess");
 

@@ -138,8 +138,10 @@ export default function Register({ parentId, setLoggedIn }) {
     const checkError = useCallback(
         (data) => {
             if ("error" in data) {
-                setPage(0);
-                setTimeout(() => emit("onRegisterError", data.error), animationSpeed);
+                setTimeout(async () => {
+                    setPage(0);
+                    setTimeout(() => emit("onRegisterError", data.error), animationSpeed);
+                }, animationSpeed);
                 return true;
             }
             return false;

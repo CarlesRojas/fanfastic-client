@@ -9,34 +9,21 @@ import UpdateHeightPopup from "./UpdateHeightPopup";
 import UpdateWeightPopup from "../weight/UpdateWeightPopup";
 import UpdateWeightObjectivePopup from "../weight/UpdateWeightObjectivePopup";
 import SubNotificationsPopup from "./SubNotificationsPopup";
-
-import { Data } from "../../contexts/Data";
-import { Utils } from "../../contexts/Utils";
-import { GlobalState } from "../../contexts/GlobalState";
 import UnsubNotificationsPopup from "./UnsubNotificationsPopup";
 import ChangeEmailPopup from "./ChangeEmailPopup";
 import ChangeUsernamePopup from "./ChangeUsernamePopup";
 import ChangePasswordPopup from "./ChangePasswordPopup";
-// import { API } from "../../contexts/API";
+import DeleteAccountPopup from "./DeleteAccountPopup";
+import LogoutPopup from "./LogoutPopup";
+
+import { Data } from "../../contexts/Data";
+import { GlobalState } from "../../contexts/GlobalState";
 
 export default function SettingsSection() {
     const { user } = useContext(Data);
-    const { invlerp, areSameDate } = useContext(Utils);
     const { set } = useContext(GlobalState);
-    // const {
-    //     logout,
-    //     changeEmail,
-    //     changeUsername,
-    //     changePassword,
-    //     deleteAccount,
-    //     setFastDesiredStartTime,
-    //     setFastObjective,
-    //     setHeight,
-    //     setWeight,
-    //     setWeightObjective,
-    //     subscribeToPushNotifications,
-    //     unsubscribeFromPushNotifications,
-    // } = useContext(API);
+
+    if (!user.current) return null;
 
     const { heightInCm, weightInKg, weightObjectiveInKg, fastDesiredStartTimeInMinutes, fastObjectiveInMinutes } =
         user.current;
@@ -162,9 +149,27 @@ export default function SettingsSection() {
         });
     };
 
-    const handleLogout = () => {};
+    const handleLogout = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            fullscreen: false,
+            content: <LogoutPopup />,
+        });
+    };
 
-    const handleDeleteAccount = () => {};
+    const handleDeleteAccount = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            fullscreen: true,
+            content: <DeleteAccountPopup />,
+        });
+    };
 
     // #################################################
     //   USER UPDATED

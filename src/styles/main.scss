@@ -31,7 +31,10 @@
     justify-content: center;
     height: 100%;
     width: 100%;
-    pointer-events: none;
+
+    &.removeEvents {
+        pointer-events: none;
+    }
 
     .backButton {
         position: absolute;

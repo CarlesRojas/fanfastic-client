@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import useCloseApp from "./hooks/useCloseApp";
 import Auth from "./components/auth/Auth";
 import DesktopLayout from "./components/layout/DesktopLayout";
@@ -6,11 +6,13 @@ import MobileLayout from "./components/layout/MobileLayout";
 
 import { API } from "./contexts/API";
 import { MediaQuery } from "./contexts/MediaQuery";
+import { Events } from "./contexts/Events";
 import { GlobalState } from "./contexts/GlobalState";
 
 export default function App() {
     const { isLoggedIn } = useContext(API);
     const { isMobile, isTablet, isLandscape } = useContext(MediaQuery);
+    const { sub, unsub } = useContext(Events);
     const { set } = useContext(GlobalState);
 
     const [loggedIn, setLoggedIn] = useState(null);
@@ -30,6 +32,23 @@ export default function App() {
 
         checkLogin();
     }, [isLoggedIn, loggedIn, set]);
+
+    // #################################################
+    //   EVENTS
+    // #################################################
+
+    const handleLogout = useCallback(() => {
+        setUserInfoReady(false);
+        setLoggedIn(null);
+    }, []);
+
+    useEffect(() => {
+        sub("onLogout", handleLogout);
+
+        return () => {
+            unsub("onLoginError", handleLogout);
+        };
+    }, [handleLogout, sub, unsub]);
 
     if (loggedIn === null) return null;
     else if (!loggedIn) return <Auth setLoggedIn={setLoggedIn} />;

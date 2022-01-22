@@ -82,18 +82,15 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId, hide
 
     const handleLoginError = useCallback(
         (error) => {
-            if (error.includes("email")) {
-                prevPhase();
-                setTimeout(() => {
-                    setError(error);
-                    trigger();
-                }, 300);
-            } else {
+            if (error.includes("email")) setCurrentPhase(0);
+            else setCurrentPhase(1);
+
+            setTimeout(() => {
                 setError(error);
                 trigger();
-            }
+            }, 300);
         },
-        [prevPhase, setError, trigger]
+        [setError, trigger]
     );
 
     const handleLoadSuccess = useCallback(() => {
@@ -123,7 +120,7 @@ export default function Card({ cardPhases, canGoBack, parentData, parentId, hide
     const { title, subtitle, loadUntilSuccess, loadingMessage } = cardPhases[currentPhase];
 
     return (
-        <div className={cn("Card", { shake: animating })}>
+        <div className={cn("Card", { shake: animating }, { removeEvents: hideClip })}>
             {canGoBack && (
                 <div className="backButton" onClick={prevPhase}>
                     Back

@@ -3,6 +3,7 @@ import { createContext, useContext } from "react";
 // Contexts
 import { Utils } from "./Utils";
 import { Data } from "./Data";
+import { Events } from "./Events";
 import { GlobalState } from "./GlobalState";
 
 const API_VERSION = "api_v1";
@@ -13,6 +14,7 @@ export const API = createContext();
 const APIProvider = (props) => {
     const { setCookie, getCookie, clearCookies, urlBase64ToUint8Array } = useContext(Utils);
     const { APP_NAME, token, user, fastHistoric, weightHistoric } = useContext(Data);
+    const { emit } = useContext(Events);
     const { set, get } = useContext(GlobalState);
 
     // #################################################
@@ -149,13 +151,13 @@ const APIProvider = (props) => {
         return true;
     };
 
-    // TODO
     const logout = () => {
         token.current = null;
         user.current = null;
         set("userUpdated", get("userUpdated") + 1);
 
         clearCookies(APP_NAME);
+        emit("onLogout");
     };
 
     const tryToLogInWithToken = async () => {
@@ -179,7 +181,6 @@ const APIProvider = (props) => {
         return false;
     };
 
-    // TODO
     const changeEmail = async (password, newEmail) => {
         const postData = { password, email: newEmail.toLowerCase() };
 
@@ -208,7 +209,6 @@ const APIProvider = (props) => {
         }
     };
 
-    // TODO
     const changeUsername = async (password, newUsername) => {
         const postData = { password, username: newUsername };
 
@@ -237,7 +237,6 @@ const APIProvider = (props) => {
         }
     };
 
-    // TODO
     const changePassword = async (password, newPassword) => {
         const postData = { password, newPassword };
 
@@ -266,7 +265,6 @@ const APIProvider = (props) => {
         }
     };
 
-    // TODO
     const deleteAccount = async (password) => {
         const postData = { password };
 
@@ -297,7 +295,6 @@ const APIProvider = (props) => {
     //   FASTING API
     // #################################################
 
-    // TODO
     const setFastDesiredStartTime = async (fastDesiredStartTimeInMinutes) => {
         const postData = { fastDesiredStartTimeInMinutes };
 
@@ -326,7 +323,6 @@ const APIProvider = (props) => {
         }
     };
 
-    // TODO
     const setFastObjective = async (fastObjectiveInMinutes) => {
         const postData = { fastObjectiveInMinutes };
 
@@ -489,7 +485,6 @@ const APIProvider = (props) => {
     //   HEALTH API
     // #################################################
 
-    // TODO
     const setHeight = async (heightInCm) => {
         const postData = { heightInCm };
 
@@ -549,7 +544,6 @@ const APIProvider = (props) => {
         }
     };
 
-    // TODO
     const setWeightObjective = async (weightObjectiveInKg) => {
         const postData = { weightObjectiveInKg };
 
