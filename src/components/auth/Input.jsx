@@ -50,6 +50,7 @@ export default function Input({
         if (inputType === "email") validate = isEmailValid;
         else if (inputType === "username") validate = isUsernameValid;
         else if (inputType === "password") validate = isPasswordValid;
+        else if (inputType === "newPassword") validate = isPasswordValid;
 
         if (inputType === "email") var validationResult = await validate(value, checkExists);
         else validationResult = await validate(value, false);

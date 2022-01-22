@@ -9,29 +9,29 @@ import Card from "../auth/Card";
 const PARENT_ID = "changeEmailPopup";
 const PHASES = [
     {
-        title: "Change your email",
-        subtitle: "Enter a new email:",
+        title: "Change your username",
+        subtitle: "Enter a new username:",
         interactiblesHeight: 4,
-        interactibles: [{ type: "input", inputType: "email", checkExists: true }],
+        interactibles: [{ type: "input", inputType: "username" }],
     },
     {
-        title: "Change your email",
+        title: "Change your username",
         subtitle: "Confirm by entering your password:",
         interactiblesHeight: 4,
         interactibles: [{ type: "input", inputType: "password", action: "complete" }],
     },
 ];
 
-export default function ChangeEmailPopup() {
+export default function ChangeUsernamePopup() {
     const { sub, unsub, emit } = useContext(Events);
-    const { changeEmail } = useContext(API);
+    const { changeUsername } = useContext(API);
     const { set, get } = useContext(GlobalState);
 
     // #################################################
     //   STATE
     // #################################################
 
-    const data = useRef({ email: "", password: "" });
+    const data = useRef({ username: "", password: "" });
 
     // #################################################
     //   HANDLERS
@@ -52,16 +52,16 @@ export default function ChangeEmailPopup() {
         async ({ callerParentId, action }) => {
             if (callerParentId !== PARENT_ID) return;
 
-            const { password, email } = data.current;
+            const { password, username } = data.current;
 
             if (action === "complete") {
-                const result = await changeEmail(password, email);
+                const result = await changeUsername(password, username);
                 if (checkError(result)) return;
 
                 set("showPopup", { ...get("showPopup"), visible: false });
             }
         },
-        [changeEmail, checkError, set, get]
+        [changeUsername, checkError, set, get]
     );
 
     // #################################################

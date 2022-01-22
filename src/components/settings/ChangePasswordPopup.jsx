@@ -9,29 +9,29 @@ import Card from "../auth/Card";
 const PARENT_ID = "changeEmailPopup";
 const PHASES = [
     {
-        title: "Change your email",
-        subtitle: "Enter a new email:",
+        title: "Change your password",
+        subtitle: "Enter a new password:",
         interactiblesHeight: 4,
-        interactibles: [{ type: "input", inputType: "email", checkExists: true }],
+        interactibles: [{ type: "input", inputType: "newPassword" }],
     },
     {
-        title: "Change your email",
-        subtitle: "Confirm by entering your password:",
+        title: "Change your password",
+        subtitle: "Confirm by entering your old password:",
         interactiblesHeight: 4,
         interactibles: [{ type: "input", inputType: "password", action: "complete" }],
     },
 ];
 
-export default function ChangeEmailPopup() {
+export default function ChangePasswordPopup() {
     const { sub, unsub, emit } = useContext(Events);
-    const { changeEmail } = useContext(API);
+    const { changePassword } = useContext(API);
     const { set, get } = useContext(GlobalState);
 
     // #################################################
     //   STATE
     // #################################################
 
-    const data = useRef({ email: "", password: "" });
+    const data = useRef({ password: "", newPassword: "" });
 
     // #################################################
     //   HANDLERS
@@ -52,16 +52,16 @@ export default function ChangeEmailPopup() {
         async ({ callerParentId, action }) => {
             if (callerParentId !== PARENT_ID) return;
 
-            const { password, email } = data.current;
+            const { password, newPassword } = data.current;
 
             if (action === "complete") {
-                const result = await changeEmail(password, email);
+                const result = await changePassword(password, newPassword);
                 if (checkError(result)) return;
 
                 set("showPopup", { ...get("showPopup"), visible: false });
             }
         },
-        [changeEmail, checkError, set, get]
+        [changePassword, checkError, set, get]
     );
 
     // #################################################

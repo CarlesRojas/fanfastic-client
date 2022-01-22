@@ -15,6 +15,8 @@ import { Utils } from "../../contexts/Utils";
 import { GlobalState } from "../../contexts/GlobalState";
 import UnsubNotificationsPopup from "./UnsubNotificationsPopup";
 import ChangeEmailPopup from "./ChangeEmailPopup";
+import ChangeUsernamePopup from "./ChangeUsernamePopup";
+import ChangePasswordPopup from "./ChangePasswordPopup";
 // import { API } from "../../contexts/API";
 
 export default function SettingsSection() {
@@ -138,9 +140,27 @@ export default function SettingsSection() {
         });
     };
 
-    const handleChangeUsername = () => {};
+    const handleChangeUsername = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            fullscreen: true,
+            content: <ChangeUsernamePopup />,
+        });
+    };
 
-    const handleChangePassword = () => {};
+    const handleChangePassword = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            fullscreen: true,
+            content: <ChangePasswordPopup />,
+        });
+    };
 
     const handleLogout = () => {};
 
