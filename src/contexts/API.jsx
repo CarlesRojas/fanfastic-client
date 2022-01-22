@@ -613,7 +613,7 @@ const APIProvider = (props) => {
     // #################################################
 
     // TODO
-    const subscribeToPuhsNotifications = async () => {
+    const subscribeToPushNotifications = async () => {
         if (!("serviceWorker" in navigator)) return;
 
         const registration = await navigator.serviceWorker.ready;
@@ -640,7 +640,27 @@ const APIProvider = (props) => {
 
             return response;
         } catch (error) {
-            return { error: `Set fast objective error: ${error}` };
+            return { error: `Sub to notifications error: ${error}` };
+        }
+    };
+
+    const unsubscribeFromPushNotifications = async () => {
+        try {
+            const rawResponse = await fetch(`${API_URL}${API_VERSION}/push/unsubscribe`, {
+                method: "get",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+            });
+
+            const response = await rawResponse.json();
+
+            return response;
+        } catch (error) {
+            return { error: `Unsub to notifications error: ${error}` };
         }
     };
 
@@ -854,7 +874,8 @@ const APIProvider = (props) => {
                 getWeightHistoric,
 
                 // PUSH API
-                subscribeToPuhsNotifications,
+                subscribeToPushNotifications,
+                unsubscribeFromPushNotifications,
 
                 // VALIDATE API
                 isEmailValid,

@@ -1321,8 +1321,10 @@
     background-color: $settingsCardBackground;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
     padding: 1rem;
+    pointer-events: all;
 
     .info {
+        pointer-events: none;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -1341,6 +1343,7 @@
     }
 
     .actionText {
+        pointer-events: none;
         display: flex;
         flex-direction: column;
         justify-content: center;

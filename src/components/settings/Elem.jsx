@@ -1,6 +1,6 @@
-export default function Elem({ title, value, actionText }) {
+export default function Elem({ title, value, actionText, handleClick }) {
     return (
-        <div className={"Elem"}>
+        <div className={"Elem"} onClick={handleClick}>
             <div className="info">
                 <p className="title">{title}</p>
                 <p className="value">{value}</p>
