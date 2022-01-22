@@ -8,10 +8,12 @@ import SetFastDurationPopup from "./SetFastDurationPopup";
 import UpdateHeightPopup from "./UpdateHeightPopup";
 import UpdateWeightPopup from "../weight/UpdateWeightPopup";
 import UpdateWeightObjectivePopup from "../weight/UpdateWeightObjectivePopup";
+import SubNotificationsPopup from "./SubNotificationsPopup";
 
 import { Data } from "../../contexts/Data";
 import { Utils } from "../../contexts/Utils";
 import { GlobalState } from "../../contexts/GlobalState";
+import UnsubNotificationsPopup from "./UnsubNotificationsPopup";
 // import { API } from "../../contexts/API";
 
 export default function SettingsSection() {
@@ -97,9 +99,25 @@ export default function SettingsSection() {
         });
     };
 
-    const handleSubToNotifications = () => {};
+    const handleSubToNotifications = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            content: <SubNotificationsPopup />,
+        });
+    };
 
-    const handleUnsubToNotifications = () => {};
+    const handleUnsubToNotifications = () => {
+        set("showPopup", {
+            visible: true,
+            canCloseWithBackground: true,
+            closeButtonVisible: false,
+            addPadding: false,
+            content: <UnsubNotificationsPopup />,
+        });
+    };
 
     const handleChangeEmail = () => {};
 
