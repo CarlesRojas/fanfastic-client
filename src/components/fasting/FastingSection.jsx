@@ -176,7 +176,7 @@ export default function FastingSection() {
             setRemainingCounter(Math.max(0, fastObjectiveInMinutes * 60 - fastDurationInSeconds));
             setProgress(Math.min(100, (fastDurationInMinutes / fastObjectiveInMinutes) * 100));
         } else {
-            const now = new Date(); // Make const
+            const now = new Date();
             const fastEndTime = new Date(lastTimeUserEndedFasting);
             fastEndTime.setTime(fastEndTime.getTime() - timezoneOffsetInMs);
             const notFastingDurationInMilliseconds = Math.abs(now - fastEndTime);
@@ -392,8 +392,6 @@ export default function FastingSection() {
             midnight.setMinutes(0);
             midnight.setSeconds(0);
             midnight.setMilliseconds(0);
-            const millisecondsSinceMidnight = Math.abs(now - midnight);
-            var minutesSinceMidnight = Math.ceil(millisecondsSinceMidnight / 1000 / 60);
 
             const lastWeeklyPassDate = new Date(lastTimeUserUsedWeeklyPass);
             lastWeeklyPassDate.setTime(lastWeeklyPassDate.getTime() - timezoneOffsetInMs);
@@ -476,12 +474,7 @@ export default function FastingSection() {
                     startDate = `Today, 00:00`;
                 }
 
-                const fastStartTime =
-                    minutesSinceMidnight > fastDesiredStartTimeInMinutes
-                        ? new Date(
-                              midnight.getTime() + (fastDesiredStartTimeInMinutes * 60 * 1000 + 24 * 60 * 60 * 1000)
-                          )
-                        : new Date(midnight.getTime() + fastDesiredStartTimeInMinutes * 60 * 1000);
+                const fastStartTime = new Date(midnight.getTime() + fastDesiredStartTimeInMinutes * 60 * 1000);
 
                 hours = fastStartTime.getHours();
                 hours = hours < 10 ? `0${hours}` : hours;
