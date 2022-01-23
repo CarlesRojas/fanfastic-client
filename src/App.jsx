@@ -3,6 +3,7 @@ import useCloseApp from "./hooks/useCloseApp";
 import Auth from "./components/auth/Auth";
 import DesktopLayout from "./components/layout/DesktopLayout";
 import MobileLayout from "./components/layout/MobileLayout";
+import Landscape from "./components/layout/Landscape";
 
 import { API } from "./contexts/API";
 import { MediaQuery } from "./contexts/MediaQuery";
@@ -51,6 +52,7 @@ export default function App() {
     }, [handleLogout, sub, unsub]);
 
     if (loggedIn === null) return null;
+    else if (isMobile && isLandscape) return <Landscape />;
     else if (!loggedIn) return <Auth setLoggedIn={setLoggedIn} />;
     else if (loggedIn && userInfoReady)
         return isMobile || (isTablet && !isLandscape) ? <MobileLayout /> : <DesktopLayout />;

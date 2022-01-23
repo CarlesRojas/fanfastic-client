@@ -43,7 +43,7 @@
         justify-content: center;
         height: 4rem;
         top: $authCardDistanceToTop - $authButtonHeight;
-        z-index: 140;
+        z-index: 2;
         color: $authIconColor;
         padding: 0 3rem;
         font-weight: 700;
@@ -59,7 +59,7 @@
         height: $authHeaderHeight;
         width: 90%;
         top: $authCardDistanceToTop;
-        z-index: 150;
+        z-index: 3;
         background-color: $authCardBackground;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
@@ -129,7 +129,7 @@
         width: 100%;
         top: 0;
         left: 0;
-        z-index: 130;
+        z-index: 1;
         background-color: $background;
     }
 
@@ -631,7 +631,7 @@
         max-height: 90%;
         width: calc(100% - 2rem);
         max-width: 50rem;
-        z-index: 1000;
+        z-index: 10;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         background-color: $background;
         border-radius: 1rem;
@@ -740,7 +740,7 @@
                     pointer-events: all;
                     width: 12rem;
                     min-width: fit-content;
-                    z-index: 1000;
+                    z-index: 10;
                     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
                     background-color: $closeButtonColor;
                     border-radius: 100vw;
@@ -759,7 +759,7 @@
         .button {
             pointer-events: all;
             width: fit-content;
-            z-index: 1000;
+            z-index: 10;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             background-color: $closeButtonColor;
             border-radius: 100vw;
@@ -932,6 +932,59 @@
         overflow-y: auto;
         padding: 1rem 0;
         margin-top: $titleHeight;
+    }
+}
+
+//      LANDSCAPE
+// #######################################
+
+.Landscape {
+    pointer-events: none;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 20;
+
+    .contentContainer {
+        pointer-events: all;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        max-height: calc(100% - 2rem);
+        width: fit-content;
+        max-width: calc(100% - 2rem);
+        z-index: 10;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        background-color: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+
+        .logoColor {
+            height: 3rem;
+            max-height: 3rem;
+            min-height: 3rem;
+            width: 3rem;
+            max-width: 3rem;
+            min-width: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            width: 100%;
+            opacity: 0.9;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-align: center;
+        }
     }
 }
 
@@ -1335,8 +1388,8 @@
 // #######################################
 
 .Elem {
-    width: calc(100% - 1rem);
-    margin: 0 1rem 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
     border-radius: 1rem;
@@ -1381,8 +1434,8 @@
 // #######################################
 
 .SettingsButton {
-    width: calc(100% - 1rem);
-    margin: 0 1rem 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
