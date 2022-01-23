@@ -15,7 +15,7 @@ export default function FastingWeight() {
             <div className="fastingContainer">
                 <FastingSection />
 
-                <WeightSection showTitle={true} />
+                <WeightSection />
             </div>
         </div>
     );
