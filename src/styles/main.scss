@@ -747,6 +747,7 @@
                     padding: 0.8rem 1.6rem;
                     font-weight: 700;
                     text-align: center;
+                    color: $authIconColor;
 
                     &.low {
                         background-color: rgba(0, 0, 0, 0.1);
@@ -766,6 +767,7 @@
             padding: 0.8rem 1.6rem;
             font-weight: 700;
             text-align: center;
+            color: $authIconColor;
         }
     }
 }
@@ -1009,6 +1011,7 @@
         width: 100%;
         overflow: hidden;
         padding: 3rem 0 0;
+        pointer-events: none;
 
         .insideProgress {
             position: absolute;
@@ -1062,6 +1065,7 @@
             }
 
             .phaseIconContainer {
+                pointer-events: all;
                 position: absolute;
                 height: 2.4rem;
                 max-height: 2.4rem;

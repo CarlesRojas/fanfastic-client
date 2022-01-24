@@ -3,4 +3,261 @@
 @import "./animations";
 
 .isNotTouchscreen {
+    // #######################################
+    //      AUTH
+    // #######################################
+
+    //      CARDS
+    // #######################################
+
+    .Card {
+        .backButton {
+            transition: color 0.1s ease-in-out;
+            cursor: pointer;
+
+            &:hover {
+                color: rgba(0, 0, 0, 0.8);
+            }
+        }
+    }
+
+    //      BUTTON
+    // #######################################
+
+    .Button {
+        transition: color 0.1s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            color: rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    //      OBJECTIVE WEIGHT BUTTON
+    // #######################################
+
+    .ObjectiveWeightButton {
+        .skip,
+        .select {
+            transition: color 0.1s ease-in-out;
+            cursor: pointer;
+
+            &:hover {
+                color: rgba(0, 0, 0, 0.8);
+            }
+        }
+    }
+
+    //      INPUT
+    // #######################################
+
+    .Input {
+        .enter {
+            cursor: pointer;
+
+            .icon {
+                transition: color 0.1s ease-in-out;
+            }
+
+            &:hover {
+                .icon {
+                    color: rgba(0, 0, 0, 0.8);
+                }
+            }
+        }
+    }
+
+    //      FAST PICKER
+    // #######################################
+
+    .FastPicker {
+        .pickerContainer {
+            cursor: grab;
+
+            &:active {
+                cursor: grabbing;
+            }
+        }
+    }
+
+    //      HEALTH PICKER
+    // #######################################
+
+    .HealthPicker {
+        .pickerContainer {
+            cursor: grab;
+
+            &:active {
+                cursor: grabbing;
+            }
+        }
+    }
+
+    // #######################################
+    //      LAYOUT
+    // #######################################
+
+    //      POPUP
+    // #######################################
+
+    .Popup {
+        .blur {
+            &.canCloseWithBackground {
+                cursor: pointer;
+            }
+        }
+
+        .contentContainer {
+            .closeApp {
+                .closeButtons {
+                    .closeButton {
+                        transition: color 0.1s ease-in-out;
+                        cursor: pointer;
+
+                        &:hover {
+                            color: rgba(0, 0, 0, 0.8);
+                        }
+                    }
+                }
+            }
+
+            .button {
+                transition: color 0.1s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    color: rgba(0, 0, 0, 0.8);
+                }
+            }
+        }
+    }
+
+    //      POPUP CONTENT
+    // #######################################
+
+    .PopupContent {
+        .editDateButton {
+            transition: opacity 0.1s ease-in-out;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    // #######################################
+    //      FASTING
+    // #######################################
+
+    //      FAST SECTION
+    // #######################################
+
+    .FastSection {
+        .progressBarContainer {
+            .insideProgress {
+                .phaseIconContainer {
+                    transition: opacity 0.1s ease-in-out;
+                    cursor: pointer;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .button {
+            transition: transform 0.1s ease-in-out;
+            cursor: pointer;
+            transform: scale(1);
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+
+        .phase {
+            cursor: pointer;
+        }
+    }
+
+    // #######################################
+    //      WEIGHT
+    // #######################################
+
+    //      WEIGHT SECTION
+    // #######################################
+
+    .WeightSection {
+        .button {
+            transition: transform 0.1s ease-in-out;
+            cursor: pointer;
+            transform: scale(1);
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+    }
+    // #######################################
+    //      HISTORIC
+    // #######################################
+
+    //      HISTORIC SECTION
+    // #######################################
+
+    .HistoricSection {
+        .monthSelector {
+            .icon {
+                transition: color 0.1s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    color: rgba(0, 0, 0, 0.8);
+                }
+            }
+        }
+    }
+
+    // #######################################
+    //      SETTINGS
+    // #######################################
+
+    //      ELEM
+    // #######################################
+
+    .Elem {
+        cursor: pointer;
+
+        .actionText {
+            transition: opacity 0.1s ease-in-out;
+        }
+
+        &:hover {
+            .actionText {
+                opacity: 1;
+            }
+        }
+    }
+
+    //      ELEM
+    // #######################################
+
+    .SettingsButton {
+        transition: color 0.1s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            color: rgba(0, 0, 0, 1);
+
+            &.blue {
+                color: #0d579c;
+            }
+
+            &.red {
+                color: #b13706;
+            }
+        }
+    }
 }

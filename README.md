@@ -45,4 +45,5 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] If the pass is used while fasting we need to check if the user started fasting today or yesterday and thhe next time should change according to that.
 -   [x] Fix calendar text size on tablet and desktop
 -   [x] Change notifications text
--   [ ] Add button cursor and animation on non touch devices
+-   [x] Add button cursor and animation on non touch devices
+-   [ ] Change html font-size to 20 on desktop and 18 on tablet

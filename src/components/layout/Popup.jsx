@@ -36,7 +36,7 @@ export default function Popup() {
                 (styles, item) =>
                     item && (
                         <animated.div
-                            className="blur"
+                            className={cn("blur", { canCloseWithBackground })}
                             style={styles}
                             onClick={() => canCloseWithBackground && setInformation({ ...information, visible: false })}
                         ></animated.div>
