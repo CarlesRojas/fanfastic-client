@@ -12,14 +12,18 @@ import { GlobalState } from "./contexts/GlobalState";
 
 export default function App() {
     const { isLoggedIn } = useContext(API);
-    const { isMobile, isTablet, isLandscape } = useContext(MediaQuery);
+    const { isMobile, isTablet, isDesktop, isLandscape } = useContext(MediaQuery);
     const { sub, unsub } = useContext(Events);
     const { set } = useContext(GlobalState);
 
+    useCloseApp();
+
+    // #################################################
+    //   LOGIN
+    // #################################################
+
     const [loggedIn, setLoggedIn] = useState(null);
     const [userInfoReady, setUserInfoReady] = useState(false);
-
-    useCloseApp();
 
     useEffect(() => {
         const checkLogin = async () => {
@@ -33,6 +37,20 @@ export default function App() {
 
         checkLogin();
     }, [isLoggedIn, loggedIn, set]);
+
+    // #################################################
+    //   FONT SIZE
+    // #################################################
+
+    useEffect(() => {
+        var htmlDOM = document.getElementsByTagName("html");
+        if (!htmlDOM.length) return;
+        htmlDOM = document.getElementsByTagName("html")[0];
+
+        if (isMobile) htmlDOM.style.fontSize = "16px";
+        else if (isTablet) htmlDOM.style.fontSize = "18px";
+        else if (isDesktop) htmlDOM.style.fontSize = "20px";
+    }, [isMobile, isTablet, isDesktop]);
 
     // #################################################
     //   EVENTS

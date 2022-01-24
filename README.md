@@ -46,4 +46,4 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Fix calendar text size on tablet and desktop
 -   [x] Change notifications text
 -   [x] Add button cursor and animation on non touch devices
--   [ ] Change html font-size to 20 on desktop and 18 on tablet
+-   [x] Change html font-size to 20 on desktop and 18 on tablet
