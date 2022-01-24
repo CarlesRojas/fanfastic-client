@@ -97,6 +97,26 @@
     //      LAYOUT
     // #######################################
 
+    //      NAVBAR
+    // #######################################
+
+    .Navbar {
+        .container {
+            cursor: pointer;
+
+            &.selected {
+                cursor: default;
+            }
+
+            &:hover {
+                .icon {
+                    transition: color 0.2s ease-in-out;
+                    color: rgba(0, 0, 0, 0.6);
+                }
+            }
+        }
+    }
+
     //      POPUP
     // #######################################
 

@@ -5,8 +5,8 @@ import { isMobile as isTouchScreen, isMobileOnly } from "react-device-detect";
 
 export const MediaQuery = createContext();
 const MediaQueryProvider = (props) => {
-    const isDesktop = useMediaQuery({ minWidth: 1500 });
-    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1500 });
+    const isDesktop = useMediaQuery({ minWidth: 1100 });
+    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1100 });
     const isLandscape = useMediaQuery({ orientation: "landscape" });
     const isNotTouchscreen = !isTouchScreen;
 
