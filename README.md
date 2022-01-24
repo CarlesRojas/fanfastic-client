@@ -44,4 +44,4 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] When user uses weekly pass when not fasting, the time until the next time is wrong (Should be 21 tomorrow instead of today)
 -   [x] If the pass is used while fasting we need to check if the user started fasting today or yesterday and thhe next time should change according to that.
 -   [ ] Fix calendar text size on tablet and desktop
--   [ ] Change notifications text
+-   [x] Change notifications text

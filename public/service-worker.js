@@ -83,7 +83,7 @@ self.addEventListener("push", function (event) {
                 // #################################################
                 else if (data.id === "startFasting") {
                     title = "Time to start fasting!";
-                    body = "It will last for 16h";
+                    body = "Stop eating and let you body rest.";
                     tag = "startFasting";
                     icon = "/logo512.png";
                 }
