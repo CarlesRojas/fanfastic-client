@@ -445,10 +445,12 @@ const APIProvider = (props) => {
     };
 
     // TODO
-    const getMonthFastEntries = async () => {
-        const date = new Date();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
+    const getMonthFastEntries = async (month, year) => {
+        if (!year || !month) {
+            const date = new Date();
+            month = date.getMonth() + 1;
+            year = date.getFullYear();
+        }
 
         const postData = { month, year };
 
@@ -468,10 +470,10 @@ const APIProvider = (props) => {
 
             if ("error" in response) return response;
 
-            if ("fastHistoric" in response) {
+            if ("historic" in response) {
                 // Update local data
                 if (!(year in fastHistoric.current)) fastHistoric.current[year] = {};
-                fastHistoric.current[year][month] = response.fastHistoric;
+                fastHistoric.current[year][month] = response.historic;
                 return true;
             }
 
@@ -596,7 +598,7 @@ const APIProvider = (props) => {
                 return true;
             }
 
-            return response;
+            return false;
         } catch (error) {
             return { error: `Get user info error: ${error}` };
         }
@@ -606,7 +608,6 @@ const APIProvider = (props) => {
     //   PUSH API
     // #################################################
 
-    // TODO
     const subscribeToPushNotifications = async () => {
         if (!("serviceWorker" in navigator)) return;
 

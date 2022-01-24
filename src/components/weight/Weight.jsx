@@ -5,7 +5,7 @@ export default function Weight() {
         <div className="Weight">
             <h1>{"Health"}</h1>
 
-            <div className="fastingContainer">
+            <div className="bigSectionContainer">
                 <WeightSection />
             </div>
         </div>

@@ -5,7 +5,7 @@ export default function Settings() {
         <div className="Settings">
             <h1>{"Settings"}</h1>
 
-            <div className="fastingContainer">
+            <div className="bigSectionContainer">
                 <SettingsSection />
             </div>
         </div>

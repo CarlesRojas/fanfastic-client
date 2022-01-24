@@ -43,7 +43,7 @@
         justify-content: center;
         height: 4rem;
         top: $authCardDistanceToTop - $authButtonHeight;
-        z-index: 2;
+        z-index: 140;
         color: $authIconColor;
         padding: 0 3rem;
         font-weight: 700;
@@ -59,7 +59,7 @@
         height: $authHeaderHeight;
         width: 90%;
         top: $authCardDistanceToTop;
-        z-index: 3;
+        z-index: 150;
         background-color: $authCardBackground;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
@@ -129,7 +129,7 @@
         width: 100%;
         top: 0;
         left: 0;
-        z-index: 1;
+        z-index: 130;
         background-color: $background;
     }
 
@@ -631,7 +631,7 @@
         max-height: 90%;
         width: calc(100% - 2rem);
         max-width: 50rem;
-        z-index: 10;
+        z-index: 1000;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         background-color: $background;
         border-radius: 1rem;
@@ -740,7 +740,7 @@
                     pointer-events: all;
                     width: 12rem;
                     min-width: fit-content;
-                    z-index: 10;
+                    z-index: 1000;
                     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
                     background-color: $closeButtonColor;
                     border-radius: 100vw;
@@ -759,7 +759,7 @@
         .button {
             pointer-events: all;
             width: fit-content;
-            z-index: 10;
+            z-index: 1000;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             background-color: $closeButtonColor;
             border-radius: 100vw;
@@ -923,7 +923,7 @@
         }
     }
 
-    .fastingContainer {
+    .bigSectionContainer {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -949,7 +949,7 @@
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 20;
+    z-index: 2000;
 
     .contentContainer {
         pointer-events: all;
@@ -962,7 +962,7 @@
         max-height: calc(100% - 2rem);
         width: fit-content;
         max-width: calc(100% - 2rem);
-        z-index: 10;
+        z-index: 1000;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         background-color: white;
         border-radius: 1rem;
@@ -1446,6 +1446,186 @@
 //      HISTORIC
 // #######################################
 
+//      HISTORIC SECTION
+// #######################################
+
+.HistoricSection {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1rem;
+
+    .ticketContainer {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 1rem;
+        justify-items: center;
+        margin-bottom: 1rem;
+
+        .ticket {
+            width: 100%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            background: $fastCardBackground;
+            border-radius: 1rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            .icon {
+                height: 2rem;
+                max-height: 2rem;
+                min-height: 2rem;
+                width: 2rem;
+                max-width: 2rem;
+                min-width: 2rem;
+                margin-bottom: 0.3rem;
+                opacity: 0.5;
+                color: black;
+            }
+
+            .value {
+                opacity: 1;
+                font-size: 1.3rem;
+                font-weight: 600;
+
+                span {
+                    opacity: 0.5;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                }
+            }
+
+            .description {
+                opacity: 0.5;
+                font-size: 0.7rem;
+                font-weight: 500;
+                text-align: center;
+            }
+        }
+    }
+
+    .monthSelector {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 1rem 0;
+
+        h2 {
+            opacity: 0.9;
+            font-size: 1.3rem;
+            font-weight: 700;
+
+            span {
+                font-size: 1.1rem;
+                opacity: 0.3;
+            }
+        }
+
+        .icon {
+            height: 2.2rem;
+            max-height: 2.2rem;
+            min-height: 2.2rem;
+            width: 2.2rem;
+            max-width: 2.2rem;
+            min-width: 2.2rem;
+            padding: 0.5rem;
+            color: rgba(0, 0, 0, 0.4);
+
+            &.disabled {
+                pointer-events: none;
+                opacity: 0.1;
+            }
+        }
+    }
+
+    .calendar {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+        .day {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.2rem;
+
+            &.hidden {
+                pointer-events: none;
+                opacity: 0;
+            }
+
+            .box {
+                width: 100%;
+                padding-top: 100%;
+                position: relative;
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.05);
+                background-color: $fastCardBackground;
+                border-radius: 0.5rem;
+                margin: 0.2rem 0;
+
+                .boxContents {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    border-radius: 0.5rem;
+                    overflow: hidden;
+
+                    .fastDuration {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        opacity: 0.8;
+                        font-size: 0.7rem;
+                        font-weight: 600;
+                    }
+
+                    .pass {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        background-color: $historicPass;
+                    }
+
+                    .fill {
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        background-color: $historicSuccess;
+
+                        &.fail {
+                            background-color: $historicFail;
+                        }
+                    }
+                }
+            }
+
+            .monthDay {
+                opacity: 0.5;
+                font-size: 0.7rem;
+                font-weight: 500;
+            }
+        }
+    }
+}
 // #######################################
 //      SETTINGS
 // #######################################

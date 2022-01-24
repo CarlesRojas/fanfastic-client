@@ -11,7 +11,7 @@ export default function Fasting() {
         <div className="Fasting">
             <h1>{isFasting ? "Fasting" : "Breaking fast"}</h1>
 
-            <div className="fastingContainer">
+            <div className="bigSectionContainer">
                 <FastingSection />
             </div>
         </div>

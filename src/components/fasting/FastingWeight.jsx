@@ -12,7 +12,7 @@ export default function FastingWeight() {
         <div className="Fasting">
             <h1>{isFasting ? "Fasting" : "Breaking fast"}</h1>
 
-            <div className="fastingContainer">
+            <div className="bigSectionContainer">
                 <FastingSection />
 
                 <WeightSection />
