@@ -43,5 +43,6 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Add date when user used last weekly pass to user model (API)
 -   [x] When user uses weekly pass when not fasting, the time until the next time is wrong (Should be 21 tomorrow instead of today)
 -   [x] If the pass is used while fasting we need to check if the user started fasting today or yesterday and thhe next time should change according to that.
--   [ ] Fix calendar text size on tablet and desktop
+-   [x] Fix calendar text size on tablet and desktop
 -   [x] Change notifications text
+-   [ ] Add button cursor and animation on non touch devices
