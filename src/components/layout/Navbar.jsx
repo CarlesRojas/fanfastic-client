@@ -14,7 +14,7 @@ const PAGES = [
         icon: FastingIcon,
     },
     {
-        name: "Weight",
+        name: "Health",
         icon: WeightIcon,
     },
     {

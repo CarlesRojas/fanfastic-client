@@ -491,8 +491,8 @@
                 background-color: $navbarFastBackground;
             }
 
-            &.navbarWeight {
-                background-color: $navbarWeightBackground;
+            &.navbarHealth {
+                background-color: $navbarHealthBackground;
             }
 
             &.navbarHistory {
@@ -508,8 +508,8 @@
                     color: $navbarFastForeground;
                 }
 
-                &.navbarWeight {
-                    color: $navbarWeightForeground;
+                &.navbarHealth {
+                    color: $navbarHealthForeground;
                 }
 
                 &.navbarHistory {
@@ -552,8 +552,8 @@
                 color: $navbarFastForeground;
             }
 
-            &.navbarWeight {
-                color: $navbarWeightForeground;
+            &.navbarHealth {
+                color: $navbarHealthForeground;
             }
 
             &.navbarHistory {
