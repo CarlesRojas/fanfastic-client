@@ -2,7 +2,7 @@
     "short_name": "Fanfastic",
     "name": "Fanfastic",
     "description": "Keep track of your fasting schedule in a healthy way.",
-    "categories": ["education", "medical", "health"],
+    "categories": ["education", "fitness", "food", "health", "lifestyle", "medical"],
     "lang": "en-US",
     "icons": [
         {
