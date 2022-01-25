@@ -1,6 +1,12 @@
-[{
+[
+    {
         "relation": ["delegate_permission/common.handle_all_urls"],
-        "target" : { "namespace": "android_app", "package_name": "app.netlify.fanfastic",
-                     "sha256_cert_fingerprints": ["6A:91:F7:E9:11:12:D6:E0:FD:AB:08:42:86:56:DE:86:E9:89:1E:7B:80:19:07:32:77:5C:AE:4C:52:B3:90:1E"] }
-      }
+        "target": {
+            "namespace": "android_app",
+            "package_name": "app.netlify.fanfastic",
+            "sha256_cert_fingerprints": [
+                "13:34:29:BB:3F:00:78:08:3F:28:1C:97:DC:58:AA:15:F5:0D:3F:64:A7:FF:E2:79:53:D6:46:7B:8F:CE:8A:72"
+            ]
+        }
+    }
 ]
