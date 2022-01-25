@@ -2,6 +2,7 @@
     "short_name": "Fanfastic",
     "name": "Fanfastic",
     "description": "Keep track of your fasting schedule in a healthy way.",
+    "long_description": "Keep track of your fasting schedule in a healthy way. Choose how long you want to fast for and when to start. You can also track your weight and BMI. The app will let you know when to start and end fasting and will provide an explanation for the different phases of fasting.",
     "categories": ["education", "fitness", "food", "health", "lifestyle", "medical"],
     "lang": "en-US",
     "icons": [

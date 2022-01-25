@@ -141,7 +141,7 @@ export default function HistoricSection() {
                 <div className="ticket">
                     <SVG className="icon" src={WeightIcon}></SVG>
                     <p className="value">
-                        {Math.abs(veryFirstWeightInKg - weightInKg)}
+                        {+Math.abs(veryFirstWeightInKg - weightInKg).toFixed(1)}
                         <span>kg</span>
                     </p>
                     <p className="description">
