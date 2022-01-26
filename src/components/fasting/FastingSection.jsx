@@ -22,7 +22,7 @@ import CellIcon from "../../resources/icons/cell.svg";
 
 export default function FastingSection() {
     const { user } = useContext(Data);
-    const { lerp, areSameDate } = useContext(Utils);
+    const { lerp, clamp, areSameDate } = useContext(Utils);
     const { set } = useContext(GlobalState);
 
     const {
@@ -241,22 +241,28 @@ export default function FastingSection() {
 
                 const fastDesiredStartTimeInSeconds = fastDesiredStartTimeInMinutes * 60;
 
-                const totalNotFastingSeconds =
-                    secondsSinceMidnight > notFastingDurationInSeconds
-                        ? secondsSinceMidnight > fastDesiredStartTimeInSeconds
-                            ? Math.abs(24 * 60 * 60 - secondsSinceMidnight) +
-                              notFastingDurationInSeconds +
-                              fastDesiredStartTimeInSeconds
-                            : fastDesiredStartTimeInSeconds - secondsSinceMidnight + notFastingDurationInSeconds
-                        : yesterdayNotFastingSeconds + fastDesiredStartTimeInSeconds;
+                var expectedNotFastingDurationInSeconds = yesterdayNotFastingSeconds + fastDesiredStartTimeInSeconds;
 
-                setProgress(Math.min(100, (notFastingDurationInSeconds / totalNotFastingSeconds) * 100));
-                setRemainingUntilFastCounter(Math.max(0, totalNotFastingSeconds - notFastingDurationInSeconds));
+                // If user stoped fasting today
+                if (secondsSinceMidnight > notFastingDurationInSeconds) {
+                    expectedNotFastingDurationInSeconds =
+                        fastDesiredStartTimeInSeconds - (secondsSinceMidnight - notFastingDurationInSeconds);
+                }
+
+                // Otherwise, if user stoped fasting yesterday
+                else {
+                    expectedNotFastingDurationInSeconds = yesterdayNotFastingSeconds + fastDesiredStartTimeInSeconds;
+                }
+
+                setProgress(clamp(notFastingDurationInSeconds / expectedNotFastingDurationInSeconds) * 100);
+                setRemainingUntilFastCounter(
+                    Math.max(0, expectedNotFastingDurationInSeconds - notFastingDurationInSeconds)
+                );
             }
 
             // Otherwise show time since midnight
             else {
-                setProgress(Math.min(100, (minutesSinceMidnight / fastDesiredStartTimeInMinutes) * 100));
+                setProgress(clamp(minutesSinceMidnight / fastDesiredStartTimeInMinutes) * 100);
                 setRemainingUntilFastCounter(Math.max(0, fastDesiredStartTimeInMinutes - minutesSinceMidnight) * 60);
             }
         }
@@ -270,6 +276,7 @@ export default function FastingSection() {
         hasWeeklyPass,
         lastTimeUserUsedWeeklyPass,
         areSameDate,
+        clamp,
     ]);
 
     useEffect(() => {
