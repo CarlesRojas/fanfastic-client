@@ -12,7 +12,7 @@ import { GlobalState } from "./contexts/GlobalState";
 
 export default function App() {
     const { isLoggedIn } = useContext(API);
-    const { isMobile, isTablet, isLandscape } = useContext(MediaQuery);
+    const { isMobile, isTablet, isMobileSize, isLandscape } = useContext(MediaQuery);
     const { sub, unsub } = useContext(Events);
     const { set } = useContext(GlobalState);
 
@@ -59,6 +59,6 @@ export default function App() {
     else if (isMobile && isLandscape) return <Landscape />;
     else if (!loggedIn) return <Auth setLoggedIn={setLoggedIn} />;
     else if (loggedIn && userInfoReady)
-        return isMobile || (isTablet && !isLandscape) ? <MobileLayout /> : <DesktopLayout />;
+        return isMobile || isMobileSize || (isTablet && !isLandscape) ? <MobileLayout /> : <DesktopLayout />;
     else return null;
 }

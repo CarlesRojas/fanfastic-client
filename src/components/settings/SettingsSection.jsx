@@ -11,7 +11,6 @@ import UpdateWeightObjectivePopup from "../weight/UpdateWeightObjectivePopup";
 import SubNotificationsPopup from "./SubNotificationsPopup";
 import UnsubNotificationsPopup from "./UnsubNotificationsPopup";
 import ChangeEmailPopup from "./ChangeEmailPopup";
-import ChangeUsernamePopup from "./ChangeUsernamePopup";
 import ChangePasswordPopup from "./ChangePasswordPopup";
 import DeleteAccountPopup from "./DeleteAccountPopup";
 import LogoutPopup from "./LogoutPopup";
@@ -127,17 +126,6 @@ export default function SettingsSection() {
         });
     };
 
-    const handleChangeUsername = () => {
-        set("showPopup", {
-            visible: true,
-            canCloseWithBackground: true,
-            closeButtonVisible: false,
-            addPadding: false,
-            fullscreen: true,
-            content: <ChangeUsernamePopup />,
-        });
-    };
-
     const handleChangePassword = () => {
         set("showPopup", {
             visible: true,
@@ -214,7 +202,6 @@ export default function SettingsSection() {
 
             <h2 className={"sectionTitle"}>Account</h2>
             <SettingsButton text={"Change Email"} handleClick={handleChangeEmail} />
-            <SettingsButton text={"Change Username"} handleClick={handleChangeUsername} />
             <SettingsButton text={"Change Password"} handleClick={handleChangePassword} />
             <SettingsButton text={"Log out"} red={true} handleClick={handleLogout} />
             <SettingsButton text={"Delete Account"} red={true} handleClick={handleDeleteAccount} />

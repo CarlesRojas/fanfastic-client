@@ -17,13 +17,7 @@ const CARDS = {
         },
         {
             title: "Create an account",
-            subtitle: "Enter your new username:",
-            interactiblesHeight: 4,
-            interactibles: [{ type: "input", inputType: "username" }],
-        },
-        {
-            title: "Create an account",
-            subtitle: "Enter your new password:",
+            subtitle: "Enter a new password:",
             interactiblesHeight: 4,
             interactibles: [{ type: "input", inputType: "password" }],
         },
@@ -100,7 +94,6 @@ export default function Register({ parentId, setLoggedIn }) {
 
     const registrationData = useRef({
         email: "",
-        username: "",
         password: "",
         fastDuration: 2,
         fastStartTime: 18,
@@ -150,12 +143,12 @@ export default function Register({ parentId, setLoggedIn }) {
     );
 
     const handleRegister = useCallback(async () => {
-        const { email, username, password, fastDuration, fastStartTime, height, weight, objectiveWeight } =
+        const { email, password, fastDuration, fastStartTime, height, weight, objectiveWeight } =
             registrationData.current;
 
         nextPage();
 
-        const registerResult = await register(username, email, password);
+        const registerResult = await register(email, password);
         if (checkError(registerResult)) return;
 
         const loginResult = await login(email, password);

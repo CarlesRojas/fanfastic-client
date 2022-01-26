@@ -21,11 +21,11 @@ const APIProvider = (props) => {
     //   AUTH API
     // #################################################
 
-    const register = async (username, email, password) => {
+    const register = async (email, password) => {
         const now = new Date();
         const timezoneOffsetInMs = -now.getTimezoneOffset() * 60 * 1000;
 
-        const postData = { username, email: email.toLowerCase(), password, timezoneOffsetInMs };
+        const postData = { email: email.toLowerCase(), password, timezoneOffsetInMs };
 
         try {
             const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/register`, {
@@ -206,34 +206,6 @@ const APIProvider = (props) => {
             return response;
         } catch (error) {
             return { error: `Change email error: ${error}` };
-        }
-    };
-
-    const changeUsername = async (password, newUsername) => {
-        const postData = { password, username: newUsername };
-
-        try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/user/changeUsername`, {
-                method: "post",
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                    token: token.current,
-                },
-                body: JSON.stringify(postData),
-            });
-
-            const response = await rawResponse.json();
-
-            // Save new user
-            if ("error" in response) return response;
-            user.current = response;
-            set("userUpdated", get("userUpdated") + 1);
-
-            return response;
-        } catch (error) {
-            return { error: `Change username error: ${error}` };
         }
     };
 
@@ -685,28 +657,6 @@ const APIProvider = (props) => {
         }
     };
 
-    const isUsernameValid = async (username) => {
-        const postData = { username };
-
-        try {
-            const rawResponse = await fetch(`${API_URL}${API_VERSION}/validate/isUsernameValid`, {
-                method: "post",
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify(postData),
-            });
-
-            const response = await rawResponse.json();
-
-            return response;
-        } catch (error) {
-            return { error: `Is valid username error: ${error}` };
-        }
-    };
-
     const isPasswordValid = async (password) => {
         const postData = { password };
 
@@ -850,7 +800,6 @@ const APIProvider = (props) => {
                 logout,
                 tryToLogInWithToken,
                 changeEmail,
-                changeUsername,
                 changePassword,
                 deleteAccount,
 
@@ -874,7 +823,6 @@ const APIProvider = (props) => {
 
                 // VALIDATE API
                 isEmailValid,
-                isUsernameValid,
                 isPasswordValid,
                 isFastDesiredStartTimeValid,
                 isFastObjectiveValid,

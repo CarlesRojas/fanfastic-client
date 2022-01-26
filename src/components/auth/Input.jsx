@@ -6,7 +6,6 @@ import useThrottle from "../../hooks/useThrottle";
 import { API } from "../../contexts/API";
 
 import EmailIcon from "../../resources/icons/email.svg";
-import UsernameIcon from "../../resources/icons/username.svg";
 import PasswordIcon from "../../resources/icons/password.svg";
 import UpIcon from "../../resources/icons/up.svg";
 import RightIcon from "../../resources/icons/right.svg";
@@ -21,7 +20,7 @@ export default function Input({
     isCurrentPhase,
     parentData,
 }) {
-    const { isEmailValid, isUsernameValid, isPasswordValid } = useContext(API);
+    const { isEmailValid, isPasswordValid } = useContext(API);
     const { inputType, checkExists } = data;
 
     // #################################################
@@ -48,7 +47,6 @@ export default function Input({
         var validate = () => ({ success: true });
 
         if (inputType === "email") validate = isEmailValid;
-        else if (inputType === "username") validate = isUsernameValid;
         else if (inputType === "password") validate = isPasswordValid;
         else if (inputType === "newPassword") validate = isPasswordValid;
 
@@ -111,7 +109,7 @@ export default function Input({
             <div className={cn("enter", { validating })} onClick={handleEnter}>
                 <SVG
                     className={cn("icon", { up: hasContent })}
-                    src={inputType === "email" ? EmailIcon : inputType === "username" ? UsernameIcon : PasswordIcon}
+                    src={inputType === "email" ? EmailIcon : PasswordIcon}
                 />
                 <SVG
                     className={cn("icon", { down: !hasContent }, { spin: validating }, { infinite: validating })}
