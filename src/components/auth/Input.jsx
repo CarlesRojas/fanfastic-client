@@ -99,7 +99,7 @@ export default function Input({
     return (
         <div className={cn("Input", { last: isLastInteractible })} onKeyDown={handleKeyDown}>
             <input
-                type={inputType === "email" ? "email" : inputType === "username" ? "text" : "password"}
+                type={inputType === "email" ? "email" : "password"}
                 autoComplete="new-password"
                 onChange={handleChange}
                 onFocus={handleFocus}
