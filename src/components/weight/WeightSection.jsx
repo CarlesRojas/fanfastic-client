@@ -138,7 +138,7 @@ export default function WeightSection() {
                     {heightInCm / 100}
                     <span>m</span>
                 </p>
-                <p className="description">Height</p>
+                <p className="description">height</p>
             </div>
 
             <div className="ticket">
@@ -147,7 +147,7 @@ export default function WeightSection() {
                     {weightInKg}
                     <span>kg</span>
                 </p>
-                <p className="description">Weight</p>
+                <p className="description">weight</p>
             </div>
 
             <div className="ticket">

@@ -47,3 +47,5 @@ Run this (If prompted to choose a site, choose `estado-covid`):
 -   [x] Change notifications text
 -   [x] Add button cursor and animation on non touch devices
 -   [x] Change html font-size to 20 on desktop and 18 on tablet
+-   [x] Remove fast from "Fast streak"
+-   [ ] Remove username from account.

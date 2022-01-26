@@ -144,23 +144,19 @@ export default function HistoricSection() {
                         {+Math.abs(veryFirstWeightInKg - weightInKg).toFixed(1)}
                         <span>kg</span>
                     </p>
-                    <p className="description">
-                        {veryFirstWeightInKg - weightInKg >= 0 ? "Lost weight" : "Gained weight"}
-                    </p>
+                    <p className="description">{veryFirstWeightInKg - weightInKg >= 0 ? "lost" : "gained"}</p>
                 </div>
 
                 <div className="ticket">
                     <SVG className="icon" src={TargetIcon}></SVG>
                     <p className="value">{totalDaysUserReachedGoal}</p>
-                    <p className="description">Fasting days</p>
+                    <p className="description">days fasted</p>
                 </div>
 
                 <div className="ticket">
                     <SVG className="icon" src={FlameIcon}></SVG>
-                    <p className="value">
-                        {fastingStreak} <span>days</span>
-                    </p>
-                    <p className="description">Fast Streak</p>
+                    <p className="value">{fastingStreak}</p>
+                    <p className="description">days streak</p>
                 </div>
             </div>
 
