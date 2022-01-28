@@ -114,7 +114,7 @@ self.addEventListener("push", function (event) {
 //   OPEN APP ON CLICK
 // #################################################
 
-const urlToOpen = new URL("https://fanfastic.netlify.app/").href;
+const urlToOpen = new URL("https://fanfastic.pinya.app/").href;
 self.addEventListener("notificationclick", (event) => {
     const promiseChain = self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((windowClients) => {
         let matchingClient = null;
