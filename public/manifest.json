@@ -12,12 +12,12 @@
             "type": "image/x-icon"
         },
         {
-            "src": "maskableIcon192.png",
+            "src": "roundedIcon192.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "maskableIcon512.png",
+            "src": "roundedIcon512.png",
             "type": "image/png",
             "sizes": "512x512"
         },
