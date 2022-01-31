@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "app.netlify.fanfastic",
+                     "sha256_cert_fingerprints": ["6A:91:F7:E9:11:12:D6:E0:FD:AB:08:42:86:56:DE:86:E9:89:1E:7B:80:19:07:32:77:5C:AE:4C:52:B3:90:1E"] }
+      }
+]
