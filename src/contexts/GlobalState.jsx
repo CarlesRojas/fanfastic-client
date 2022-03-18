@@ -1,12 +1,15 @@
 import { createContext, useRef } from "react";
+import initialState from "../InitialGlobalState";
 
-const STATE = {
-    stateName: "stateName",
+const getObjectFromInitialState = () => {
+    const result = {};
+    for (const [key, value] of Object.entries(initialState)) result[key] = { value, subbedFunctions: [] };
+    return result;
 };
 
 export const GlobalState = createContext();
 const GlobalStateProvider = (props) => {
-    const state = useRef({});
+    const state = useRef(getObjectFromInitialState());
 
     const sub = (stateName, func) => {
         state.current[stateName] = state.current[stateName] || { value: null, subbedFunctions: [] };
@@ -15,7 +18,7 @@ const GlobalStateProvider = (props) => {
 
     const unsub = (stateName, func) => {
         if (state.current[stateName])
-            for (var i = 0; i < state.current[stateName].subbedFunctions.length; i++)
+            for (let i = 0; i < state.current[stateName].subbedFunctions.length; i++)
                 if (state.current[stateName].subbedFunctions[i] === func) {
                     state.current[stateName].subbedFunctions.splice(i, 1);
                     break;
@@ -39,7 +42,6 @@ const GlobalStateProvider = (props) => {
     return (
         <GlobalState.Provider
             value={{
-                STATE,
                 sub,
                 unsub,
                 set,

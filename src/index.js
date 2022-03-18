@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import * as serviceWorker from "./serviceWorker";
 import ReactDOM from "react-dom";
 import App from "./App";
@@ -7,28 +8,27 @@ import "./styles/main.scss";
 import EventsProvider from "./contexts/Events";
 import UtilsProvider from "./contexts/Utils";
 import APIProvider from "./contexts/API";
-import LanguageProvider from "./contexts/Language";
 import GlobalStateProvider from "./contexts/GlobalState";
 import DataProvider from "./contexts/Data";
 import MediaQueryProvider from "./contexts/MediaQuery";
 
 ReactDOM.render(
-    <EventsProvider>
-        <UtilsProvider>
-            <APIProvider>
+    <StrictMode>
+        <EventsProvider>
+            <UtilsProvider>
                 <GlobalStateProvider>
                     <DataProvider>
-                        <LanguageProvider>
+                        <APIProvider>
                             <MediaQueryProvider>
                                 <App />
                             </MediaQueryProvider>
-                        </LanguageProvider>
+                        </APIProvider>
                     </DataProvider>
                 </GlobalStateProvider>
-            </APIProvider>
-        </UtilsProvider>
-    </EventsProvider>,
+            </UtilsProvider>
+        </EventsProvider>
+    </StrictMode>,
     document.getElementById("root")
 );
 
-serviceWorker.unregister();
+serviceWorker.register();

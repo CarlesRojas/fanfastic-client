@@ -1,9 +1,5 @@
 import { createContext, useRef } from "react";
 
-const EVENT_LIST = {
-    ON_EVENT_NAME: "onEventName",
-};
-
 export const Events = createContext();
 const EventsProvider = (props) => {
     const events = useRef({});
@@ -15,7 +11,7 @@ const EventsProvider = (props) => {
 
     const unsub = (eventName, func) => {
         if (events.current[eventName])
-            for (var i = 0; i < events.current[eventName].length; i++)
+            for (let i = 0; i < events.current[eventName].length; i++)
                 if (events.current[eventName][i] === func) {
                     events.current[eventName].splice(i, 1);
                     break;
@@ -32,7 +28,6 @@ const EventsProvider = (props) => {
     return (
         <Events.Provider
             value={{
-                EVENT_LIST,
                 sub,
                 unsub,
                 emit,

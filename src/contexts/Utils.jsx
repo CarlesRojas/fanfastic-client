@@ -3,62 +3,6 @@ import { createContext } from "react";
 export const Utils = createContext();
 const UtilsProvider = (props) => {
     // ###################################################
-    //      COOKIES
-    // ###################################################
-
-    // Set a cookie
-    const setCookie = (name, value, expirationDays = 10) => {
-        var date = new Date();
-        date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000);
-        var expires = "expires=" + date.toUTCString();
-        document.cookie = name + "=" + value + ";" + expires + ";path=/";
-    };
-
-    // Get a cookie
-    const getCookie = (name) => {
-        var cookieName = name + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var splittedCookie = decodedCookie.split(";");
-        for (var i = 0; i < splittedCookie.length; i++) {
-            var c = splittedCookie[i];
-            while (c.charAt(0) === " ") {
-                c = c.substring(1);
-            }
-            if (c.indexOf(cookieName) === 0) {
-                return c.substring(cookieName.length, c.length);
-            }
-        }
-        return "";
-    };
-
-    // Delete a cookie
-    const deleteCookie = (name) => {
-        document.cookie = name + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    };
-
-    // Get all cookies
-    const getCookies = () => {
-        var pairs = document.cookie.split(";");
-        var cookies = {};
-        for (var i = 0; i < pairs.length; i++) {
-            var pair = pairs[i].split("=");
-            if (pair[0].includes("planPlant")) cookies[(pair[0] + "").trim()] = unescape(pair.slice(1).join("="));
-        }
-        return cookies;
-    };
-
-    // Clear all cookies
-    const clearCookies = () => {
-        var res = document.cookie;
-        var multiple = res.split(";");
-        for (var i = 0; i < multiple.length; i++) {
-            var key = multiple[i].split("=");
-            if (key[0].includes("planPlant"))
-                document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        }
-    };
-
-    // ###################################################
     //      INTERPOLATIONS
     // ###################################################
 
@@ -157,6 +101,14 @@ const UtilsProvider = (props) => {
         return getFormattedDate(date);
     };
 
+    const areSameDate = (date1, date2) => {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        );
+    };
+
     // ###################################################
     //      NUMBER FORMAT
     // ###################################################
@@ -168,9 +120,9 @@ const UtilsProvider = (props) => {
         const six_power = Math.pow(10, 6);
         const three_power = Math.pow(10, 3);
 
-        var negative = num < 0;
+        let negative = num < 0;
         num = Math.abs(num);
-        var letter = "";
+        let letter = "";
 
         if (num >= fifteen_power) {
             letter = "Q";
@@ -189,7 +141,7 @@ const UtilsProvider = (props) => {
             num = num / three_power;
         }
 
-        var num_characters = letter.length ? 3 : 4;
+        let num_characters = letter.length ? 3 : 4;
 
         // Limit to one decimal and at most 4 characters
         if (num >= 100) num = num.toFixed(Math.min(1, Math.max(0, num_characters - 3)));
@@ -204,10 +156,10 @@ const UtilsProvider = (props) => {
     // ###################################################
 
     const createUniqueID = (length) => {
-        var id = "";
-        var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) id += characters.charAt(Math.floor(Math.random() * charactersLength));
+        let id = "";
+        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++) id += characters.charAt(Math.floor(Math.random() * charactersLength));
 
         return /*new Date().toISOString() + "_" +*/ id;
     };
@@ -231,54 +183,34 @@ const UtilsProvider = (props) => {
     };
 
     // ###################################################
-    //      THROTTLE & DEBOUNCE
+    //      BASE64
     // ###################################################
 
-    const throttle = (func, limit, immediate) => {
-        var timeout;
-        let inThrottle;
+    const urlBase64ToUint8Array = (base64String) => {
+        const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+        // eslint-disable-next-line
+        const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
 
-        return function () {
-            var context = this;
-            var args = arguments;
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
 
-            if (immediate || !inThrottle) {
-                func.apply(context, args);
-                inThrottle = true;
-
-                clearTimeout(timeout);
-                timeout = setTimeout(() => (inThrottle = false), limit);
-            }
-        };
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
     };
 
-    const debounce = (func, wait, immediate) => {
-        var timeout;
+    // ###################################################
+    //      SLEEP
+    // ###################################################
 
-        return function () {
-            var context = this;
-            var args = arguments;
-
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            }, wait);
-
-            if (immediate && !timeout) func.apply(context, args);
-        };
+    const sleep = (ms) => {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     };
 
     return (
         <Utils.Provider
             value={{
-                // COOKIES
-                setCookie,
-                getCookie,
-                deleteCookie,
-                getCookies,
-                clearCookies,
-
                 // INTERPOLATIONS
                 clamp,
                 lerp,
@@ -290,6 +222,7 @@ const UtilsProvider = (props) => {
                 // DATE AND TIME
                 unixTimeToDate,
                 timeAgo,
+                areSameDate,
 
                 // FORMAT NUMBERS
                 format_number,
@@ -301,9 +234,11 @@ const UtilsProvider = (props) => {
                 // VIBRATE
                 vibrate,
 
-                // THROTTLE & DEBOUNCE
-                throttle,
-                debounce,
+                // BASE64
+                urlBase64ToUint8Array,
+
+                // SLEEP
+                sleep,
             }}
         >
             {props.children}
